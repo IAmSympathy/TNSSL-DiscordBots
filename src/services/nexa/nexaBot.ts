@@ -442,6 +442,7 @@ export class NexaBot {
         switch (id) {
             case "nexa_prev":
                 if (!player) return;
+                cancelClosingTimer(guildId);
                 await previousTrack(guildId);
                 break;
 

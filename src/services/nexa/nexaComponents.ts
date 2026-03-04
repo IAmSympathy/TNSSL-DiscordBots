@@ -312,7 +312,7 @@ export async function buildTrackProposal(tracks: Track[], userId: string): Promi
         .addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
                 [
-                    `### 🎵 Résultat trouvé`,
+                    `### 🔍 Résultat trouvé`,
                     `**[${info.title}](${info.url})**`,
                     [
                         `${info.sourceEmoji} ${info.channel}`,
