@@ -135,7 +135,6 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
         container.addMediaGalleryComponents(
             new MediaGalleryBuilder().addItems(new MediaGalleryItemBuilder().setURL(thumbUrl))
         );
-        // Barre de progression juste sous l'image, sans codeblock
         if (!info.isLive) {
             const posMs = (player as any)?.position ?? 0;
             const durationMs = current.info.duration ?? 0;
@@ -146,123 +145,64 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
         container.addSeparatorComponents(new SeparatorBuilder());
         container.addActionRowComponents(
             new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder()
-                    .setCustomId("nexa_prev")
-                    .setLabel("⏮ Préc.")
-                    .setStyle(ButtonStyle.Secondary)
-                    .setDisabled(!hasHistory),
-                new ButtonBuilder()
-                    .setCustomId("nexa_playpause")
-                    .setLabel(isPaused ? "▶️ Reprendre" : "⏸ Pause")
-                    .setStyle(isPaused ? ButtonStyle.Success : ButtonStyle.Primary)
-                    .setDisabled(!isPlaying),
-                new ButtonBuilder()
-                    .setCustomId("nexa_skip")
-                    .setLabel("⏭ Skip")
-                    .setStyle(ButtonStyle.Secondary)
-                    .setDisabled(!isPlaying),
-                new ButtonBuilder()
-                    .setCustomId("nexa_stop")
-                    .setLabel("⏹ Stop")
-                    .setStyle(ButtonStyle.Danger)
-                    .setDisabled(!isPlaying),
+                new ButtonBuilder().setCustomId("nexa_prev").setLabel("⏮ Préc.").setStyle(ButtonStyle.Secondary).setDisabled(!hasHistory),
+                new ButtonBuilder().setCustomId("nexa_playpause").setLabel(isPaused ? "▶️ Reprendre" : "⏸ Pause").setStyle(isPaused ? ButtonStyle.Success : ButtonStyle.Primary).setDisabled(!isPlaying),
+                new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Skip").setStyle(ButtonStyle.Secondary).setDisabled(!isPlaying),
+                new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Stop").setStyle(ButtonStyle.Danger).setDisabled(!isPlaying),
+                new ButtonBuilder().setCustomId("nexa_loop").setLabel(repeatMode === "off" ? "🔁 Off" : repeatMode === "queue" ? "🔁 Liste" : "🔂 Titre").setStyle(repeatMode === "off" ? ButtonStyle.Secondary : ButtonStyle.Success),
             )
         );
         container.addActionRowComponents(
             new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder()
-                    .setCustomId("nexa_seek_back")
-                    .setLabel("⏪ -10s")
-                    .setStyle(ButtonStyle.Secondary)
-                    .setDisabled(!isPlaying || info.isLive),
-                new ButtonBuilder()
-                    .setCustomId("nexa_seek_forward")
-                    .setLabel("+10s ⏩")
-                    .setStyle(ButtonStyle.Secondary)
-                    .setDisabled(!isPlaying || info.isLive),
-                new ButtonBuilder()
-                    .setCustomId("nexa_loop")
-                    .setLabel(repeatMode === "off" ? "🔁 Boucle: Off" : repeatMode === "track" ? "🔂 Boucle: Titre" : "🔁 Boucle: File")
-                    .setStyle(repeatMode === "off" ? ButtonStyle.Secondary : ButtonStyle.Success),
-                new ButtonBuilder()
-                    .setCustomId("nexa_shuffle")
-                    .setLabel("🔀 Shuffle")
-                    .setStyle(ButtonStyle.Secondary)
-                    .setDisabled(queue.length < 2),
+                new ButtonBuilder().setCustomId("nexa_seek_back").setLabel("⏪ -10s").setStyle(ButtonStyle.Secondary).setDisabled(!isPlaying || info.isLive),
+                new ButtonBuilder().setCustomId("nexa_seek_forward").setLabel("+10s ⏩").setStyle(ButtonStyle.Secondary).setDisabled(!isPlaying || info.isLive),
+                new ButtonBuilder().setCustomId("nexa_shuffle").setLabel("🔀 Shuffle").setStyle(ButtonStyle.Secondary).setDisabled(queue.length < 2),
             )
         );
-        // Select menu des filtres (single-select) — juste sous les boutons
         {
             const activeFilters = getActiveFilters(player!);
             const activeId = FILTERS.find(f => activeFilters.has(f.id))?.id ?? null;
             const options = [
-                new StringSelectMenuOptionBuilder()
-                    .setValue("nexa_filter_none")
-                    .setLabel("Aucun filtre")
-                    .setDescription("Désactiver tous les filtres")
-                    .setEmoji("✖️")
-                    .setDefault(activeId === null),
-                ...FILTERS.map(f =>
-                    new StringSelectMenuOptionBuilder()
-                        .setValue(`nexa_filter_${f.id}`)
-                        .setLabel(`${f.emoji} ${f.label}`)
-                        .setDescription(f.description)
-                        .setDefault(f.id === activeId)
-                ),
+                new StringSelectMenuOptionBuilder().setValue("nexa_filter_none").setLabel("Aucun filtre").setDescription("Désactiver tous les filtres").setEmoji("✖️").setDefault(activeId === null),
+                ...FILTERS.map(f => new StringSelectMenuOptionBuilder().setValue(`nexa_filter_${f.id}`).setLabel(`${f.emoji} ${f.label}`).setDescription(f.description).setDefault(f.id === activeId)),
             ];
             container.addActionRowComponents(
                 new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-                    new StringSelectMenuBuilder()
-                        .setCustomId("nexa_filter_select")
-                        .setPlaceholder("🎛️ Filtre audio…")
-                        .setMinValues(1)
-                        .setMaxValues(1)
-                        .addOptions(options)
+                    new StringSelectMenuBuilder().setCustomId("nexa_filter_select").setPlaceholder("🎛️ Filtre audio…").setMinValues(1).setMaxValues(1).addOptions(options)
                 )
             );
         }
         container.addSeparatorComponents(new SeparatorBuilder());
-        // Toujours 3 lignes fixes : 1 précédent | courant au milieu | 1 suivant
         {
             const prevTrack = history.length > 0 ? history[history.length - 1] : null;
             const nextTrack = queue.length > 0 ? queue[0] : null;
-
             const fmtLine = (t: Track, prefix: string) => {
                 const inf = trackToDisplay(t);
                 const title = inf.title.length > 46 ? inf.title.slice(0, 45) + "…" : inf.title;
                 return `${prefix} ${title} (${inf.duration})`;
             };
-
             const currentTitle = info.title.length > 44 ? info.title.slice(0, 43) + "…" : info.title;
             const lines = [
                 prevTrack ? fmtLine(prevTrack, " ") : " ",
                 `▶ ${currentTitle} (${info.duration})`,
                 nextTrack ? fmtLine(nextTrack, " ") : " ",
             ];
-
-            // Durée totale restante (position actuelle + suivantes)
             const posMs = (player as any)?.position ?? 0;
             const remainingMs = (current?.info.isStream ? 0 : Math.max(0, (current?.info.duration ?? 0) - posMs))
                 + queue.reduce((acc, t) => acc + (t.info.isStream ? 0 : (t.info.duration ?? 0)), 0);
             const remainingFmt = info.isLive ? "∞" : fmt(remainingMs);
-
             const total = history.length + 1 + queue.length;
             const remaining = 1 + queue.length;
-            // Titre avec temps restant aligné à droite via padding (monospace -#)
-            const label = "📋 Liste de lecture";
             const timeLabel = `(${remainingFmt} · ${remaining} titre${remaining > 1 ? "s" : ""} restant${remaining > 1 ? "s" : ""})`;
-            const header = `**${label}** ${timeLabel}`;
             const footer = `\n-# *${total} titre${total > 1 ? "s" : ""} au total*`;
-
             container.addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(`${header}\n\`\`\`\n${lines.join("\n")}\n\`\`\`${footer}`)
+                new TextDisplayBuilder().setContent(`**📋 Liste de lecture** ${timeLabel}\n\`\`\`\n${lines.join("\n")}\n\`\`\`${footer}`)
             );
         }
 
-
         return {components: [container], flags: MessageFlags.IsComponentsV2, files};
+
     } else {
-        // Vérifier si on est en mode "fermeture imminente"
         const guildId = (player as any)?.guildId as string | undefined;
         const closingTimer = guildId ? getClosingTimer(guildId) : undefined;
 
@@ -272,69 +212,60 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
             const minsLeft = Math.floor(secsLeft / 60);
             const sLeft = secsLeft % 60;
             const countdown = minsLeft > 0 ? `${minsLeft}m${String(sLeft).padStart(2, "0")}s` : `${secsLeft}s`;
-
             const totalMs = 5 * 60 * 1000;
             const ratio = Math.min(1, Math.max(0, msLeft / totalMs));
             const filled = Math.round(ratio * BAR_WIDTH);
             const bar = "▰".repeat(filled) + "▱".repeat(BAR_WIDTH - filled);
 
-            // Header
             container.addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(
-                    [`## 💽 Nexa's Jukebox - En fermeture.`].join("\n")
-                )
+                new TextDisplayBuilder().setContent(`## 💽 Nexa's Jukebox - En fermeture`)
             );
-            // Image placeholder
             container.addMediaGalleryComponents(
                 new MediaGalleryBuilder().addItems(new MediaGalleryItemBuilder().setURL(PLACEHOLDER_URL))
             );
-            // Barre + compte à rebours sous l'image
             container.addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(
-                    [`-# ${bar}`, `⏳ Fermeture dans **${countdown}** — Envoie une chanson pour continuer !`].join("\n")
+                    `-# ${bar}\n⏳ Fermeture dans **${countdown}** — Envoie une chanson pour continuer !`
                 )
             );
             container.addSeparatorComponents(new SeparatorBuilder());
-            // Row 1 : Préc. actif, playpause/skip désactivés, Stop actif
+            // Row 1 : Reprendre (relance liste) + Stop actifs si historique, skip désactivé, loop désactivé
             container.addActionRowComponents(
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder().setCustomId("nexa_prev").setLabel("⏮ Préc.").setStyle(ButtonStyle.Secondary).setDisabled(!hasHistory),
-                    new ButtonBuilder().setCustomId("nexa_playpause").setLabel("▶️ Reprendre").setStyle(ButtonStyle.Primary).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_restart_queue").setLabel("▶️ Reprendre").setStyle(ButtonStyle.Success).setDisabled(!hasHistory),
                     new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Skip").setStyle(ButtonStyle.Secondary).setDisabled(true),
                     new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Stop").setStyle(ButtonStyle.Danger).setDisabled(!hasHistory),
+                    new ButtonBuilder().setCustomId("nexa_loop").setLabel("🔁 Off").setStyle(ButtonStyle.Secondary).setDisabled(true),
                 )
             );
-            // Row 2 : seek désactivés, Boucle actif (relance), Shuffle désactivé
+            // Row 2 : seek désactivés + shuffle désactivé
             container.addActionRowComponents(
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder().setCustomId("nexa_seek_back").setLabel("⏪ -10s").setStyle(ButtonStyle.Secondary).setDisabled(true),
                     new ButtonBuilder().setCustomId("nexa_seek_forward").setLabel("+10s ⏩").setStyle(ButtonStyle.Secondary).setDisabled(true),
-                    new ButtonBuilder().setCustomId("nexa_loop").setLabel("🔁 Relancer la liste").setStyle(ButtonStyle.Success).setDisabled(!hasHistory),
                     new ButtonBuilder().setCustomId("nexa_shuffle").setLabel("🔀 Shuffle").setStyle(ButtonStyle.Secondary).setDisabled(true),
                 )
             );
             // Select filtre désactivé
             container.addActionRowComponents(
                 new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-                    new StringSelectMenuBuilder()
-                        .setCustomId("nexa_filter_select")
-                        .setPlaceholder("🎛️ Filtre audio…")
-                        .setDisabled(true)
+                    new StringSelectMenuBuilder().setCustomId("nexa_filter_select").setPlaceholder("🎛️ Filtre audio…").setDisabled(true)
                         .addOptions([new StringSelectMenuOptionBuilder().setValue("none").setLabel("Aucun filtre")])
                 )
             );
             container.addSeparatorComponents(new SeparatorBuilder());
-            // Liste de lecture (historique)
+            // Liste de lecture : toutes les chansons de l'historique + fermeture au milieu
             {
-                const prevTrack = history.length > 0 ? history[history.length - 1] : null;
-                const fmtLine = (t: Track) => {
+                const fmtLine = (t: Track, prefix: string) => {
                     const inf = trackToDisplay(t);
                     const title = inf.title.length > 46 ? inf.title.slice(0, 45) + "…" : inf.title;
-                    return ` ${title} (${inf.duration})`;
+                    return `${prefix} ${title} (${inf.duration})`;
                 };
+                const prevTrack = history.length > 0 ? history[history.length - 1] : null;
                 const lines = [
-                    prevTrack ? fmtLine(prevTrack) : " ",
-                    `▶ (fin de la file)`,
+                    prevTrack ? fmtLine(prevTrack, " ") : " ",
+                    `▶ (Fermeture du Jukebox)`,
                     ` `,
                 ];
                 const total = history.length + 1;
@@ -345,6 +276,7 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
                 );
             }
             return {components: [container], flags: MessageFlags.IsComponentsV2, files: [makePlaceholderAttachment()]};
+
         } else {
             container.addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(
@@ -361,6 +293,7 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
                     new ButtonBuilder().setCustomId("nexa_playpause").setLabel("⏸ Pause").setStyle(ButtonStyle.Primary).setDisabled(true),
                     new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Skip").setStyle(ButtonStyle.Secondary).setDisabled(true),
                     new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Stop").setStyle(ButtonStyle.Danger).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_loop").setLabel("🔁 Off").setStyle(ButtonStyle.Secondary).setDisabled(true),
                 )
             );
             return {components: [container], flags: MessageFlags.IsComponentsV2, files: [makePlaceholderAttachment()]};

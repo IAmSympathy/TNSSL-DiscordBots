@@ -448,6 +448,20 @@ export class NexaBot {
                 await this.refreshPanel(guildId);
                 break;
 
+            case "nexa_restart_queue": {
+                if (!player) return;
+                cancelClosingTimer(guildId);
+                const hist = getHistory(guildId);
+                if (hist.length > 0) {
+                    for (const t of hist) {
+                        player.queue.add(t);
+                    }
+                    await player.play();
+                }
+                await this.refreshPanel(guildId);
+                break;
+            }
+
             case "nexa_loop": {
                 if (!player) return;
                 // En mode fermeture (pas de current), "boucle" relance toute la liste depuis l'historique
