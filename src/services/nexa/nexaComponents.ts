@@ -13,12 +13,29 @@ const PLACEHOLDER_FILENAME = "nexa_placeholder.png";
 const PLACEHOLDER_PATH = path.join(process.cwd(), "assets", PLACEHOLDER_FILENAME);
 const PLACEHOLDER_URL = `attachment://${PLACEHOLDER_FILENAME}`;
 
+const PLACEHOLDER_SMALL_FILENAME = "nexa_placeholder_small.png";
+const PLACEHOLDER_SMALL_PATH = path.join(process.cwd(), "assets", PLACEHOLDER_SMALL_FILENAME);
+const PLACEHOLDER_SMALL_URL = `attachment://${PLACEHOLDER_SMALL_FILENAME}`;
+
 function makePlaceholderAttachment(): AttachmentBuilder {
     return new AttachmentBuilder(PLACEHOLDER_PATH, {name: PLACEHOLDER_FILENAME});
 }
 
+function makeSmallPlaceholderAttachment(): AttachmentBuilder {
+    return new AttachmentBuilder(PLACEHOLDER_SMALL_PATH, {name: PLACEHOLDER_SMALL_FILENAME});
+}
+
 /** Télécharge une thumbnail distante, la redimensionne en 1920×1080 (cover) et la retourne comme AttachmentBuilder */
 async function fetchThumbnailAttachment(url: string): Promise<AttachmentBuilder | null> {
+    return fetchThumbnailAttachmentSized(url, 1920, 1080);
+}
+
+/** Télécharge une thumbnail distante, la redimensionne en 640×360 (cover) et la retourne comme AttachmentBuilder */
+async function fetchSmallThumbnailAttachment(url: string): Promise<AttachmentBuilder | null> {
+    return fetchThumbnailAttachmentSized(url, 640, 360);
+}
+
+async function fetchThumbnailAttachmentSized(url: string, width: number, height: number): Promise<AttachmentBuilder | null> {
     try {
         const raw = await new Promise<Buffer>((resolve, reject) => {
             const proto = url.startsWith("https") ? https : http;
@@ -30,8 +47,8 @@ async function fetchThumbnailAttachment(url: string): Promise<AttachmentBuilder 
             }).on("error", reject);
         });
         const resized = await sharp(raw)
-            .resize(1920, 1080, {fit: "cover", position: "centre"})
-            .jpeg({quality: 90})
+            .resize(width, height, {fit: "cover", position: "centre"})
+            .jpeg({quality: 85})
             .toBuffer();
         return new AttachmentBuilder(resized, {name: "thumb.jpg"});
     } catch {
@@ -118,7 +135,7 @@ export async function buildJukeboxPanel(player: Player | null, hasHistory = fals
                     .setDisabled(!isPlaying),
                 new ButtonBuilder()
                     .setCustomId("nexa_loop")
-                    .setLabel(repeatMode === "off" ? "🔁 Off" : repeatMode === "track" ? "🔂 Titre" : "🔁 File")
+                    .setLabel(repeatMode === "off" ? "🔁 Boucle: Off" : repeatMode === "track" ? "🔂 Boucle: Titre" : "🔁 Boucle: File")
                     .setStyle(repeatMode === "off" ? ButtonStyle.Secondary : ButtonStyle.Success),
             )
         );
@@ -183,11 +200,11 @@ export async function buildTrackProposal(tracks: Track[], userId: string): Promi
     const info = trackToDisplay(track);
     const container = new ContainerBuilder();
 
-    // Thumbnail redimensionnée comme le panneau principal
-    let thumbUrl = PLACEHOLDER_URL;
-    let files: AttachmentBuilder[] | undefined = [makePlaceholderAttachment()];
+    // Thumbnail petite (640×360) — taille uniforme pour toutes les propositions
+    let thumbUrl = PLACEHOLDER_SMALL_URL;
+    let files: AttachmentBuilder[] | undefined = [makeSmallPlaceholderAttachment()];
     if (info.thumbnail) {
-        const thumbAttachment = await fetchThumbnailAttachment(info.thumbnail);
+        const thumbAttachment = await fetchSmallThumbnailAttachment(info.thumbnail);
         if (thumbAttachment) {
             thumbUrl = "attachment://thumb.jpg";
             files = [thumbAttachment];

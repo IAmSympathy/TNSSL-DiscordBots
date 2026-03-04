@@ -44,11 +44,11 @@ export class NexaBot {
 
         m.on("trackStart", async (player) => {
             console.log(`[Nexa] ▶️ ${player.queue.current?.info.title}`);
-            // Mémoriser la track qui VIENT de démarrer dans l'historique
-            if (player.queue.current) pushHistory(player.guildId, player.queue.current);
             await this.refreshPanel(player.guildId);
         });
-        m.on("trackEnd", async (player) => {
+        m.on("trackEnd", async (player, track) => {
+            // Push la track qui vient de se terminer dans l'historique
+            if (track) pushHistory(player.guildId, track as Track);
             await this.refreshPanel(player.guildId);
         });
         m.on("queueEnd", async (player) => {

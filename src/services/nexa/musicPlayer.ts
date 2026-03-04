@@ -118,8 +118,14 @@ export async function togglePause(guildId: string): Promise<"paused" | "resumed"
 
 // Historique des tracks jouées par guildId (max 50)
 const trackHistory = new Map<string, Track[]>();
+// Flag pour ignorer le prochain trackEnd/trackStart lors d'un previous
+const skipNextPush = new Set<string>();
 
 export function pushHistory(guildId: string, track: Track): void {
+    if (skipNextPush.has(guildId)) {
+        skipNextPush.delete(guildId);
+        return;
+    }
     const hist = trackHistory.get(guildId) ?? [];
     hist.push(track);
     if (hist.length > 50) hist.shift();
@@ -142,7 +148,9 @@ export async function previousTrack(guildId: string): Promise<void> {
     if (!hist.length) return;
     const prev = hist.pop()!;
     trackHistory.set(guildId, hist);
-    // Remettre la track courante en tête de file
+
+    // Remettre la track courante en tête de file SANS la re-pousser dans l'historique
+    skipNextPush.add(guildId);
     if (player.queue.current) player.queue.add(player.queue.current, 0);
     await player.play({track: prev});
 }
