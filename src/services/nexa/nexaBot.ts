@@ -279,7 +279,7 @@ export class NexaBot {
         const textChan = message.channel as TextChannel;
 
         if (!await isLavalinkReady()) {
-            const m = await textChan.send({content: "⏳ Lavalink en cours de démarrage... réessaie dans quelques secondes."}).catch(() => null);
+            const m = await textChan.send({content: "En cours de démarrage... réessaie dans quelques secondes."}).catch(() => null);
             if (m) setTimeout(() => m.delete().catch(() => {
             }), 7000);
             return;
@@ -288,7 +288,7 @@ export class NexaBot {
         const member = await message.guild?.members.fetch(message.author.id).catch(() => null);
         const voiceChannel = member?.voice.channel;
         if (!voiceChannel) {
-            const m = await textChan.send({content: `❌ <@${message.author.id}> Tu dois être dans un salon vocal !`}).catch(() => null);
+            const m = await textChan.send({content: `<@${message.author.id}> Tu dois être dans un salon vocal !`}).catch(() => null);
             if (m) setTimeout(() => m.delete().catch(() => {
             }), 5000);
             return;
@@ -300,7 +300,7 @@ export class NexaBot {
         });
 
         if (!result) {
-            const m = await textChan.send({content: `❌ Aucun résultat pour **${query}**`}).catch(() => null);
+            const m = await textChan.send({content: `Aucun résultat pour **${query}**`}).catch(() => null);
             if (m) setTimeout(() => m.delete().catch(() => {
             }), 5000);
             return;
@@ -389,7 +389,7 @@ export class NexaBot {
 
         // Vérifier que l'utilisateur est dans le même salon vocal que le bot (sauf pour lyrics)
         if (id !== "nexa_lyrics" && !await this.isInSameVoiceChannel(interaction)) {
-            await interaction.followUp({content: "❌ Tu dois être dans le même salon vocal que moi !", flags: MessageFlags.Ephemeral}).catch(() => {
+            await interaction.followUp({content: "Tu dois être dans le même salon vocal que moi !", flags: MessageFlags.Ephemeral}).catch(() => {
             });
             return;
         }
@@ -438,13 +438,13 @@ export class NexaBot {
 
             case "nexa_lyrics": {
                 if (!player?.queue?.current) return;
-                await interaction.followUp({content: "🔍 Recherche des paroles...", flags: MessageFlags.Ephemeral}).catch(() => {
+                await interaction.followUp({content: "\`Recherche des paroles...\`", flags: MessageFlags.Ephemeral}).catch(() => {
                 });
                 try {
                     const track = player.queue.current;
                     const result = await (player as any).getLyrics(track, false).catch(() => null);
                     if (!result) {
-                        await interaction.editReply({content: "❌ Aucune parole trouvée pour cette chanson."}).catch(() => {
+                        await interaction.editReply({content: "Aucune parole trouvée pour cette chanson."}).catch(() => {
                         });
                         return;
                     }
@@ -458,7 +458,7 @@ export class NexaBot {
                         lyricsText = "";
                     }
                     if (!lyricsText || lyricsText.length < 5) {
-                        await interaction.editReply({content: "❌ Aucune parole trouvée pour cette chanson."}).catch(() => {
+                        await interaction.editReply({content: "Aucune parole trouvée pour cette chanson."}).catch(() => {
                         });
                         return;
                     }
@@ -479,7 +479,7 @@ export class NexaBot {
                     await interaction.editReply({content: `${title}${pages[0]}${pages.length > 1 ? `\n-# *(page 1/${pages.length} — /lyrics pour voir la suite)*` : ""}`}).catch(() => {
                     });
                 } catch {
-                    await interaction.editReply({content: "❌ Le plugin lyrics n'est pas disponible sur ce serveur Lavalink."}).catch(() => {
+                    await interaction.editReply({content: "Le plugin lyrics n'est pas disponible sur ce serveur Lavalink."}).catch(() => {
                     });
                 }
                 break;
@@ -504,7 +504,7 @@ export class NexaBot {
 
         // Vérification salon vocal
         if (!await this.isInSameVoiceChannel(interaction)) {
-            await interaction.followUp({content: "❌ Tu dois être dans le même salon vocal que moi !", flags: MessageFlags.Ephemeral}).catch(() => {
+            await interaction.followUp({content: "Tu dois être dans le même salon vocal que moi !", flags: MessageFlags.Ephemeral}).catch(() => {
             });
             return;
         }
