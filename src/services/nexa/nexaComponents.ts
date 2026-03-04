@@ -94,7 +94,7 @@ export function trackToDisplay(t: Track) {
 }
 
 /** Construit le message Components V2 du panneau jukebox */
-export async function buildJukeboxPanel(player: Player | null, history: Track[] = [], lyricsCache: Map<string, boolean> = new Map()): Promise<{ components: any[]; flags: number; files?: AttachmentBuilder[] }> {
+export async function buildJukeboxPanel(player: Player | null, history: Track[] = []): Promise<{ components: any[]; flags: number; files?: AttachmentBuilder[] }> {
     const container = new ContainerBuilder();
 
     const current = player?.queue?.current as Track | null | undefined;
@@ -106,9 +106,6 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
 
     if (current) {
         const info = trackToDisplay(current);
-        const trackId = (current.info as any).identifier ?? current.info.uri ?? "";
-        const lyricsKnown = lyricsCache.has(trackId);
-        const lyricsAvailable = lyricsKnown ? lyricsCache.get(trackId)! : false;
 
         // Thumbnail : téléchargée comme attachment pour taille uniforme
         let thumbUrl = PLACEHOLDER_URL;
@@ -191,11 +188,6 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
                     .setLabel("🔀 Shuffle")
                     .setStyle(ButtonStyle.Secondary)
                     .setDisabled(queue.length < 2),
-                new ButtonBuilder()
-                    .setCustomId("nexa_lyrics")
-                    .setLabel(lyricsKnown ? (lyricsAvailable ? "📜 Paroles" : "📜 Pas de paroles") : "📜 Paroles…")
-                    .setStyle(ButtonStyle.Secondary)
-                    .setDisabled(!lyricsAvailable),
             )
         );
         // Select menu des filtres (single-select) — juste sous les boutons

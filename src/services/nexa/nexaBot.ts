@@ -23,7 +23,7 @@ async function checkLyricsAvailable(player: Player, track: Track): Promise<boole
     const id = (track.info as any).identifier ?? track.info.uri ?? "";
     if (lyricsAvailableCache.has(id)) return lyricsAvailableCache.get(id)!;
     try {
-        const result = await (player as any).getLyrics(track, false).catch(() => null);
+u        const result = await (player as any).getLyrics(track, true).catch(() => null);
         let hasLyrics = false;
         if (result?.lines && Array.isArray(result.lines) && result.lines.length > 0) hasLyrics = true;
         else if (typeof result === "string" && result.length > 10) hasLyrics = true;
@@ -159,7 +159,7 @@ export class NexaBot {
         } catch { /* manager pas encore prêt */
         }
 
-        const options = await buildJukeboxPanel(player ?? null, getHistory(guildId), lyricsAvailableCache);
+        const options = await buildJukeboxPanel(player ?? null, getHistory(guildId));
 
         // Essaie d'éditer le message existant
         const existingId = this.controlMessages.get(guildId);
@@ -442,7 +442,7 @@ export class NexaBot {
                 });
                 try {
                     const track = player.queue.current;
-                    const result = await (player as any).getLyrics(track, false).catch(() => null);
+                    const result = await (player as any).getLyrics(track, true).catch(() => null);
                     if (!result) {
                         await interaction.editReply({content: "Aucune parole trouvée pour cette chanson."}).catch(() => {
                         });
