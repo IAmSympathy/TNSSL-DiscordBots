@@ -149,24 +149,28 @@ export async function buildJukeboxPanel(player: Player | null, hasHistory = fals
             )
         );
         container.addSeparatorComponents(new SeparatorBuilder());
-        if (queue.length > 0) {
-            const MAX_SHOW = 5;
+        // Track courante + file d'attente
+        {
+            const MAX_SHOW = 4; // 4 suivantes + la courante = 5 lignes max
+            const currentTitle = info.title.length > 50 ? info.title.slice(0, 49) + "…" : info.title;
+            const lines: string[] = [`▶️ **${currentTitle}** · *${info.duration}*`];
+
             const shown = queue.slice(0, MAX_SHOW);
-            const lines = shown.map((t, i) => {
+            for (const t of shown) {
                 const inf = trackToDisplay(t);
-                const title = inf.title.length > 50 ? inf.title.slice(0, 49) + "…" : inf.title;
-                return `**${i + 1}.** ${title} · *${inf.duration}*`;
-            });
+                const title = inf.title.length > 48 ? inf.title.slice(0, 47) + "…" : inf.title;
+                lines.push(`╰ ${title} · *${inf.duration}*`);
+            }
+
             const remaining = queue.length - MAX_SHOW;
-            const footer = remaining > 0
-                ? `\n-# *+ ${remaining} autre${remaining > 1 ? "s" : ""} (${queue.length} au total)*`
-                : `\n-# *${queue.length} titre${queue.length > 1 ? "s" : ""} dans la file*`;
+            const footer = queue.length === 0
+                ? "\n-# *File vide après ce titre.*"
+                : remaining > 0
+                    ? `\n-# *+ ${remaining} autre${remaining > 1 ? "s" : ""} (${queue.length + 1} au total)*`
+                    : `\n-# *${queue.length + 1} titre${queue.length + 1 > 1 ? "s" : ""} dans la file*`;
+
             container.addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(`**📋 File d'attente :**\n${lines.join("\n")}${footer}`)
-            );
-        } else {
-            container.addTextDisplayComponents(
-                new TextDisplayBuilder().setContent("-# *File vide après ce titre.*")
             );
         }
 

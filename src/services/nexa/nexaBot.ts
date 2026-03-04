@@ -226,7 +226,7 @@ export class NexaBot {
             return;
         }
 
-        const loading = await textChan.send({content: `🔍 Recherche de **${query}**...`}).catch(() => null);
+        const loading = await textChan.send({content: `\`Recherche de \"${query}\"...\``}).catch(() => null);
         const result = await searchTrack(query, message.guild!.id, voiceChannel.id, channelId, message.author);
         if (loading) await loading.delete().catch(() => {
         });
@@ -254,6 +254,30 @@ export class NexaBot {
         const proposalMsg = await textChan.send(proposal as any).catch(() => null);
         if (proposalMsg) setTimeout(() => proposalMsg.delete().catch(() => {
         }), 5 * 60 * 1000);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // HELPERS
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /** Vérifie que l'utilisateur est dans le même salon vocal que le bot */
+    private async isInSameVoiceChannel(interaction: any): Promise<boolean> {
+        const guild = this.client.guilds.cache.get(interaction.guildId);
+        if (!guild) return false;
+        const member = await guild.members.fetch(interaction.user.id).catch(() => null);
+        if (!member) return false;
+        const userVc = member.voice.channelId;
+        if (!userVc) return false;
+        // Cherche le player pour connaître le salon du bot
+        let player: Player | undefined;
+        try {
+            player = getKazagumo().getPlayer(interaction.guildId);
+        } catch {
+            return false;
+        }
+        // Si pas de player actif, accepter (confirmation d'ajout etc.)
+        if (!player) return true;
+        return player.voiceChannelId === userVc;
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -294,6 +318,13 @@ export class NexaBot {
             return;
         }
         if (!player && !["nexa_playpause", "nexa_stop"].includes(id)) return;
+
+        // Vérifier que l'utilisateur est dans le même salon vocal que le bot
+        if (!await this.isInSameVoiceChannel(interaction)) {
+            await interaction.followUp({content: "❌ Tu dois être dans le même salon vocal que moi !", flags: MessageFlags.Ephemeral}).catch(() => {
+            });
+            return;
+        }
 
         switch (id) {
             case "nexa_prev":
