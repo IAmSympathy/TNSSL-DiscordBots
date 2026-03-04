@@ -1,8 +1,8 @@
 ﻿﻿# Script de déploiement automatique vers le serveur Oracle
 # Usage: .\deploy-to-oracle.ps1
 
-$SSH_KEY = "C:\Users\samyl\Downloads\ssh-key-2026-02-10.key"
-$SERVER = "ubuntu@151.145.51.189"
+$SSH_KEY = "C:\Users\samyl\Downloads\ssh-key-2026-03-04.key"
+$SERVER = "ubuntu@147.15.132.219"
 $SSH_OPTS = "-o StrictHostKeyChecking=no -o ConnectTimeout=15"
 
 Write-Host "🚀 Déploiement vers le serveur Oracle Cloud..." -ForegroundColor Cyan

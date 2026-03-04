@@ -91,12 +91,13 @@ export async function getOrCreatePlayer(guildId: string, voiceChannelId: string,
     return await m.createPlayer({guildId, voiceChannelId, textChannelId, volume: 80, selfDeaf: true, selfMute: false});
 }
 
-export async function searchTrack(query: string, guildId: string, voiceChannelId: string, textChannelId: string, requestUser: unknown): Promise<{ player: Player; track: Track } | null> {
+export async function searchTrack(query: string, guildId: string, voiceChannelId: string, textChannelId: string, requestUser: unknown): Promise<{ player: Player; track: Track; tracks: Track[] } | null> {
     try {
         const player = await getOrCreatePlayer(guildId, voiceChannelId, textChannelId);
         const result = await player.search({query}, requestUser);
         if (!result?.tracks.length) return null;
-        return {player, track: result.tracks[0] as Track};
+        const tracks = result.tracks.slice(0, 6) as Track[];
+        return {player, track: tracks[0], tracks};
     } catch (err) {
         console.error("[Nexa] Erreur recherche:", err);
         return null;

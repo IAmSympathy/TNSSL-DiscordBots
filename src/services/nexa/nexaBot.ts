@@ -13,7 +13,7 @@ import {buildJukeboxPanel, buildTrackProposal} from "./nexaComponents";
 dotenv.config();
 
 // ── Pending tracks par userId (en attente de confirmation)
-const pendingTracks = new Map<string, { track: Track; guildId: string; voiceChannelId: string; textChannelId: string }>();
+const pendingTracks = new Map<string, { track: Track; tracks: Track[]; guildId: string; voiceChannelId: string; textChannelId: string }>();
 
 export class NexaBot {
     public client: Client;
@@ -154,8 +154,14 @@ export class NexaBot {
             await this.handleSearch(message);
         });
 
-        // Boutons
+        // Boutons et select menus
         this.client.on(Events.InteractionCreate, async (interaction) => {
+            if (interaction.isStringSelectMenu() && interaction.customId.startsWith("nexa_select_")) {
+                await interaction.deferUpdate().catch(() => {
+                });
+                await this.handleSelectMenu(interaction);
+                return;
+            }
             if (!interaction.isButton()) return;
             if (!interaction.customId.startsWith("nexa_")) return;
             await interaction.deferUpdate().catch(() => {
@@ -229,18 +235,19 @@ export class NexaBot {
             return;
         }
 
-        const {track} = result;
+        const {track, tracks} = result;
         const userId = message.author.id;
 
         pendingTracks.set(userId, {
             track,
+            tracks,
             guildId: message.guild!.id,
             voiceChannelId: voiceChannel.id,
             textChannelId: channelId,
         });
         setTimeout(() => pendingTracks.delete(userId), 5 * 60 * 1000);
 
-        const proposal = buildTrackProposal(track, userId);
+        const proposal = buildTrackProposal(tracks, userId);
         const proposalMsg = await textChan.send(proposal as any).catch(() => null);
         if (proposalMsg) setTimeout(() => proposalMsg.delete().catch(() => {
         }), 5 * 60 * 1000);
@@ -331,6 +338,36 @@ export class NexaBot {
                 break;
             }
         }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // SELECT MENU (choix alternatif)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private async handleSelectMenu(interaction: any): Promise<void> {
+        const userId = interaction.customId.replace("nexa_select_", "");
+        if (interaction.user.id !== userId) return;
+
+        const pending = pendingTracks.get(userId);
+        if (!pending) return;
+
+        const value: string = interaction.values[0]; // ex: nexa_alt_userId_2
+        const parts = value.split("_");
+        const idx = parseInt(parts[parts.length - 1], 10); // index 1-based parmi les alternatives
+        const selectedTrack = pending.tracks[idx]; // tracks[0] = premier résultat, tracks[1] = alt 1, etc.
+        if (!selectedTrack) return;
+
+        // Mettre à jour le pending avec le nouveau track sélectionné
+        pending.track = selectedTrack;
+        pendingTracks.set(userId, pending);
+
+        // Reconstruire la proposition avec le nouveau premier choix
+        const newTracks = [selectedTrack, ...pending.tracks.filter((_, i) => i !== idx)];
+        const proposal = buildTrackProposal(newTracks, userId);
+
+        // Éditer le message de proposition
+        await interaction.message.edit(proposal as any).catch(() => {
+        });
     }
 
     // ─────────────────────────────────────────────────────────────────────────
