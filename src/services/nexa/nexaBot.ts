@@ -7,7 +7,7 @@
 import {Client, Events, GatewayIntentBits, type Message, MessageFlags, TextChannel,} from "discord.js";
 import * as dotenv from "dotenv";
 import type {Player, Track} from "lavalink-client";
-import {getHistory, getKazagumo, getOrCreatePlayer, initKazagumo, isLavalinkReady, previousTrack, pushHistory, searchTrack, skipTrack, stopPlayback, togglePause,} from "./musicPlayer";
+import {getHistory, getKazagumo, getOrCreatePlayer, initKazagumo, isLavalinkReady, previousTrack, pushHistory, searchTrack, seekRelative, skipTrack, stopPlayback, togglePause,} from "./musicPlayer";
 import {buildJukeboxPanel, buildTrackProposal} from "./nexaComponents";
 import {applyFilterSet} from "./nexaFilters";
 
@@ -396,6 +396,18 @@ export class NexaBot {
                 await this.refreshPanel(guildId);
                 break;
             }
+
+            case "nexa_seek_back":
+                if (!player) return;
+                await seekRelative(guildId, -10_000);
+                await this.refreshPanel(guildId);
+                break;
+
+            case "nexa_seek_forward":
+                if (!player) return;
+                await seekRelative(guildId, 10_000);
+                await this.refreshPanel(guildId);
+                break;
 
             case "nexa_shuffle": {
                 if (!player) return;

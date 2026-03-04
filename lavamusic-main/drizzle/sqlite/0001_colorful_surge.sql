@@ -1,1 +1,0 @@
-ALTER TABLE `Guild` ADD `defaultVolume` integer DEFAULT 50;

@@ -154,12 +154,44 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
         container.addActionRowComponents(
             new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
+                    .setCustomId("nexa_seek_back")
+                    .setLabel("⏪ -10s")
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(!isPlaying || info.isLive),
+                new ButtonBuilder()
+                    .setCustomId("nexa_seek_forward")
+                    .setLabel("+10s ⏩")
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(!isPlaying || info.isLive),
+                new ButtonBuilder()
                     .setCustomId("nexa_shuffle")
                     .setLabel("🔀 Shuffle")
                     .setStyle(ButtonStyle.Secondary)
                     .setDisabled(queue.length < 2),
             )
         );
+        // Select menu des filtres (single-select) — juste sous les boutons
+        {
+            const activeFilters = getActiveFilters(player!);
+            const activeId = FILTERS.find(f => activeFilters.has(f.id))?.id ?? null;
+            const options = FILTERS.map(f =>
+                new StringSelectMenuOptionBuilder()
+                    .setValue(`nexa_filter_${f.id}`)
+                    .setLabel(`${f.emoji} ${f.label}`)
+                    .setDescription(f.description)
+                    .setDefault(f.id === activeId)
+            );
+            container.addActionRowComponents(
+                new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+                    new StringSelectMenuBuilder()
+                        .setCustomId("nexa_filter_select")
+                        .setPlaceholder("🎛️ Filtre audio…")
+                        .setMinValues(0)
+                        .setMaxValues(1)
+                        .addOptions(options)
+                )
+            );
+        }
         container.addSeparatorComponents(new SeparatorBuilder());
         // Toujours 3 lignes fixes : 1 précédent | courant au milieu | 1 suivant
         {
@@ -199,27 +231,6 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
             );
         }
 
-        // Select menu des filtres (multi-select)
-        {
-            const activeFilters = getActiveFilters(player!);
-            const options = FILTERS.map(f =>
-                new StringSelectMenuOptionBuilder()
-                    .setValue(`nexa_filter_${f.id}`)
-                    .setLabel(`${f.emoji} ${f.label}`)
-                    .setDescription(f.description)
-                    .setDefault(activeFilters.has(f.id))
-            );
-            container.addActionRowComponents(
-                new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-                    new StringSelectMenuBuilder()
-                        .setCustomId("nexa_filter_select")
-                        .setPlaceholder("🎛️ Filtres audio — sélectionner pour activer")
-                        .setMinValues(0)
-                        .setMaxValues(FILTERS.length)
-                        .addOptions(options)
-                )
-            );
-        }
 
         return {components: [container], flags: MessageFlags.IsComponentsV2, files};
     } else {

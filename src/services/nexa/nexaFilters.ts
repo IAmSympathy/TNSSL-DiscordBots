@@ -57,54 +57,54 @@ export function getActiveFilters(player: Player): Set<string> {
     return active;
 }
 
-/** Synchronise les filtres du player selon la sélection complète reçue du select menu */
+/** Synchronise les filtres du player — un seul filtre actif à la fois */
 export async function applyFilterSet(player: Player, selectedIds: string[]): Promise<void> {
     const fm = player.filterManager;
-    const selected = new Set(selectedIds);
-    const active = getActiveFilters(player);
 
-    // EQ presets — on reset d'abord, puis on applique celui sélectionné (un seul à la fois)
-    const eqFilters = ["bassboost", "pop", "rock", "electronic", "gaming"];
-    const selectedEq = eqFilters.find(id => selected.has(id));
-    const activeEq = eqFilters.find(id => active.has(id) || active.has("_eq"));
-    if (selectedEq !== activeEq) {
-        await fm.clearEQ(); // reset EQ
-        if (selectedEq) {
-            switch (selectedEq) {
-                case "bassboost":
-                    await fm.setEQ(EQList.BassboostHigh);
-                    break;
-                case "pop":
-                    await fm.setEQPreset("Pop");
-                    break;
-                case "rock":
-                    await fm.setEQPreset("Rock");
-                    break;
-                case "electronic":
-                    await fm.setEQPreset("Electronic");
-                    break;
-                case "gaming":
-                    await fm.setEQPreset("Gaming");
-                    break;
-            }
-        }
-    }
+    // Désactiver tous les filtres actifs
+    await fm.resetFilters();
 
-    // Filtres toggle — activer/désactiver selon l'écart
-    const toggleFilters: { id: string; activeKey: string; toggle: () => Promise<any> }[] = [
-        {id: "nightcore", activeKey: "nightcore", toggle: () => fm.toggleNightcore()},
-        {id: "vaporwave", activeKey: "vaporwave", toggle: () => fm.toggleVaporwave()},
-        {id: "karaoke", activeKey: "karaoke", toggle: () => fm.toggleKaraoke()},
-        {id: "rotation", activeKey: "rotation", toggle: () => fm.toggleRotation()},
-        {id: "tremolo", activeKey: "tremolo", toggle: () => fm.toggleTremolo()},
-        {id: "vibrato", activeKey: "vibrato", toggle: () => fm.toggleVibrato()},
-        {id: "lowpass", activeKey: "lowpass", toggle: () => fm.toggleLowPass()},
-    ];
+    // Activer le filtre sélectionné (s'il y en a un)
+    const filterId = selectedIds[0] ?? null;
+    if (!filterId) return;
 
-    for (const {id, activeKey, toggle} of toggleFilters) {
-        const isActive = active.has(activeKey);
-        const shouldBeActive = selected.has(id);
-        if (isActive !== shouldBeActive) await toggle();
+    switch (filterId) {
+        case "nightcore":
+            await fm.toggleNightcore();
+            break;
+        case "vaporwave":
+            await fm.toggleVaporwave();
+            break;
+        case "karaoke":
+            await fm.toggleKaraoke();
+            break;
+        case "rotation":
+            await fm.toggleRotation();
+            break;
+        case "tremolo":
+            await fm.toggleTremolo();
+            break;
+        case "vibrato":
+            await fm.toggleVibrato();
+            break;
+        case "lowpass":
+            await fm.toggleLowPass();
+            break;
+        case "bassboost":
+            await fm.setEQ(EQList.BassboostHigh);
+            break;
+        case "pop":
+            await fm.setEQPreset("Pop");
+            break;
+        case "rock":
+            await fm.setEQPreset("Rock");
+            break;
+        case "electronic":
+            await fm.setEQPreset("Electronic");
+            break;
+        case "gaming":
+            await fm.setEQPreset("Gaming");
+            break;
     }
 }
 

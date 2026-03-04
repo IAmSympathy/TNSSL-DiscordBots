@@ -141,6 +141,14 @@ export async function skipTrack(guildId: string): Promise<void> {
     if (player) await player.skip();
 }
 
+export async function seekRelative(guildId: string, offsetMs: number): Promise<void> {
+    const player = getKazagumo().getPlayer(guildId);
+    if (!player?.queue?.current || player.queue.current.info.isStream) return;
+    const duration = player.queue.current.info.duration ?? 0;
+    const newPos = Math.max(0, Math.min(duration, player.position + offsetMs));
+    await player.seek(newPos);
+}
+
 export async function previousTrack(guildId: string): Promise<void> {
     const player = getKazagumo().getPlayer(guildId);
     if (!player) return;
