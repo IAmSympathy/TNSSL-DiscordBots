@@ -54,7 +54,7 @@ function fmt(ms: number): string {
     return h > 0 ? `${h}:${String(m).padStart(2, "0")}:${sec}` : `${m}:${sec}`;
 }
 
-const BAR_WIDTH = 102; // ~largeur d'un MediaGallery Discord en monospace
+const BAR_WIDTH = 40; // ~largeur d'un MediaGallery Discord en monospace
 
 function buildProgressBar(posMs: number, durationMs: number): string {
     if (!durationMs) return "";
