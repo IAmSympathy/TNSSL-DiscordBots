@@ -43,11 +43,8 @@ echo "==> Compilation TypeScript..."
 
 mkdir -p logs
 
-echo "==> Redemarrage PM2..."
-pm2 stop all 2>/dev/null || true
-sleep 2
-pm2 start ecosystem.config.js
-pm2 save
+echo "==> Redemarrage du bot..."
+pm2 restart discord-bot-netricsa
 
 echo ""
 echo "==> Statut des services:"

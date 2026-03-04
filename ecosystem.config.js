@@ -52,11 +52,10 @@ module.exports = {
         },
         {
             name: "yt-cipher",
-            script: "/usr/bin/bash",
-            args: "-c /home/ubuntu/.deno/bin/deno run --allow-net --allow-read --allow-write --allow-env /home/ubuntu/yt-cipher/server.ts",
+            script: "/home/ubuntu/yt-cipher/start.sh",
+            interpreter: "bash",
             cwd: "/home/ubuntu/yt-cipher",
             exec_mode: "fork",
-            interpreter: "none",
             restart_delay: 5000,
             max_restarts: 10,
             min_uptime: "5s",
