@@ -1,0 +1,69 @@
+{
+    "eval": {
+        "description": "Procijeni kod",
+        "success": "Kod je uspješno procijenjen",
+        "error": "Neuspjela procjena koda"
+    },
+    "guilds": {
+        "description": "Upravljaj i izlistaj cehove bota",
+        "list": "Popis cehova",
+        "leave": {
+            "success": "Uspješno napušten ceh: {name}",
+            "fail": "Neuspješno napuštanje ceha {name}",
+            "log": "Bot je napustio ceh: {name} (ID: {id})"
+        },
+        "not_found": "Ceh nije pronađen."
+    },
+    "restart": {
+        "description": "Ponovno pokreni proces bota",
+        "prompt": "Jeste li sigurni да želite ponovno pokrenuti **{client}**?",
+        "status": {
+            "restarting": "Ponovno pokretanje...",
+            "canceled": "Ponovno pokretanje otkazano.",
+            "error": "Došlo je do pogreške prilikom ponovnog pokretanja bota."
+        },
+        "restart_by": "Ponovno pokretanje pokrenuo {user}"
+    },
+    "shutdown": {
+        "description": "Isključi proces bota",
+        "prompt": "Jeste li sigurni да želite isključiti bota?",
+        "status": "Isključivanje...",
+        "canceled": "Isključivanje otkazano."
+    },
+    "deploy": {
+        "description": "Sinkroniziraj slash naredbe s Discord API-jem",
+        "prompt": "Gdje želite implementirati/ukloniti naredbe?",
+        "status": {
+            "deployed_global": "Naredbe implementirane globalno.",
+            "deployed_guild": "Naredbe implementirane u ovom cehu.",
+            "removed_global": "Naredbe uklonjene globalno.",
+            "removed_guild": "Naredbe uklonjene iz ovog ceha.",
+            "failed": "Implementacija nije uspjela putem naredbe: {command}"
+        },
+        "buttons": {
+            "deploy_global": "Implementiraj globalno",
+            "deploy_guild": "Implementiraj u ceh",
+            "remove_global": "Ukloni globalno",
+            "remove_guild": "Ukloni iz ceha"
+        }
+    },
+    "invite": {
+        "create": {
+            "description": "Stvori poveznicu za pozivnicu za određeni ceh.",
+            "errors": {
+                "guild_not_found": "Ceh nije pronađen. Provjerite je li ID točan.",
+                "no_suitable_channel": "Nije pronađen odgovarajući kanal s dovoljno dozvola za stvaranje pozivnice u tom cehu."
+            },
+            "success": "Poveznica za pozivnicu za **{guildName}**: [Klikni ovdje]({url})"
+        },
+        "destroy": {
+            "description": "Uništi sve poveznice za pozivnice koje je stvorio bot u cehu",
+            "errors": {
+                "guild_not_found": "Ceh nije pronađen. Molimo navedite važeći ID.",
+                "generic": "Neuspjelo uništavanje pozivnica. Provjerite imam li dozvole 'Manage Server' u tom cehu."
+            },
+            "success": "Uspješno uništeno **{count}** pozivnica koje sam stvorio u **{guildName}**.",
+            "not_found": "U ovom cehu nisu pronađene pozivnice koje sam stvorio."
+        }
+    }
+}

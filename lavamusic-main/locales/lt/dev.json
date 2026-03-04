@@ -1,0 +1,69 @@
+{
+    "eval": {
+        "description": "Įvertinti kodą",
+        "success": "Kodas sėkmingai įvertintas",
+        "error": "Nepavyko įvertinti kodo"
+    },
+    "guilds": {
+        "description": "Valdyti ir rodyti boto serverius",
+        "list": "Serverių sąrašas",
+        "leave": {
+            "success": "Sėkmingai paliktas serveris: {name}",
+            "fail": "Nepavyko palikti serverio {name}",
+            "log": "Botas paliko serverį: {name} (ID: {id})"
+        },
+        "not_found": "Serveris nerastas."
+    },
+    "restart": {
+        "description": "Iš naujo paleisti boto procesą",
+        "prompt": "Ar tikrai norite iš naujo paleisti **{client}**?",
+        "status": {
+            "restarting": "Paleidžiama iš naujo...",
+            "canceled": "Paleidimas iš naujo atšauktas.",
+            "error": "Įvyko klaida paleidžiant botą iš naujo."
+        },
+        "restart_by": "Paleidimą iš naujo inicijavo {user}"
+    },
+    "shutdown": {
+        "description": "Išjungti boto procesą",
+        "prompt": "Ar tikrai norite išjungti?",
+        "status": "Išjungiama...",
+        "canceled": "Išjungimas atšauktas."
+    },
+    "deploy": {
+        "description": "Sinchronizuoti slash komandas su Discord API",
+        "prompt": "Kur norite įdiegti / pašalinti komandas?",
+        "status": {
+            "deployed_global": "Komandos įdiegtos globaliai.",
+            "deployed_guild": "Komandos įdiegtos šiame serveryje.",
+            "removed_global": "Komandos pašalintos globaliai.",
+            "removed_guild": "Komandos pašalintos iš šio serverio.",
+            "failed": "Diegimas nepavyko naudojant komandą: {command}"
+        },
+        "buttons": {
+            "deploy_global": "Įdiegti globaliai",
+            "deploy_guild": "Įdiegti serveryje",
+            "remove_global": "Pašalinti globaliai",
+            "remove_guild": "Pašalinti iš serverio"
+        }
+    },
+    "invite": {
+        "create": {
+            "description": "Sukurti pakvietimo nuorodą konkrečiam serveriui.",
+            "errors": {
+                "guild_not_found": "Serveris nerastas. Įsitikinkite, kad ID teisingas.",
+                "no_suitable_channel": "Tame serveryje nerastas tinkamas kanalas su pakankamai leidimų sukurti pakvietimą."
+            },
+            "success": "Pakvietimo nuoroda į **{guildName}**: [Spustelėkite čia]({url})"
+        },
+        "destroy": {
+            "description": "Sunaikinti visas boto sukurtas pakvietimo nuorodas serveryje",
+            "errors": {
+                "guild_not_found": "Serveris nerastas. Pateikite galiojantį ID.",
+                "generic": "Nepavyko sunaikinti pakvietimų. Patikrinkite, ar turiu 'Valdyti serverį' leidimą tame serveryje."
+            },
+            "success": "Sėkmingai sunaikinti **{count}** mano sukurti pakvietimai serveryje **{guildName}**.",
+            "not_found": "Šiame serveryje mano sukurtų pakvietimų nerasta."
+        }
+    }
+}

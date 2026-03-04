@@ -1,0 +1,13 @@
+{
+    "invite": "Kutsu",
+    "support": "Tukipalvelin",
+    "previous": "Edellinen",
+    "resume": "Jatka",
+    "stop": "Lopeta",
+    "skip": "Ohita",
+    "loop": "Toisto",
+    "next": "Seuraava",
+    "errors": {
+        "not_author": "Et voi käyttää tätä painiketta."
+    }
+}

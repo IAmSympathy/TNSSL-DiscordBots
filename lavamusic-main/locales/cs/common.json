@@ -1,0 +1,37 @@
+{
+    "ui": {
+        "confirm": "Potvrdit",
+        "cancel": "Zrušit",
+        "yes": "Ano",
+        "no": "Ne",
+        "back": "Zpět",
+        "next": "Další",
+        "previous": "Předchozí",
+        "save": "Uložit",
+        "close": "Zavřít"
+    },
+    "status": {
+        "enabled": "Povoleno",
+        "disabled": "Zakázáno",
+        "on": "Zapnuto",
+        "off": "Vypnuto",
+        "loading": "Načítání...",
+        "processing": "Zpracování...",
+        "success": "Úspěch!",
+        "failed": "Selhalo!"
+    },
+    "errors": {
+        "generic": "Došlo k neočekávané chybě. Zkuste to prosím později.\n{error}",
+        "timeout": "Časový limit pro tuto akci vypršel.",
+        "no_permissions": "Nemáte potřebná oprávnění k provedení této akce.",
+        "dev_only": "Tento příkaz je omezen pouze na vývojáře.",
+        "db_error": "Při přístupu k databázi došlo k chybě."
+    },
+    "labels": {
+        "author": "Autor",
+        "duration": "Délka",
+        "requested_by": "Vyžádal",
+        "volume": "Hlasitost",
+        "page": "Stránka {current} z {total}"
+    }
+}

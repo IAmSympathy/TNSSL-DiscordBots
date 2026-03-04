@@ -1,0 +1,39 @@
+{
+    "errors": {
+        "no_player": "Der er ingen aktiv afspiller i denne guild.",
+        "no_channel": "Du skal være i en stemmekanal for at bruge denne kommando.",
+        "queue_empty": "Køen er tom.",
+        "no_previous": "Der er ingen forrige sange i køen.",
+        "no_song": "Der er ingen sange i køen.",
+        "already_paused": "Sangen er allerede sat på pause.",
+        "user_not_in_voice_channel": "Du er ikke forbundet til en stemmekanal."
+    },
+    "trackStart": {
+        "now_playing": "Afspiller nu",
+        "requested_by": "Anmodet af {user}",
+        "duration": "Varighed",
+        "author": "Forfatter",
+        "not_connected_to_voice_channel": "Du er ikke forbundet til <#{channel}> for at bruge disse knapper.",
+        "need_dj_role": "Du skal have DJ-rollen for at bruge denne kommando.",
+        "previous_by": "Forrige af {user}",
+        "no_previous_song": "Der er ingen forrige sang.",
+        "paused_by": "Sat på pause af {user}",
+        "resumed_by": "Genoptaget af {user}",
+        "skipped_by": "Sprunget over af {user}",
+        "no_more_songs_in_queue": "Der er ikke flere sange i køen.",
+        "looping_by": "Looping af {user}",
+        "looping_queue_by": "Looping af kø af {user}",
+        "looping_off_by": "Looping fra af {user}"
+    },
+    "setupStart": {
+        "now_playing": "Afspiller nu",
+        "description": "[{title}]({uri}) af {author} • `[{length}]` - Anmodet af <@{requester}>",
+        "error_searching": "Der opstod en fejl under søgningen.",
+        "no_results": "Der blev ikke fundet nogen resultater.",
+        "nothing_playing": "Der afspilles intet lige nu",
+        "queue_too_long": "Køen er for lang. Den maksimale længde er {maxQueueSize} sange.",
+        "playlist_too_long": "Playlisten er for lang. Den maksimale længde er {maxPlaylistSize} sange.",
+        "added_to_queue": "Tilføjede [{title}]({uri}) til køen.",
+        "added_playlist_to_queue": "Tilføjede [{length}] sange fra playlisten til køen."
+    }
+}

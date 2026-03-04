@@ -1,0 +1,69 @@
+{
+    "eval": {
+        "description": "Vyhodnotit kód",
+        "success": "Kód byl úspěšně vyhodnocen",
+        "error": "Nepodařilo se vyhodnotit kód"
+    },
+    "guilds": {
+        "description": "Správa a výpis serverů bota",
+        "list": "Seznam serverů",
+        "leave": {
+            "success": "Úspěšně opuštěn server: {name}",
+            "fail": "Nepodařilo se opustit server {name}",
+            "log": "Bot opustil server: {name} (ID: {id})"
+        },
+        "not_found": "Server nebyl nalezen."
+    },
+    "restart": {
+        "description": "Restartovat proces bota",
+        "prompt": "Opravdu chcete restartovat **{client}**?",
+        "status": {
+            "restarting": "Restartování...",
+            "canceled": "Restartování bylo zrušeno.",
+            "error": "Při restartování bota došlo k chybě."
+        },
+        "restart_by": "Restartování inicioval {user}"
+    },
+    "shutdown": {
+        "description": "Vypnout proces bota",
+        "prompt": "Opravdu chcete vypnout bota?",
+        "status": "Vypínání...",
+        "canceled": "Vypínání bylo zrušeno."
+    },
+    "deploy": {
+        "description": "Synchronizovat slash příkazy s API Discordu",
+        "prompt": "Kam chcete nasadit/odstranit příkazy?",
+        "status": {
+            "deployed_global": "Příkazy byly nasazeny globálně.",
+            "deployed_guild": "Příkazy byly nasazeny na tomto serveru.",
+            "removed_global": "Příkazy byly globálně odstraněny.",
+            "removed_guild": "Příkazy byly odstraněny z tohoto serveru.",
+            "failed": "Nasazení selhalo prostřednictvím příkazu: {command}"
+        },
+        "buttons": {
+            "deploy_global": "Nasadit globálně",
+            "deploy_guild": "Nasadit na server",
+            "remove_global": "Odstranit globálně",
+            "remove_guild": "Odstranit ze serveru"
+        }
+    },
+    "invite": {
+        "create": {
+            "description": "Vytvořit pozvánku pro konkrétní server.",
+            "errors": {
+                "guild_not_found": "Server nebyl nalezen. Ujistěte se, že ID je správné.",
+                "no_suitable_channel": "Nebyl nalezen žádný vhodný kanál s dostatečnými oprávněními k vytvoření pozvánky na tomto serveru."
+            },
+            "success": "Pozvánka pro **{guildName}**: [Klikněte zde]({url})"
+        },
+        "destroy": {
+            "description": "Zničit všechny pozvánky vytvořené botem na serveru",
+            "errors": {
+                "guild_not_found": "Server nebyl nalezen. Uveďte prosím platné ID.",
+                "generic": "Nepodařilo se zničit pozvánky. Zkontrolujte, zda mám na tomto serveru oprávnění 'Manage Server'."
+            },
+            "success": "Úspěšně zničeno **{count}** pozvánek vytvořených mnou na **{guildName}**.",
+            "not_found": "Na tomto serveru nebyly nalezeny žádné pozvánky vytvořené mnou."
+        }
+    }
+}

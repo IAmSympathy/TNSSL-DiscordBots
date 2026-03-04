@@ -1,0 +1,13 @@
+{
+    "invite": "Meghívás",
+    "support": "Support Szerver",
+    "previous": "Előző",
+    "resume": "Folytatás",
+    "stop": "Stop",
+    "skip": "Kihagyás",
+    "loop": "Ismétlés",
+    "next": "Következő",
+    "errors": {
+        "not_author": "Ezt a gombot nem használhatod."
+    }
+}

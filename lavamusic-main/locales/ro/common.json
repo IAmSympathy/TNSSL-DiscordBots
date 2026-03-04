@@ -1,0 +1,37 @@
+{
+    "ui": {
+        "confirm": "Confirmă",
+        "cancel": "Anulează",
+        "yes": "Da",
+        "no": "Nu",
+        "back": "Înapoi",
+        "next": "Înainte",
+        "previous": "Anterior",
+        "save": "Salvează",
+        "close": "Închide"
+    },
+    "status": {
+        "enabled": "Activat",
+        "disabled": "Dezactivat",
+        "on": "Pornit",
+        "off": "Oprit",
+        "loading": "Se încarcă...",
+        "processing": "Se procesează...",
+        "success": "Succes!",
+        "failed": "Eșuat!"
+    },
+    "errors": {
+        "generic": "A apărut o eroare neașteptată. Vă rugăm să încercați din nou mai târziu.\n{error}",
+        "timeout": "Limita de timp pentru această acțiune a expirat.",
+        "no_permissions": "Nu aveți permisiunile necesare pentru a efectua această acțiune.",
+        "dev_only": "Această comandă este restricționată doar pentru dezvoltatori.",
+        "db_error": "A apărut o eroare la accesarea bazei de date."
+    },
+    "labels": {
+        "author": "Autor",
+        "duration": "Durată",
+        "requested_by": "Solicitat de",
+        "volume": "Volum",
+        "page": "Pagina {current} din {total}"
+    }
+}

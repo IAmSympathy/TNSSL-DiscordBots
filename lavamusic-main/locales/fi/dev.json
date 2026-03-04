@@ -1,0 +1,69 @@
+{
+    "eval": {
+        "description": "Arvioi koodi",
+        "success": "Koodi arvioitu onnistuneesti",
+        "error": "Koodin arviointi epäonnistui"
+    },
+    "guilds": {
+        "description": "Hallitse ja listaa botin palvelimia",
+        "list": "Palvelinlista",
+        "leave": {
+            "success": "Poistuttu palvelimelta onnistuneesti: {name}",
+            "fail": "Palvelimelta poistuminen epäonnistui {name}",
+            "log": "Botti on poistunut palvelimelta: {name} (ID: {id})"
+        },
+        "not_found": "Palvelinta ei löytynyt."
+    },
+    "restart": {
+        "description": "Käynnistä botin prosessi uudelleen",
+        "prompt": "Oletko varma, että haluat käynnistää **{client}** uudelleen?",
+        "status": {
+            "restarting": "Käynnistetään uudelleen...",
+            "canceled": "Uudelleenkäynnistys peruttu.",
+            "error": "Tapahtui virhe bottia uudelleenkäynnistettäessä."
+        },
+        "restart_by": "Uudelleenkäynnistyksen aloitti {user}"
+    },
+    "shutdown": {
+        "description": "Sammuta botin prosessi",
+        "prompt": "Oletko varma, että haluat sammuttaa botin?",
+        "status": "Sammutetaan...",
+        "canceled": "Sammuttaminen peruttu."
+    },
+    "deploy": {
+        "description": "Synkronoi vinoviivakomennot Discord API:n kanssa",
+        "prompt": "Missä haluat ottaa käyttöön / poistaa komennot?",
+        "status": {
+            "deployed_global": "Komennot otettu käyttöön maailmanlaajuisesti.",
+            "deployed_guild": "Komennot otettu käyttöön tällä palvelimella.",
+            "removed_global": "Komennot poistettu maailmanlaajuisesti.",
+            "removed_guild": "Komennot poistettu tältä palvelimelta.",
+            "failed": "Käyttöönotto epäonnistui komennon kautta: {command}"
+        },
+        "buttons": {
+            "deploy_global": "Ota käyttöön maailmanlaajuisesti",
+            "deploy_guild": "Ota käyttöön palvelimella",
+            "remove_global": "Poista maailmanlaajuisesti",
+            "remove_guild": "Poista palvelimelta"
+        }
+    },
+    "invite": {
+        "create": {
+            "description": "Luo kutsulinkki tietylle palvelimelle.",
+            "errors": {
+                "guild_not_found": "Palvelinta ei löytynyt. Varmista, että ID on oikein.",
+                "no_suitable_channel": "Sopivaa kanavaa riittävillä oikeuksilla kutsun luomiseen ei löytynyt kyseiseltä palvelimelta."
+            },
+            "success": "Kutsulinkki palvelimelle **{guildName}**: [Klikkaa tästä]({url})"
+        },
+        "destroy": {
+            "description": "Tuhoa kaikki botin luomat kutsulinkit palvelimella",
+            "errors": {
+                "guild_not_found": "Palvelinta ei löytynyt. Anna voimassa oleva ID.",
+                "generic": "Kutsujen tuhoaminen epäonnistui. Tarkista, onko minulla 'Manage Server' -oikeudet kyseisellä palvelimella."
+            },
+            "success": "Tuhottiin onnistuneesti **{count}** luomaani kutsua palvelimelta **{guildName}**.",
+            "not_found": "Kyseiseltä palvelimelta ei löytynyt luomiani kutsuja."
+        }
+    }
+}

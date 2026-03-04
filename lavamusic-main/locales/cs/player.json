@@ -1,0 +1,39 @@
+{
+    "errors": {
+        "no_player": "Na tomto serveru není žádný aktivní přehrávač.",
+        "no_channel": "K použití tohoto příkazu musíte být v hlasovém kanálu.",
+        "queue_empty": "Fronta je prázdná.",
+        "no_previous": "Ve frontě nejsou žádné předchozí skladby.",
+        "no_song": "Ve frontě nejsou žádné skladby.",
+        "already_paused": "Skladba je již pozastavena.",
+        "user_not_in_voice_channel": "Nejste připojeni k hlasovému kanálu."
+    },
+    "trackStart": {
+        "now_playing": "Nyní hraje",
+        "requested_by": "Vyžádal {user}",
+        "duration": "Délka",
+        "author": "Autor",
+        "not_connected_to_voice_channel": "Nejste připojeni k <#{channel}>, abyste mohli používat tato tlačítka.",
+        "need_dj_role": "K použití tohoto příkazu musíte mít roli DJ.",
+        "previous_by": "Předchozí od {user}",
+        "no_previous_song": "Neexistuje žádná předchozí skladba.",
+        "paused_by": "Pozastavil {user}",
+        "resumed_by": "Obnovil {user}",
+        "skipped_by": "Přeskočil {user}",
+        "no_more_songs_in_queue": "Ve frontě již není žádná další skladba.",
+        "looping_by": "Smyčku zapnul {user}",
+        "looping_queue_by": "Smyčku fronty zapnul {user}",
+        "looping_off_by": "Smyčku vypnul {user}"
+    },
+    "setupStart": {
+        "now_playing": "Nyní hraje",
+        "description": "[{title}]({uri}) od {author} • `[{length}]` - Vyžádal <@{requester}>",
+        "error_searching": "Při vyhledávání došlo k chybě.",
+        "no_results": "Nebyly nalezeny žádné výsledky.",
+        "nothing_playing": "Momentálně nic nehraje",
+        "queue_too_long": "Fronta je příliš dlouhá. Maximální délka je {maxQueueSize} skladeb.",
+        "playlist_too_long": "Playlist je příliš dlouhý. Maximální délka je {maxPlaylistSize} skladeb.",
+        "added_to_queue": "Přidáno [{title}]({uri}) do fronty.",
+        "added_playlist_to_queue": "Přidáno [{length}] skladeb z playlistu do fronty."
+    }
+}

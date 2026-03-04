@@ -1,0 +1,13 @@
+{
+    "invite": "Pozovi",
+    "support": "Poslužitelj za podršku",
+    "previous": "Prethodno",
+    "resume": "Nastavi",
+    "stop": "Zaustavi",
+    "skip": "Preskoči",
+    "loop": "Ponavljanje",
+    "next": "Sljedeće",
+    "errors": {
+        "not_author": "Ne možete koristiti ovaj gumb."
+    }
+}

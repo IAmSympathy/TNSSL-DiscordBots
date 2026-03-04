@@ -1,0 +1,39 @@
+{
+    "errors": {
+        "no_player": "В тази гилдия няма активен плейър.",
+        "no_channel": "Трябва да сте в гласов канал, за да използвате тази команда.",
+        "queue_empty": "Опашката е празна.",
+        "no_previous": "В опашката няма предишни песни.",
+        "no_song": "В опашката няма песни.",
+        "already_paused": "Песента вече е на пауза.",
+        "user_not_in_voice_channel": "Не сте свързани с гласов канал."
+    },
+    "trackStart": {
+        "now_playing": "Сега се възпроизвежда",
+        "requested_by": "Заявено от {user}",
+        "duration": "Продължителност",
+        "author": "Автор",
+        "not_connected_to_voice_channel": "Не сте свързани с <#{channel}>, за да използвате тези бутони.",
+        "need_dj_role": "Трябва да имате ролята DJ, за да използвате тази команда.",
+        "previous_by": "Предишна от {user}",
+        "no_previous_song": "Няма предишна песен.",
+        "paused_by": "На пауза от {user}",
+        "resumed_by": "Възобновено от {user}",
+        "skipped_by": "Пропуснато от {user}",
+        "no_more_songs_in_queue": "В опашката няма повече песни.",
+        "looping_by": "Повтаряне от {user}",
+        "looping_queue_by": "Повтаряне на опашката от {user}",
+        "looping_off_by": "Повтарянето е изключено от {user}"
+    },
+    "setupStart": {
+        "now_playing": "Сега се възпроизвежда",
+        "description": "[{title}]({uri}) от {author} • `[{length}]` - Заявено от <@{requester}>",
+        "error_searching": "Възникна грешка при търсенето.",
+        "no_results": "Не бяха намерени резултати.",
+        "nothing_playing": "В момента нищо не се възпроизвежда",
+        "queue_too_long": "Опашката е твърде дълга. Максималната дължина е {maxQueueSize} песни.",
+        "playlist_too_long": "Плейлистът е твърде дълъг. Максималната дължина е {maxPlaylistSize} песни.",
+        "added_to_queue": "Добавена [{title}]({uri}) към опашката.",
+        "added_playlist_to_queue": "Добавени [{length}] песни от плейлиста към опашката."
+    }
+}

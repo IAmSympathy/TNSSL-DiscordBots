@@ -1,0 +1,39 @@
+{
+    "errors": {
+        "no_player": "Tällä palvelimella ei ole aktiivista soitinta.",
+        "no_channel": "Sinun on oltava puhekanavalla käyttääksesi tätä komentoa.",
+        "queue_empty": "Jono on tyhjä.",
+        "no_previous": "Jonossa ei ole edellisiä kappaleita.",
+        "no_song": "Jonossa ei ole kappaleita.",
+        "already_paused": "Kappale on jo tauotettu.",
+        "user_not_in_voice_channel": "Et ole yhdistettynä puhekanavaan."
+    },
+    "trackStart": {
+        "now_playing": "Nyt soitetaan",
+        "requested_by": "Pyytänyt {user}",
+        "duration": "Kesto",
+        "author": "Tekijä",
+        "not_connected_to_voice_channel": "Et ole yhdistettynä kanavaan <#{channel}> käyttääksesi näitä painikkeita.",
+        "need_dj_role": "Sinulla on oltava DJ-rooli käyttääksesi tätä komentoa.",
+        "previous_by": "Edellinen: {user}",
+        "no_previous_song": "Edellistä kappaletta ei ole.",
+        "paused_by": "Tauottanut {user}",
+        "resumed_by": "Jatkanut {user}",
+        "skipped_by": "Ohittanut {user}",
+        "no_more_songs_in_queue": "Jonossa ei ole enempää kappaleita.",
+        "looping_by": "Toiston asetti {user}",
+        "looping_queue_by": "Jonon toiston asetti {user}",
+        "looping_off_by": "Toiston poisti käytöstä {user}"
+    },
+    "setupStart": {
+        "now_playing": "Nyt soitetaan",
+        "description": "[{title}]({uri}) - {author} • `[{length}]` - Pyytänyt <@{requester}>",
+        "error_searching": "Tapahtui virhe etsittäessä.",
+        "no_results": "Tuloksia ei löytynyt.",
+        "nothing_playing": "Mitään ei soiteta tällä hetkellä",
+        "queue_too_long": "Jono on liian pitkä. Maksimipituus on {maxQueueSize} kappaletta.",
+        "playlist_too_long": "Soittolista on liian pitkä. Maksimipituus on {maxPlaylistSize} kappaletta.",
+        "added_to_queue": "Lisätty [{title}]({uri}) jonoon.",
+        "added_playlist_to_queue": "Lisätty [{length}] kappaletta soittolistalta jonoon."
+    }
+}

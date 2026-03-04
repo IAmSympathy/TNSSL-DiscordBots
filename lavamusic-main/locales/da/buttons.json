@@ -1,0 +1,13 @@
+{
+    "invite": "Inviter",
+    "support": "Support server",
+    "previous": "Forrige",
+    "resume": "Genoptag",
+    "stop": "Stop",
+    "skip": "Spring over",
+    "loop": "Loop",
+    "next": "Næste",
+    "errors": {
+        "not_author": "Du kan ikke bruge denne knap."
+    }
+}

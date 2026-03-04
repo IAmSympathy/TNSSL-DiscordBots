@@ -16,6 +16,25 @@ dotenv.config();
 // ── Pending tracks par userId (en attente de confirmation)
 const pendingTracks = new Map<string, { track: Track; tracks: Track[]; guildId: string; voiceChannelId: string; textChannelId: string }>();
 
+// ── Cache lyrics disponibles par trackIdentifier (true/false/undefined=inconnu)
+const lyricsAvailableCache = new Map<string, boolean>();
+
+async function checkLyricsAvailable(player: Player, track: Track): Promise<boolean> {
+    const id = (track.info as any).identifier ?? track.info.uri ?? "";
+    if (lyricsAvailableCache.has(id)) return lyricsAvailableCache.get(id)!;
+    try {
+        const result = await (player as any).getLyrics(track, false).catch(() => null);
+        let hasLyrics = false;
+        if (result?.lines && Array.isArray(result.lines) && result.lines.length > 0) hasLyrics = true;
+        else if (typeof result === "string" && result.length > 10) hasLyrics = true;
+        lyricsAvailableCache.set(id, hasLyrics);
+        return hasLyrics;
+    } catch {
+        lyricsAvailableCache.set(id, false);
+        return false;
+    }
+}
+
 export class NexaBot {
     public client: Client;
     private ready = false;
@@ -73,6 +92,14 @@ export class NexaBot {
             console.log(`[Nexa] ▶️ ${player.queue.current?.info.title}`);
             startProgressTimer(player.guildId);
             await this.refreshPanel(player.guildId);
+            // Vérifier les lyrics en background et refresh si le résultat est connu
+            const track = player.queue.current;
+            if (track) {
+                const id = (track.info as any).identifier ?? track.info.uri ?? "";
+                if (!lyricsAvailableCache.has(id)) {
+                    checkLyricsAvailable(player, track).then(() => this.refreshPanel(player.guildId));
+                }
+            }
         });
         m.on("trackEnd", async (player, track) => {
             stopProgressTimer(player.guildId);
@@ -132,7 +159,7 @@ export class NexaBot {
         } catch { /* manager pas encore prêt */
         }
 
-        const options = await buildJukeboxPanel(player ?? null, getHistory(guildId));
+        const options = await buildJukeboxPanel(player ?? null, getHistory(guildId), lyricsAvailableCache);
 
         // Essaie d'éditer le message existant
         const existingId = this.controlMessages.get(guildId);
@@ -360,8 +387,8 @@ export class NexaBot {
         }
         if (!player && !["nexa_playpause", "nexa_stop"].includes(id)) return;
 
-        // Vérifier que l'utilisateur est dans le même salon vocal que le bot
-        if (!await this.isInSameVoiceChannel(interaction)) {
+        // Vérifier que l'utilisateur est dans le même salon vocal que le bot (sauf pour lyrics)
+        if (id !== "nexa_lyrics" && !await this.isInSameVoiceChannel(interaction)) {
             await interaction.followUp({content: "❌ Tu dois être dans le même salon vocal que moi !", flags: MessageFlags.Ephemeral}).catch(() => {
             });
             return;
@@ -408,6 +435,55 @@ export class NexaBot {
                 await seekRelative(guildId, 10_000);
                 await this.refreshPanel(guildId);
                 break;
+
+            case "nexa_lyrics": {
+                if (!player?.queue?.current) return;
+                await interaction.followUp({content: "🔍 Recherche des paroles...", flags: MessageFlags.Ephemeral}).catch(() => {
+                });
+                try {
+                    const track = player.queue.current;
+                    const result = await (player as any).getLyrics(track, false).catch(() => null);
+                    if (!result) {
+                        await interaction.editReply({content: "❌ Aucune parole trouvée pour cette chanson."}).catch(() => {
+                        });
+                        return;
+                    }
+                    // Extraire le texte
+                    let lyricsText: string;
+                    if (result?.lines && Array.isArray(result.lines)) {
+                        lyricsText = result.lines.map((l: any) => l.line ?? "").filter(Boolean).join("\n");
+                    } else if (typeof result === "string") {
+                        lyricsText = result;
+                    } else {
+                        lyricsText = "";
+                    }
+                    if (!lyricsText || lyricsText.length < 5) {
+                        await interaction.editReply({content: "❌ Aucune parole trouvée pour cette chanson."}).catch(() => {
+                        });
+                        return;
+                    }
+                    // Paginer si > 1900 chars
+                    const title = `📜 **${track.info.title}** — *${track.info.author}*\n\n`;
+                    const MAX = 1900 - title.length;
+                    const pages: string[] = [];
+                    let chunk = "";
+                    for (const line of lyricsText.split("\n")) {
+                        if ((chunk + line + "\n").length > MAX) {
+                            pages.push(chunk);
+                            chunk = "";
+                        }
+                        chunk += line + "\n";
+                    }
+                    if (chunk) pages.push(chunk);
+
+                    await interaction.editReply({content: `${title}${pages[0]}${pages.length > 1 ? `\n-# *(page 1/${pages.length} — /lyrics pour voir la suite)*` : ""}`}).catch(() => {
+                    });
+                } catch {
+                    await interaction.editReply({content: "❌ Le plugin lyrics n'est pas disponible sur ce serveur Lavalink."}).catch(() => {
+                    });
+                }
+                break;
+            }
 
             case "nexa_shuffle": {
                 if (!player) return;

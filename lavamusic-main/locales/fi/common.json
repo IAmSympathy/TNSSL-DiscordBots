@@ -1,0 +1,37 @@
+{
+    "ui": {
+        "confirm": "Vahvista",
+        "cancel": "Peruuta",
+        "yes": "Kyllä",
+        "no": "Ei",
+        "back": "Takaisin",
+        "next": "Seuraava",
+        "previous": "Edellinen",
+        "save": "Tallenna",
+        "close": "Sulje"
+    },
+    "status": {
+        "enabled": "Käytössä",
+        "disabled": "Poissa käytöstä",
+        "on": "Päällä",
+        "off": "Pois",
+        "loading": "Ladataan...",
+        "processing": "Käsitellään...",
+        "success": "Onnistui!",
+        "failed": "Epäonnistui!"
+    },
+    "errors": {
+        "generic": "Tapahtui odottamaton virhe. Yritä myöhemmin uudelleen.\n{error}",
+        "timeout": "Tämän toiminnon aikaraja umpeutui.",
+        "no_permissions": "Sinulla ei ole tarvittavia oikeuksia tämän toiminnon suorittamiseen.",
+        "dev_only": "Tämä komento on rajoitettu vain kehittäjille.",
+        "db_error": "Tapahtui virhe tietokantaan yhdistettäessä."
+    },
+    "labels": {
+        "author": "Tekijä",
+        "duration": "Kesto",
+        "requested_by": "Pyytänyt",
+        "volume": "Äänenvoimakkuus",
+        "page": "Sivu {current} / {total}"
+    }
+}

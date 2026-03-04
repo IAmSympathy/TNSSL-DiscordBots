@@ -1,0 +1,39 @@
+{
+    "errors": {
+        "no_player": "Šiame serveryje nėra aktyvaus grotuvo.",
+        "no_channel": "Norėdami naudoti šią komandą, turite būti balso kanale.",
+        "queue_empty": "Eilė tuščia.",
+        "no_previous": "Eilėje nėra ankstesnių dainų.",
+        "no_song": "Eilėje nėra dainų.",
+        "already_paused": "Daina jau sustabdyta.",
+        "user_not_in_voice_channel": "Neesate prisijungę prie balso kanalo."
+    },
+    "trackStart": {
+        "now_playing": "Dabar groja",
+        "requested_by": "Užsakė {user}",
+        "duration": "Trukmė",
+        "author": "Autorius",
+        "not_connected_to_voice_channel": "Neesate prisijungę prie <#{channel}>, kad galėtumėte naudoti šiuos mygtukus.",
+        "need_dj_role": "Norėdami naudoti šią komandą, turite turėti DJ rolę.",
+        "previous_by": "Ankstesnė: {user}",
+        "no_previous_song": "Ankstesnės dainos nėra.",
+        "paused_by": "Sustabdė {user}",
+        "resumed_by": "Atnaujino {user}",
+        "skipped_by": "Praleido {user}",
+        "no_more_songs_in_queue": "Eilėje dainų daugiau nėra.",
+        "looping_by": "Kartojimą įjungė {user}",
+        "looping_queue_by": "Eilės kartojimą įjungė {user}",
+        "looping_off_by": "Kartojimą išjungė {user}"
+    },
+    "setupStart": {
+        "now_playing": "Dabar groja",
+        "description": "[{title}]({uri}) - {author} • `[{length}]` - Užsakė <@{requester}>",
+        "error_searching": "Paieškos metu įvyko klaida.",
+        "no_results": "Rezultatų nerasta.",
+        "nothing_playing": "Šiuo metu nieko negroja",
+        "queue_too_long": "Eilė per ilga. Maksimalus ilgis yra {maxQueueSize} dainų.",
+        "playlist_too_long": "Grojaraštis per ilgas. Maksimalus ilgis yra {maxPlaylistSize} dainų.",
+        "added_to_queue": "Pridėta [{title}]({uri}) į eilę.",
+        "added_playlist_to_queue": "Pridėta [{length}] dainų iš grojaraščio į eilę."
+    }
+}

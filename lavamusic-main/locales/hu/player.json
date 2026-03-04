@@ -1,0 +1,39 @@
+{
+    "errors": {
+        "no_player": "Ezen a szerveren nincs aktív lejátszó.",
+        "no_channel": "A parancs használatához hangcsatornában kell lenned.",
+        "queue_empty": "A várólista üres.",
+        "no_previous": "Nincsenek előző dalok a várólistában.",
+        "no_song": "Nincsenek dalok a várólistában.",
+        "already_paused": "A dal már szüneteltetve van.",
+        "user_not_in_voice_channel": "Nem csatlakozol hangcsatornához."
+    },
+    "trackStart": {
+        "now_playing": "Most szól",
+        "requested_by": "Kérte {user}",
+        "duration": "Időtartam",
+        "author": "Szerző",
+        "not_connected_to_voice_channel": "Nem csatlakozol a(z) <#{channel}> csatornához a gombok használatához.",
+        "need_dj_role": "Rendelkezned kell a DJ szerepkörrel a parancs használatához.",
+        "previous_by": "Előző: {user}",
+        "no_previous_song": "Nincs előző dal.",
+        "paused_by": "Szüneteltette: {user}",
+        "resumed_by": "Folytatta: {user}",
+        "skipped_by": "Átugorta: {user}",
+        "no_more_songs_in_queue": "Nincs több dal a várólistában.",
+        "looping_by": "Ismétlést beállította: {user}",
+        "looping_queue_by": "Várólista ismétlését beállította: {user}",
+        "looping_off_by": "Ismétlést kikapcsolta: {user}"
+    },
+    "setupStart": {
+        "now_playing": "Most szól",
+        "description": "[{title}]({uri}), szerző: {author} • `[{length}]` - Kérte <@{requester}>",
+        "error_searching": "Hiba történt a keresés közben.",
+        "no_results": "Nincs találat.",
+        "nothing_playing": "Jelenleg semmi sem szól",
+        "queue_too_long": "A várólista túl hosszú. A maximális hossz {maxQueueSize} dal.",
+        "playlist_too_long": "A lejátszási lista túl hosszú. A maximális hossz {maxPlaylistSize} dal.",
+        "added_to_queue": "[{title}]({uri}) hozzáadva a várólistához.",
+        "added_playlist_to_queue": "[{length}] dal hozzáadva a lejátszási listáról a várólistához."
+    }
+}

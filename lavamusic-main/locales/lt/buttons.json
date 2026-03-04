@@ -1,0 +1,13 @@
+{
+    "invite": "Pakviesti",
+    "support": "Pagalbos serveris",
+    "previous": "Ankstesnis",
+    "resume": "Tęsti",
+    "stop": "Sustabdyti",
+    "skip": "Praleisti",
+    "loop": "Kartoti",
+    "next": "Kitas",
+    "errors": {
+        "not_author": "Jūs negalite naudoti šio mygtuko."
+    }
+}
