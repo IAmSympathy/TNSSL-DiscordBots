@@ -1,0 +1,37 @@
+{
+    "ui": {
+        "confirm": "Megerősítés",
+        "cancel": "Mégse",
+        "yes": "Igen",
+        "no": "Nem",
+        "back": "Vissza",
+        "next": "Tovább",
+        "previous": "Előző",
+        "save": "Mentés",
+        "close": "Bezárás"
+    },
+    "status": {
+        "enabled": "Engedélyezve",
+        "disabled": "Letiltva",
+        "on": "Be",
+        "off": "Ki",
+        "loading": "Betöltés...",
+        "processing": "Feldolgozás...",
+        "success": "Siker!",
+        "failed": "Hiba!"
+    },
+    "errors": {
+        "generic": "Váratlan hiba történt. Kérjük, próbálja meg később.\n{error}",
+        "timeout": "A művelet végrehajtásához rendelkezésre álló idő lejárt.",
+        "no_permissions": "Nincs elegendő jogosultsága a művelet végrehajtásához.",
+        "dev_only": "Ez a parancs csak a fejlesztők számára érhető el.",
+        "db_error": "Hiba történt az adatbázis elérése során."
+    },
+    "labels": {
+        "author": "Szerző",
+        "duration": "Időtartam",
+        "requested_by": "Kérte",
+        "volume": "Hangerő",
+        "page": "Oldal: {current} / {total}"
+    }
+}

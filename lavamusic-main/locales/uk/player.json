@@ -1,0 +1,39 @@
+{
+    "errors": {
+        "no_player": "На цьому сервері немає активного плеєра.",
+        "no_channel": "Ви повинні бути в голосовому каналі, щоб використовувати цю команду.",
+        "queue_empty": "Черга порожня.",
+        "no_previous": "У черзі немає попередніх пісень.",
+        "no_song": "У черзі немає пісень.",
+        "already_paused": "Пісня вже призупинена.",
+        "user_not_in_voice_channel": "Ви не підключені до голосового каналу."
+    },
+    "trackStart": {
+        "now_playing": "Зараз відтворюється",
+        "requested_by": "Запит від {user}",
+        "duration": "Тривалість",
+        "author": "Автор",
+        "not_connected_to_voice_channel": "Ви не підключені до <#{channel}>, щоб використовувати ці кнопки.",
+        "need_dj_role": "У вас повинна бути роль DJ, щоб використовувати цю команду.",
+        "previous_by": "Попередня від {user}",
+        "no_previous_song": "Попередньої пісні немає.",
+        "paused_by": "Призупинено користувачем {user}",
+        "resumed_by": "Відновлено користувачем {user}",
+        "skipped_by": "Пропущено користувачем {user}",
+        "no_more_songs_in_queue": "У черзі більше немає пісень.",
+        "looping_by": "Повторення увімкнено користувачем {user}",
+        "looping_queue_by": "Повторення черги увімкнено користувачем {user}",
+        "looping_off_by": "Повторення вимкнено користувачем {user}"
+    },
+    "setupStart": {
+        "now_playing": "Зараз відтворюється",
+        "description": "[{title}]({uri}) від {author} • `[{length}]` - Запит від <@{requester}>",
+        "error_searching": "Сталася помилка під час пошуку.",
+        "no_results": "Результатів не знайдено.",
+        "nothing_playing": "Зараз нічого не відтворюється",
+        "queue_too_long": "Черга занадто довга. Максимальний розмір - {maxQueueSize} пісень.",
+        "playlist_too_long": "Плейлист занадто довгий. Максимальний розмір - {maxPlaylistSize} пісень.",
+        "added_to_queue": "Додано [{title}]({uri}) до черги.",
+        "added_playlist_to_queue": "Додано [{length}] пісень з плейлиста до черги."
+    }
+}

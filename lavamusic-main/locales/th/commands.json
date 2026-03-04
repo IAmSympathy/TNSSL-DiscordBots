@@ -1,0 +1,639 @@
+{
+	"247": {
+		"description": "ตั้งค่าบอทให้อยู่ในห้องเสียงตลอดเวลา",
+		"errors": {
+			"not_in_voice": "คุณต้องอยู่ในห้องเสียงก่อนใช้คำสั่งนี้",
+			"generic": "เกิดข้อผิดพลาดในการใช้คำสั่งนี้"
+		},
+		"messages": {
+			"disabled": "`✅` | โหมด 24/7 ปิดแล้ว",
+			"enabled": "`✅` | โหมด 24/7 เปิดแล้ว"
+		}
+	},
+	"fairplay": {
+		"description": "ตั้งค่าบอทให้เล่นเพลงอย่างยุติธรรมระหว่างผู้ใช้",
+		"errors": {
+			"not_in_voice": "คุณต้องอยู่ในห้องเสียงก่อนใช้คำสั่งนี้",
+			"generic": "เกิดข้อผิดพลาดในการใช้คำสั่งนี้"
+		},
+		"messages": {
+			"disabled": "`✅` | โหมด Fairplay ปิดแล้ว",
+			"enabled": "`✅` | โหมด Fairplay เปิดแล้ว"
+		}
+	},
+	"ping": {
+		"description": "แสดงปิงของบอท",
+		"content": "กำลังวัดปิงไปยังเซิร์ฟเวอร์...",
+		"bot_latency": "ปิงของบอท",
+		"api_latency": "ปิงของ API → บอท",
+		"requested_by": "ใช้คำสั่งโดย {author}"
+	},
+	"lavalink": {
+		"description": "แสดงสถานะปัจจุบันของ Lavalink node",
+		"title": "สถานะ Lavalink",
+		"content": "Player: {players}\nกำลังเล่น: {playingPlayers}\nเวลาทำงาน: {uptime}\nคอร์ CPU: {cores} คอร์\nการใช้หน่วยความจำ: {used} / {reservable}\nภาระระบบ: {systemLoad}%\nภาระของ Lavalink: {lavalinkLoad}%",
+		"page_info": "หน้า {index} จาก {total}"
+	},
+	"invite": {
+		"description": "รับลิงก์เชิญบอท",
+		"content": "คุณสามารถเข้าดิสคอร์ดซัพพอร์ตของบอทได้โดยกดปุ่มด้านล่าง หากพบบั๊กหรือตัวบอทล่ม ให้เข้าดิสคอร์ดซัพพอร์ตเลย!"
+	},
+	"help": {
+		"description": "ดูคำสั่งทั้งหมด",
+		"options": {
+			"command": "ดูข้อมูลของคำสั่งที่ต้องการ"
+		},
+		"content": "สวัสดีค่ะ 🙏🏻 ฉันคือ `{bot}` ค่ะ บอทนี้เปิดเพลงด้วย [`Lavamusic`](https://github.com/bongodevs/lavamusic) และ `Discord.js`\nคุณสามารถใช้คำสั่ง `{prefix}help <คำสั่ง>` เพื่อดูรายละเอียดเพิ่มเติมได้",
+		"title": "เมนูคำสั่ง",
+		"not_found": "ไม่มีคำสั่ง `{cmdName}` ในระบบ",
+		"help_cmd": "**คำอธิบาย:** {description}\n**วิธีใช้:** {usage}\n**ตัวอย่าง:** {examples}\n**ชื่ออื่น:** {aliases}\n**หมวด:** {category}\n**คูลดาวน์:** {cooldown} วินาที\n**สิทธิ์ผู้ใช้:** {premUser}\n**สิทธิ์บอท:** {premBot}\n**เฉพาะนักพัฒนา:** {dev}\n**คำสั่งแบบ /:** {slash}\n**Args:** {args}\n**Player:** {player}\n**DJ:** {dj}\n**สิทธิ์ DJ:** {djPerm}\n**Voice:** {voice}",
+		"footer": "ใช้ {prefix}help <คำสั่ง> เพื่อดูข้อมูลเพิ่มเติม"
+	},
+	"botinfo": {
+		"description": "ข้อมูลเกี่ยวกับบอท",
+		"content": "ข้อมูลบอท:\n- **ระบบปฏิบัติการ**: {osInfo}\n- **เวลาทำงาน**: {osUptime}\n- **โฮสต์เนม**: {osHostname}\n- **สถาปัตยกรรม CPU**: {cpuInfo}\n- **การใช้ CPU**: {cpuUsed}%\n- **การใช้หน่วยความจำ**: {memUsed}MB / {memTotal}GB\n- **เวอร์ชัน Node**: {nodeVersion}\n- **เวอร์ชัน Discord.js**: {discordJsVersion}\n- **เชื่อมต่ออยู่กับ** {guilds} เซิร์ฟเวอร์, {channels} ช่อง, และ {users} ผู้ใช้\n- **จำนวนคำสั่งทั้งหมด**: {commands}"
+	},
+	"about": {
+		"description": "เกี่ยวกับบอท",
+		"fields": {
+			"creator": "ผู้สร้าง",
+			"repository": "ที่เก็บโค้ด",
+			"support": "ฝ่ายสนับสนุน",
+			"description": "เขาต้องการสร้างโปรเจกต์โอเพนซอร์สแรกของเขาเพื่อเพิ่มพูนประสบการณ์การเขียนโค้ด ในโปรเจกต์นี้เขาได้รับความท้าทายให้สร้างโปรเจกต์ที่บัคน้อยลง หวังว่าคุณจะสนุกกับการใช้ LavaMusic!"
+		}
+	},
+	"dj": {
+		"description": "จัดการโหมด DJ และบทบาทที่เกี่ยวข้อง",
+		"errors": {
+			"provide_role": "กรุณาระบุ role",
+			"no_roles": "ยังไม่มี role ของ DJ ถูกตั้งค่า",
+			"invalid_subcommand": "กรุณาระบุตัวเลือกย่อยที่ถูกต้อง"
+		},
+		"messages": {
+			"role_exists": "Role ของดีเจ <@&{roleId}> มีอยู่แล้ว",
+			"role_added": "Role ของดีเจ <@&{roleId}> ถูกเพิ่มเรียบร้อยแล้ว",
+			"role_not_found": "Role ของดีเจ <@&{roleId}> ยังไม่ถูกเพิ่ม",
+			"role_removed": "Role ของดีเจ <@&{roleId}> ถูกลบเรียบร้อยแล้ว",
+			"all_roles_cleared": "ลบ role ดีเจทั้งหมดเรียบร้อยแล้ว",
+			"toggle": "โหมด DJ ถูกสลับเป็น {status}"
+		},
+		"options": {
+			"add": "Role DJ ที่ต้องการเพิ่ม",
+			"remove": "Role DJ ที่ต้องการลบ",
+			"clear": "ลบ role DJ ทั้งหมด",
+			"toggle": "สลับโหมด DJ",
+			"role": "Role DJ"
+		},
+		"subcommands": "ตัวเลือกย่อย"
+	},
+	"language": {
+		"description": "ตั้งค่าภาษาสำหรับบอท",
+		"invalid_language": "กรุณาระบุภาษาที่ถูกต้อง ตัวอย่าง: `EnglishUS` สำหรับภาษาอังกฤษ (สหรัฐอเมริกา)\n\nคุณสามารถดูรายชื่อภาษาที่รองรับได้ [ที่นี่](https://discord.com/developers/docs/reference#locales)\n\n**ภาษาที่มีให้เลือก:**\n{languages}",
+		"already_set": "ภาษาถูกตั้งค่าเป็น `{language}` แล้ว",
+		"not_set": "ยังไม่ได้ตั้งค่าภาษา",
+		"set": "ตั้งค่าภาษาเป็น `{language}` เรียบร้อยแล้ว",
+		"reset": "ตั้งค่าภาษากลับไปใช้ค่าเริ่มต้นเรียบร้อยแล้ว",
+		"options": {
+			"set": "ตั้งค่าภาษาสำหรับบอท",
+			"language": "ภาษาที่ต้องการตั้งค่า",
+			"reset": "เปลี่ยนกลับไปใช้ค่าภาษาเริ่มต้น"
+		}
+	},
+	"prefix": {
+		"description": "ดูหรือกำหนด prefix ของบอท",
+		"errors": {
+			"prefix_too_long": "Prefix ห้ามยาวเกิน 3 ตัวอักษร"
+		},
+		"messages": {
+			"current_prefix": "Prefix ของเซิร์ฟเวอร์นี้คือ `{prefix}`",
+			"prefix_set": "ตั้งค่า prefix เป็น `{prefix}` เรียบร้อยแล้ว",
+			"prefix_reset": "รีเซ็ต prefix กลับไปเป็นค่าเริ่มต้นแล้ว (`{prefix}`)"
+		},
+		"options": {
+			"set": "ตั้งค่า prefix",
+			"prefix": "Prefix ที่ต้องการตั้ง",
+			"reset": "รีเซ็ต prefix เป็นค่าเริ่มต้น"
+		}
+	},
+	"setup": {
+		"description": "ตั้งค่าบอท",
+		"errors": {
+			"channel_exists": "ช่องสำหรับคำขอฟังเพลงมีอยู่แล้ว",
+			"channel_not_exists": "ช่องสำหรับคำขอฟังเพลงยังไม่มีอยู่",
+			"channel_delete_fail": "ไม่สามารถลบข้อมูลช่องออกจากฐานข้อมูลได้ โปรดลบช่องด้วยตนเอง"
+		},
+		"messages": {
+			"channel_created": "สร้างช่องขอเพลงเรียบร้อยแล้วใน <#{channelId}>",
+			"channel_deleted": "ลบช่องขอเพลงเรียบร้อยแล้ว",
+			"channel_info": "ช่องขอเพลงอยู่ที่ <#{channelId}>"
+		},
+		"options": {
+			"create": "สร้างช่องขอเพลง",
+			"delete": "ลบช่องขอเพลง",
+			"info": "แสดงข้อมูลช่องขอเพลง"
+		}
+	},
+	"defaultvolume": {
+		"description": "ตั้งค่าระดับเสียงเริ่มต้นสำหรับบอทในเซิร์ฟเวอร์นี้",
+		"options": {
+			"volume": "ระดับเสียงเริ่มต้นที่คุณต้องการตั้ง (0-200)"
+		},
+		"messages": {
+			"current": "ระดับเสียงเริ่มต้นปัจจุบันสำหรับเซิร์ฟเวอร์นี้คือ **{volume}**",
+			"set": "`✅` | ตั้งค่าระดับเสียงเริ่มต้นเป็น **{volume}** แล้ว",
+			"invalid_number": "กรุณาระบุตัวเลขที่ถูกต้อง",
+			"too_low": "ระดับเสียงต้องไม่ต่ำกว่า 0",
+			"too_high": "ระดับเสียงต้องไม่สูงกว่า 200"
+		}
+	},
+	"8d": {
+		"description": "เปิด/ปิดฟิลเตอร์ 8D",
+		"messages": {
+			"filter_enabled": "`✅` | เปิดฟิลเตอร์ 8D แล้ว",
+			"filter_disabled": "`✅` | ปิดฟิลเตอร์ 8D แล้ว"
+		}
+	},
+	"bassboost": {
+		"description": "เปิด/ปิดฟิลเตอร์เพิ่มเบส",
+		"options": {
+			"level": "ระดับเบสที่ต้องการตั้ง"
+		},
+		"messages": {
+			"high": "`✅` | เปิดฟิลเตอร์เบสระดับสูงแล้ว",
+			"low": "`✅` | เปิดฟิลเตอร์เบสระดับต่ำแล้ว",
+			"medium": "`✅` | เปิดฟิลเตอร์เบสระดับกลางแล้ว",
+			"off": "`✅` | ปิดฟิลเตอร์เบสแล้ว",
+			"invalid_level": "กรุณาระบุระดับเบสที่ถูกต้อง ระดับที่มีให้เลือก: `high`, `medium`, `low`, `off`"
+		}
+	},
+	"distortion": {
+		"description": "สลับฟิลเตอร์ Distortion (บิดเบี้ยวเสียง) เปิด/ปิด",
+		"messages": {
+			"filter_enabled": "`✅` | เปิดฟิลเตอร์ Distortion แล้ว",
+			"filter_disabled": "`✅` | ปิดฟิลเตอร์ Distortion แล้ว"
+		}
+	},
+	"karaoke": {
+		"description": "สลับฟิลเตอร์คาราโอเกะ เปิด/ปิด",
+		"messages": {
+			"filter_enabled": "`✅` | เปิดฟิลเตอร์คาราโอเกะแล้ว",
+			"filter_disabled": "`✅` | ปิดฟิลเตอร์คาราโอเกะแล้ว"
+		}
+	},
+	"lowpass": {
+		"description": "สลับฟิลเตอร์ Lowpass เปิด/ปิด",
+		"messages": {
+			"filter_enabled": "`✅` | เปิดฟิลเตอร์ Lowpass แล้ว",
+			"filter_disabled": "`✅` | ปิดฟิลเตอร์ Lowpass แล้ว"
+		}
+	},
+	"nightcore": {
+		"description": "สลับฟิลเตอร์ Nightcore เปิด/ปิด",
+		"messages": {
+			"filter_enabled": "`✅` | เปิดฟิลเตอร์ Nightcore แล้ว",
+			"filter_disabled": "`✅` | ปิดฟิลเตอร์ Nightcore แล้ว"
+		}
+	},
+	"pitch": {
+		"description": "ปรับ Pitch ของเพลง",
+		"options": {
+			"pitch": "ค่าที่ต้องการตั้ง (ระหว่าง 0.5 ถึง 5)"
+		},
+		"errors": {
+			"invalid_number": "กรุณาระบุตัวเลขระหว่าง 0.5 ถึง 5"
+		},
+		"messages": {
+			"pitch_set": "`✅` | ตั้งค่า Pitch เป็น **{pitch}** เรียบร้อยแล้ว"
+		}
+	},
+	"rate": {
+		"description": "ปรับความเร็วของเพลง",
+		"options": {
+			"rate": "ค่าความเร็วที่ต้องการตั้ง (ระหว่าง 0.5 ถึง 5)"
+		},
+		"errors": {
+			"invalid_number": "กรุณาระบุตัวเลขระหว่าง 0.5 ถึง 5"
+		},
+		"messages": {
+			"rate_set": "`✅` | ตั้งค่าความเร็วเป็น **{rate}** เรียบร้อยแล้ว"
+		}
+	},
+	"reset": {
+		"description": "รีเซ็ตฟิลเตอร์ทั้งหมด",
+		"messages": {
+			"filters_reset": "`✅` | รีเซ็ตฟิลเตอร์ทั้งหมดแล้ว"
+		}
+	},
+	"rotation": {
+		"description": "สลับฟิลเตอร์หมุน (Rotation) เปิด/ปิด",
+		"messages": {
+			"enabled": "`✅` | เปิดฟิลเตอร์หมุนแล้ว",
+			"disabled": "`✅` | ปิดฟิลเตอร์หมุนแล้ว"
+		}
+	},
+	"speed": {
+		"description": "ปรับความเร็วเพลง",
+		"options": {
+			"speed": "ความเร็วที่ต้องการตั้ง (0.5 - 5)"
+		},
+		"messages": {
+			"invalid_number": "กรุณาระบุตัวเลขระหว่าง 0.5 ถึง 5",
+			"set_speed": "`✅` | ตั้งค่าความเร็วเป็น **{speed}** เรียบร้อยแล้ว"
+		}
+	},
+	"tremolo": {
+		"description": "สลับฟิลเตอร์ Tremolo เปิด/ปิด",
+		"messages": {
+			"enabled": "`✅` | เปิดฟิลเตอร์ Tremolo แล้ว",
+			"disabled": "`✅` | ปิดฟิลเตอร์ Tremolo แล้ว"
+		}
+	},
+	"vibrato": {
+		"description": "สลับฟิลเตอร์ Vibrato เปิด/ปิด",
+		"messages": {
+			"enabled": "`✅` | เปิดฟิลเตอร์ Vibrato แล้ว",
+			"disabled": "`✅` | ปิดฟิลเตอร์ Vibrato แล้ว"
+		}
+	},
+	"autoplay": {
+		"description": "สลับโหมดเล่นอัตโนมัติ",
+		"messages": {
+			"enabled": "`✅` | เปิดโหมดเล่นอัตโนมัติแล้ว",
+			"disabled": "`✅` | ปิดโหมดเล่นอัตโนมัติแล้ว"
+		}
+	},
+	"clearqueue": {
+		"description": "ล้างคิวเพลง",
+		"messages": {
+			"cleared": "ล้างคิวเพลงเรียบร้อยแล้ว"
+		}
+	},
+	"grab": {
+		"description": "บันทึกเพลงปัจจุบันไปยัง DM ของคุณ",
+		"loading": "กำลังโหลด...",
+		"content": "**ความยาว:** {length}\n**ขอโดย:** <@{requester}>\n**ลิงก์:** [คลิกที่นี่]({uri})",
+		"check_dm": "กรุณาตรวจสอบใน DM ของคุณ",
+		"dm_failed": "ฉันไม่สามารถส่ง DM ให้คุณได้ โปรดตรวจสอบว่า DM ของคุณเปิดอยู่"
+	},
+	"join": {
+		"description": "เชื่อมต่อบอทเข้าห้องเสียง",
+		"already_connected": "บอทเชื่อมต่ออยู่กับ <#{channelId}> แล้ว",
+		"no_voice_channel": "คุณต้องอยู่ในห้องเสียงก่อนใช้คำสั่งนี้",
+		"joined": "เชื่อมต่อสำเร็จที่ <#{channelId}>"
+	},
+	"leave": {
+		"description": "ตัดการเชื่อมต่อบอทจากห้องเสียง",
+		"left": "บอทออกจาก <#{channelId}> เรียบร้อยแล้ว",
+		"not_in_channel": "บอทไม่ได้อยู่ในห้องเสียง"
+	},
+	"loop": {
+		"description": "วนซ้ำเพลงปัจจุบันหรือคิว",
+		"options": {
+			"mode": "โหมดการวนซ้ำที่คุณต้องการตั้งค่า"
+		},
+		"messages": {
+			"looping_song": "**กำลังวนซ้ำเพลง**",
+			"looping_queue": "**กำลังวนซ้ำคิว**",
+			"looping_off": "**ปิดการวนซ้ำแล้ว**",
+			"invalid_mode": "โหมดการวนซ้ำไม่ถูกต้อง"
+		}
+	},
+	"lyrics": {
+		"description": "แสดงเนื้อเพลงสำหรับแทร็กปัจจุบัน",
+		"lyrics_for_track": "### เนื้อเพลงสำหรับ: [{trackTitle}]({trackUrl})",
+		"no_lyrics_on_page": "ไม่พบเนื้อเพลงในหน้านี้",
+		"searching": "🔍 กำลังค้นหาเนื้อเพลงของ **{trackTitle}**...",
+		"session_expired": "เซสชันหมดอายุแล้ว ใช้คำสั่งอีกครั้งเพื่อรีเฟรช",
+		"page_indicator": "หน้า {current}/{total}",
+		"artwork_description": "ปกอัลบั้มสำหรับ {trackTitle}",
+		"no_lyrics_available": "ไม่มีเนื้อเพลง",
+		"button_subscribe": "📌 ติดตามเนื้อเพลงสด",
+		"button_unsubscribe": "📌 เลิกติดตามเนื้อเพลงสด",
+		"subscribed": "คุณได้ติดตามการอัปเดตเนื้อเพลงสดแล้ว!",
+		"unsubscribed": "คุณได้เลิกติดตามการอัปเดตเนื้อเพลงสดแล้ว",
+		"errors": {
+			"no_results": "ไม่พบเนื้อเพลงสำหรับแทร็กปัจจุบัน",
+			"lyrics_error": "เกิดข้อผิดพลาดขณะดึงเนื้อเพลง",
+			"no_player_for_lyrics": "ไม่สามารถดึงเนื้อเพลงได้หากไม่มีเครื่องเล่นที่ใช้งานอยู่"
+		},
+		"options": {
+			"song": "เพลงที่คุณต้องการดึงเนื้อเพลง"
+		}
+	},
+	"nowplaying": {
+		"description": "แสดงเพลงที่กำลังเล่นอยู่",
+		"now_playing": "กำลังเล่น",
+		"track_info": "[{title}]({uri}) - ขอโดย: <@{requester}>\n\n`{bar}`"
+	},
+	"pause": {
+		"description": "หยุดเพลงชั่วคราว",
+		"successfully_paused": "หยุดเพลงเรียบร้อยแล้ว"
+	},
+	"play": {
+		"description": "เล่นเพลงจาก YouTube, Spotify, URL ฯลฯ",
+		"options": {
+			"song": "เพลงหรือ URL ที่ต้องการเล่น"
+		},
+		"loading": "กำลังโหลด...",
+		"errors": {
+			"search_error": "เกิดข้อผิดพลาดในการค้นหา",
+			"no_results": "ไม่พบผลลัพธ์",
+			"queue_too_long": "คิวเพลงยาวเกินไป สูงสุด {maxQueueSize} เพลง",
+			"playlist_too_long": "เพลย์ลิสต์ยาวเกินไป สูงสุด {maxPlaylistSize} เพลง"
+		},
+		"added_to_queue": "เพิ่ม [{title}]({uri}) ลงในคิวแล้ว",
+		"added_playlist_to_queue": "เพิ่ม {length} เพลงลงในคิวแล้ว"
+	},
+	"playlocal": {
+		"description": "เล่นไฟล์เสียงในเครื่อง",
+		"options": {
+			"file": "ไฟล์เสียงที่คุณต้องการเล่น"
+		},
+		"loading": "กำลังโหลด...",
+		"errors": {
+			"empty_query": "กรุณาแนบไฟล์เสียงเพื่อเล่น",
+			"invalid_format": "คุณสามารถเล่นได้เฉพาะไฟล์ MP3, WAV, OGG, FLAC, AAC หรือ M4A เท่านั้น",
+			"no_results": "ไม่สามารถเล่นไฟล์เสียงได้ ไฟล์อาจเสียหาย"
+		},
+		"added_to_queue": "เพิ่ม [{title}]({url}) ลงในคิวแล้ว"
+	},
+	"playnext": {
+		"description": "เพิ่มเพลงไปที่ด้านบนของคิว",
+		"options": {
+			"song": "เพลงที่คุณต้องการเล่น"
+		},
+		"loading": "กำลังโหลด...",
+		"errors": {
+			"search_error": "เกิดข้อผิดพลาดในการค้นหา",
+			"no_results": "ไม่พบผลลัพธ์",
+			"queue_too_long": "คิวเพลงยาวเกินไป สูงสุด {maxQueueSize} เพลง",
+			"playlist_too_long": "เพลย์ลิสต์ยาวเกินไป สูงสุด {maxPlaylistSize} เพลง"
+		},
+		"added_to_play_next": "เพิ่ม [{title}]({uri}) ให้เล่นถัดไปในคิวแล้ว",
+		"added_playlist_to_play_next": "เพิ่ม {length} เพลงให้เล่นถัดไปในคิวแล้ว"
+	},
+	"queue": {
+		"description": "แสดงคิวเพลงปัจจุบัน",
+		"now_playing": "กำลังเล่น: [{title}]({uri}) - ขอโดย: <@{requester}> - ความยาว: `{duration}`",
+		"live": "สด",
+		"track_info": "{index}. [{title}]({uri}) - ขอโดย: <@{requester}> - ความยาว: `{duration}`",
+		"title": "คิวเพลง",
+		"page_info": "หน้า {index} จาก {total}",
+		"duration": "ระยะเวลาคิว: `{totalDuration}`"
+	},
+	"remove": {
+		"description": "ลบเพลงเฉพาะออกจากคิว",
+		"options": {
+			"song": "หมายเลขเพลงที่คุณต้องการลบ"
+		},
+		"errors": {
+			"no_songs": "ไม่มีเพลงในคิว",
+			"invalid_number": "กรุณาระบุหมายเลขเพลงที่ถูกต้อง"
+		},
+		"messages": {
+			"removed": "ลบเพลงหมายเลข {songNumber} ออกจากคิวแล้ว"
+		}
+	},
+	"replay": {
+		"description": "เล่นแทร็กปัจจุบันซ้ำ",
+		"errors": {
+			"not_seekable": "ไม่สามารถเล่นซ้ำแทร็กนี้ได้เนื่องจากไม่สามารถ seek ได้"
+		},
+		"messages": {
+			"replaying": "กำลังเล่นแทร็กปัจจุบันซ้ำ"
+		}
+	},
+	"resume": {
+		"description": "เล่นเพลงต่อจากที่หยุดไว้",
+		"errors": {
+			"not_paused": "เครื่องเล่นไม่ได้หยุดชั่วคราว"
+		},
+		"messages": {
+			"resumed": "เล่นต่อแล้ว"
+		}
+	},
+	"search": {
+		"description": "ค้นหาเพลง",
+		"options": {
+			"song": "เพลงที่คุณกำลังมองหา"
+		},
+		"select": "เลือกเพลงจากรายการ...",
+		"errors": {
+			"no_results": "ไม่พบผลลัพธ์",
+			"no_results_title": "ไม่พบผลลัพธ์การค้นหา!",
+			"no_results_description": "ฉันไม่พบเพลงที่ตรงกับคำค้นหาของคุณ ลองเปลี่ยนคำหลักหรือระบุลิงก์",
+			"invalid_selection_title": "การเลือกไม่ถูกต้อง!",
+			"invalid_selection_description": "ตัวเลือกที่เลือกไม่ถูกต้อง กรุณาเลือกหมายเลขเพลงจากรายการ",
+			"search_error": "เกิดข้อผิดพลาดขณะค้นหาเพลง",
+			"vc_connect_fail_title": "ข้อผิดพลาดในการเชื่อมต่อช่องเสียง",
+			"vc_connect_fail_description": "ฉันไม่สามารถเชื่อมต่อกับช่องเสียงของคุณได้ ตรวจสอบให้แน่ใจว่าฉันมีสิทธิ์ที่เหมาะสม"
+		},
+		"messages": {
+			"results_found": "พบ **{count}** เพลง",
+			"select_prompt": "เลือกหมายเลขเพื่อเพิ่มเพลงลงในคิว",
+			"page_info": "หน้า {currentPage}/{maxPages}",
+			"added_to_queue": "เพิ่ม **[{title}]({uri})** ลงในคิวแล้ว!",
+			"selection_timed_out_title": "หมดเวลา!",
+			"selection_timed_out_description": "ไม่มีการเลือกเพลงภายในเวลาที่กำหนด การค้นหาถูกยกเลิก กรุณาลองใหม่อีกครั้ง",
+			"selection_timed_out_short": "หมดเวลาการเลือก"
+		}
+	},
+	"seek": {
+		"description": "ข้ามไปยังเวลาที่ระบุในเพลง",
+		"options": {
+			"duration": "ระยะเวลาที่ต้องการข้ามไป (เช่น 1m 30s)"
+		},
+		"errors": {
+			"invalid_format": "รูปแบบเวลาไม่ถูกต้อง ตัวอย่าง: seek 1m, seek 1h 30m",
+			"not_seekable": "แทร็กนี้ไม่สามารถ seek ได้",
+			"beyond_duration": "ไม่สามารถข้ามเกินระยะเวลาของเพลงที่ {length}"
+		},
+		"messages": {
+			"seeked_to": "ข้ามไปที่ {duration}"
+		}
+	},
+	"shuffle": {
+		"description": "สุ่มคิว",
+		"messages": {
+			"shuffled": "สุ่มคิวแล้ว"
+		},
+		"errors": {
+			"fairplay": "โหมด Fairplay เปิดอยู่ คุณไม่สามารถสุ่มคิวได้"
+		}
+	},
+	"skip": {
+		"description": "ข้ามเพลงปัจจุบัน",
+		"messages": {
+			"skipped": "ข้าม [{title}]({uri}) แล้ว"
+		}
+	},
+	"skipto": {
+		"description": "ข้ามไปยังเพลงเฉพาะในคิว",
+		"options": {
+			"number": "หมายเลขเพลงที่คุณต้องการข้ามไป"
+		},
+		"errors": {
+			"invalid_number": "กรุณาระบุหมายเลขที่ถูกต้อง"
+		},
+		"messages": {
+			"skipped_to": "ข้ามไปที่เพลงหมายเลข {number} แล้ว"
+		}
+	},
+	"move": {
+		"description": "ย้ายตำแหน่งแทร็กในคิว",
+		"options": {
+			"from": "ตำแหน่งของแทร็กที่จะย้าย",
+			"to": "ตำแหน่งที่จะย้ายแทร็กไป"
+		},
+		"errors": {
+			"no_tracks": "ไม่มีแทร็กในคิว",
+			"invalid_usage": "การใช้งานไม่ถูกต้อง กรุณาระบุตำแหน่งต้นทางและปลายทาง",
+			"invalid_numbers": "กรุณาระบุตำแหน่งแทร็กที่ถูกต้อง",
+			"invalid_positions": "กรุณาระบุตำแหน่งแทร็กที่ถูกต้องภายในคิว",
+			"same_position": "ตำแหน่งต้นทางและปลายทางเหมือนกัน"
+		},
+		"messages": {
+			"moved": "ย้าย **{title}** จากตำแหน่ง {from} ไปยัง {to} แล้ว"
+		}
+	},
+	"stop": {
+		"description": "หยุดเพลงและล้างคิว",
+		"messages": {
+			"stopped": "หยุดเพลงและล้างคิวแล้ว"
+		}
+	},
+	"volume": {
+		"description": "ตั้งค่าระดับเสียงของเครื่องเล่น",
+		"options": {
+			"number": "ระดับเสียงที่คุณต้องการตั้ง (0-200)"
+		},
+		"messages": {
+			"invalid_number": "กรุณาระบุหมายเลขที่ถูกต้อง",
+			"too_low": "ระดับเสียงต้องไม่ต่ำกว่า 0",
+			"too_high": "ระดับเสียงต้องไม่สูงกว่า 200 คุณต้องการทำลายการได้ยินหรือลำโพงของคุณหรือไม่? อืม ฉันไม่คิดว่านั่นเป็นความคิดที่ดีนะ",
+			"set": "ตั้งค่าระดับเสียงเป็น {volume}"
+		}
+	},
+	"addsong": {
+		"description": "เพิ่มเพลงลงในเพลย์ลิสต์ที่บันทึกไว้",
+		"options": {
+			"playlist": "เพลย์ลิสต์ที่คุณต้องการเพิ่มลงไป",
+			"song": "เพลงที่คุณต้องการเพิ่ม"
+		},
+		"messages": {
+			"no_playlist": "กรุณาระบุเพลย์ลิสต์",
+			"no_song": "กรุณาระบุเพลง",
+			"playlist_not_found": "เพลย์ลิสต์นั้นไม่มีอยู่",
+			"no_songs_found": "ไม่พบเพลง",
+			"added": "เพิ่ม {count} เพลงลงใน {playlist} แล้ว"
+		}
+	},
+	"create": {
+		"description": "สร้างเพลย์ลิสต์ใหม่",
+		"options": {
+			"name": "ชื่อของเพลย์ลิสต์"
+		},
+		"messages": {
+			"name_too_long": "ชื่อเพลย์ลิสต์ต้องไม่เกิน 50 ตัวอักษร",
+			"playlist_exists": "เพลย์ลิสต์ที่มีชื่อนั้นมีอยู่แล้ว กรุณาใช้ชื่ออื่น",
+			"playlist_created": "สร้างเพลย์ลิสต์ **{name}** แล้ว",
+			"name_empty": "คุณต้องระบุชื่อเพลย์ลิสต์"
+		}
+	},
+	"delete": {
+		"description": "ลบเพลย์ลิสต์",
+		"options": {
+			"playlist": "เพลย์ลิสต์ที่คุณต้องการลบ"
+		},
+		"messages": {
+			"playlist_not_found": "เพลย์ลิสต์นั้นไม่มีอยู่",
+			"playlist_deleted": "ลบเพลย์ลิสต์ **{playlistName}** แล้ว"
+		}
+	},
+	"list": {
+		"description": "แสดงรายการเพลย์ลิสต์ทั้งหมดของผู้ใช้",
+		"options": {
+			"user": "ผู้ใช้ที่คุณต้องการดึงเพลย์ลิสต์"
+		},
+		"messages": {
+			"no_playlists": "ผู้ใช้นี้ไม่มีเพลย์ลิสต์",
+			"your": "ของคุณ",
+			"playlists_title": "เพลย์ลิสต์ของ {username}",
+			"error": "เกิดข้อผิดพลาดขณะดึงเพลย์ลิสต์",
+			"invalid_username": "ชื่อผู้ใช้ไม่ถูกต้องหรือไม่พบผู้ใช้",
+			"invalid_userid": "รหัสผู้ใช้ไม่ถูกต้อง"
+		}
+	},
+	"load": {
+		"description": "โหลดเพลย์ลิสต์ที่บันทึกไว้ลงในคิว",
+		"options": {
+			"playlist": "เพลย์ลิสต์ที่คุณต้องการโหลด"
+		},
+		"messages": {
+			"playlist_not_exist": "เพลย์ลิสต์นั้นไม่มีอยู่",
+			"playlist_empty": "เพลย์ลิสต์นั้นว่างเปล่า",
+			"playlist_loaded": "โหลด `{name}` พร้อม `{count}` เพลงแล้ว",
+			"no_lavalink_nodes": "ไม่มีโหนด Lavalink ที่ใช้งานได้เพื่อโหลดเพลย์ลิสต์"
+		}
+	},
+	"removesong": {
+		"description": "ลบเพลงออกจากเพลย์ลิสต์",
+		"options": {
+			"playlist": "เพลย์ลิสต์ที่คุณต้องการลบออก",
+			"song": "เพลงที่คุณต้องการลบ"
+		},
+		"messages": {
+			"provide_playlist": "กรุณาระบุเพลย์ลิสต์",
+			"provide_song": "กรุณาระบุเพลง",
+			"playlist_not_exist": "เพลย์ลิสต์นั้นไม่มีอยู่",
+			"song_not_found": "ไม่พบเพลงที่ตรงกัน",
+			"song_removed": "ลบ {song} ออกจาก {playlist} แล้ว",
+			"error_occurred": "เกิดข้อผิดพลาดขณะลบเพลง"
+		}
+	},
+	"steal": {
+		"description": "ขโมยเพลย์ลิสต์จากผู้ใช้รายอื่นและเพิ่มลงในเพลย์ลิสต์ของคุณ",
+		"options": {
+			"playlist": "เพลย์ลิสต์ที่คุณต้องการขโมย",
+			"user": "ผู้ใช้ที่คุณต้องการขโมยเพลย์ลิสต์"
+		},
+		"messages": {
+			"provide_playlist": "กรุณาระบุชื่อเพลย์ลิสต์",
+			"provide_user": "กรุณาระบุผู้ใช้",
+			"playlist_not_exist": "เพลย์ลิสต์นั้นไม่มีอยู่สำหรับผู้ใช้ที่ระบุ",
+			"playlist_exists": "คุณมีเพลย์ลิสต์ชื่อ `{playlist}` อยู่แล้ว",
+			"playlist_stolen": "ขโมยเพลย์ลิสต์ `{playlist}` จาก {user} สำเร็จแล้ว",
+			"error_occurred": "เกิดข้อผิดพลาดขณะขโมยเพลย์ลิสต์"
+		}
+	},
+	"movenode": {
+		"description": "ย้ายผู้เล่นไปยังโหนด Lavalink อื่น",
+		"options": {
+			"node": "รหัสโหนดที่จะย้ายผู้เล่นไป"
+		},
+		"messages": {
+			"no_player": "ไม่มีเครื่องเล่นเพลงที่ใช้งานอยู่ในเซิร์ฟเวอร์นี้",
+			"no_available_nodes": "ไม่มีโหนดอื่นที่ใช้งานได้เพื่อย้ายไป",
+			"available_nodes_title": "โหนดที่ใช้งานได้",
+			"current_node": "โหนดปัจจุบัน",
+			"available_nodes": "โหนดที่ใช้งานได้",
+			"usage_hint": "ใช้: movenode <nodeId>",
+			"node_not_found": "ไม่พบโหนด `{node}`",
+			"node_not_connected": "โหนด `{node}` ไม่ได้เชื่อมต่อ",
+			"same_node": "Player อยู่บนโหนด `{node}` แล้ว",
+			"moving": "กำลังย้าย Player จาก `{from}` ไปยัง `{to}`...",
+			"success_title": "ย้าย Player สำเร็จ",
+			"success_description": "ย้าย Player จาก `{from}` ไปยัง `{to}` แล้ว",
+			"error": "ย้าย Player ไม่สำเร็จ: {error}",
+			"moving_all_players": "กำลังย้าย Player ทั้งหมดไปยังโหนด `{node}`...",
+			"results_title": "ผลการย้ายโหนด",
+			"moved_players": "**ย้าย Player ในกิลด์:**\n{list}",
+			"guild_move": "• `{guildId}` ({from} → {to})",
+			"failed_moves": "**ย้าย Player ในกิลด์ไม่สำเร็จ:**\n{list}",
+			"guild_move_failed": "• `{guildId}`: {error}",
+			"no_players_moved": "ไม่มี Player ที่ต้องย้าย",
+			"unknown_error": "ข้อผิดพลาดที่ไม่รู้จัก",
+			"no_players": "ไม่มี Player ให้ย้าย"
+		}
+	}
+}

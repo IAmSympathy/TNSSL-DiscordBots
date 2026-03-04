@@ -1,0 +1,69 @@
+{
+    "eval": {
+        "description": "Kód kiértékelése",
+        "success": "Kód sikeresen kiértékelve",
+        "error": "Sikertelen kódkiértékelés"
+    },
+    "guilds": {
+        "description": "A bot szervereinek kezelése és listázása",
+        "list": "Szerverlista",
+        "leave": {
+            "success": "Sikeres kilépés a szerverről: {name}",
+            "fail": "Sikertelen kilépés a szerverről: {name}",
+            "log": "A bot kilépett a szerverről: {name} (ID: {id})"
+        },
+        "not_found": "Szerver nem található."
+    },
+    "restart": {
+        "description": "Bot folyamat újraindítása",
+        "prompt": "Biztosan újra szeretnéd indítani a következőt: **{client}**?",
+        "status": {
+            "restarting": "Újraindítás...",
+            "canceled": "Újraindítás megszakítva.",
+            "error": "Hiba történt a bot újraindítása közben."
+        },
+        "restart_by": "Újraindítást kezdeményezte: {user}"
+    },
+    "shutdown": {
+        "description": "Bot folyamat leállítása",
+        "prompt": "Biztosan le akarod állítani a botot?",
+        "status": "Leállítás...",
+        "canceled": "Leállítás megszakítva."
+    },
+    "deploy": {
+        "description": "Slash parancsok szinkronizálása a Discord API-val",
+        "prompt": "Hová szeretnéd telepíteni/eltávolítani a parancsokat?",
+        "status": {
+            "deployed_global": "Parancsok globálisan telepítve.",
+            "deployed_guild": "Parancsok telepítve ezen a szerveren.",
+            "removed_global": "Parancsok globálisan eltávolítva.",
+            "removed_guild": "Parancsok eltávolítva erről a szerverről.",
+            "failed": "A telepítés sikertelen a következő parancson keresztül: {command}"
+        },
+        "buttons": {
+            "deploy_global": "Globális telepítés",
+            "deploy_guild": "Szerverre telepítés",
+            "remove_global": "Globális eltávolítás",
+            "remove_guild": "Szerverről eltávolítás"
+        }
+    },
+    "invite": {
+        "create": {
+            "description": "Meghívó link létrehozása egy adott szerverre.",
+            "errors": {
+                "guild_not_found": "Szerver nem található. Ellenőrizze az ID helyességét.",
+                "no_suitable_channel": "Nem található megfelelő csatorna elegendő jogosultsággal a meghívó létrehozásához azon a szerveren."
+            },
+            "success": "Meghívó link a következőhöz: **{guildName}**: [Kattints ide]({url})"
+        },
+        "destroy": {
+            "description": "A bot által létrehozott összes meghívó link törlése egy szerveren",
+            "errors": {
+                "guild_not_found": "Szerver nem található. Kérjük, adjon meg érvényes ID-t.",
+                "generic": "Nem sikerült törölni a meghívókat. Ellenőrizze, hogy van-e 'Szerver kezelése' jogosultságom azon a szerveren."
+            },
+            "success": "Sikeresen törölve **{count}** általam létrehozott meghívó a(z) **{guildName}** szerveren.",
+            "not_found": "Nem található általam létrehozott meghívó ezen a szerveren."
+        }
+    }
+}

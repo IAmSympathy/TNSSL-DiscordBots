@@ -1,0 +1,176 @@
+/**
+ * Custom Theme for LavaMusic
+ * Brand Color: #9057E8 (Purple)
+ */
+
+:root {
+    /* Brand Colors */
+    --vp-c-brand-1: #9057E8;
+    --vp-c-brand-2: #7239cc;
+    --vp-c-brand-3: #ac7ff2;
+
+    --vp-c-brand-soft: rgba(144, 87, 232, 0.16);
+
+    /* Background Colors - Sleek Dark */
+    --vp-c-bg: #0f111a;
+    --vp-c-bg-soft: #161821;
+    --vp-c-bg-mute: #242633;
+
+    /* Text Highlights */
+    --vp-home-hero-name-color: transparent;
+    --vp-home-hero-name-background: linear-gradient(135deg, #9057E8 0%, #c084fc 100%);
+
+    --vp-home-hero-image-filter: drop-shadow(0 0 3rem rgba(144, 87, 232, 0.4));
+}
+
+/* Dark mode tweaks */
+.dark {
+    --vp-c-brand-1: #ffffff;
+    --vp-c-brand-2: #9057E8;
+    --vp-c-brand-3: #ac7ff2;
+}
+
+/**
+ * Component Customization
+ */
+
+/* Hero Image Shadow Animation */
+@keyframes purple-glow {
+    0% {
+        filter: drop-shadow(0 0 1rem rgba(144, 87, 232, 0.4));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 2.5rem rgba(144, 87, 232, 0.7));
+    }
+
+    100% {
+        filter: drop-shadow(0 0 1rem rgba(144, 87, 232, 0.4));
+    }
+}
+
+.VPImage.logo {
+    animation: purple-glow 4s ease-in-out infinite;
+}
+
+/* Clean Typography & Spacing */
+:root {
+    --vp-font-family-base: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.vp-doc {
+    font-size: 17px;
+    line-height: 1.7;
+    letter-spacing: -0.01em;
+}
+
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3 {
+    letter-spacing: -0.02em;
+    font-weight: 700;
+}
+
+/* Feature cards refinements */
+.VPFeature {
+    border-radius: 12px !important;
+    padding: 32px !important;
+    border-color: var(--vp-c-bg-mute) !important;
+    background-color: var(--vp-c-bg-soft) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.VPFeature:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--vp-c-brand-1) !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+}
+
+.VPFeature .icon {
+    background-color: var(--vp-c-bg-mute) !important;
+    border-radius: 10px !important;
+    width: 56px !important;
+    height: 56px !important;
+    font-size: 28px !important;
+    margin-bottom: 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Navbar refinements */
+.VPNav {
+    background-color: rgba(15, 17, 26, 0.85) !important;
+    backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Sidebar refinements - Matching official VitePress guide look */
+.VPSidebar {
+    background-color: var(--vp-c-bg) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+    padding-top: 32px !important;
+}
+
+.VPSidebarItem.level-0 .text {
+    font-weight: 600 !important;
+    color: var(--vp-c-text-1) !important;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+.VPSidebarItem.level-0.is-active .text {
+    color: var(--vp-c-brand-1) !important;
+}
+
+.VPSidebarItem.level-1 .text {
+    font-size: 0.85rem !important;
+    color: var(--vp-c-text-2) !important;
+}
+
+.VPSidebarItem.level-1.is-active .text {
+    color: var(--vp-c-brand-1) !important;
+}
+
+
+/* Custom Block Styles */
+.custom-block {
+    border-radius: 8px !important;
+    padding: 20px !important;
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--vp-c-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+    border: 2px solid var(--vp-c-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--vp-c-brand-1);
+}
+
+/* Home Hero adjustments */
+.VPHero.has-image .container {
+    padding-top: 80px !important;
+    padding-bottom: 80px !important;
+}
+
+.VPHero .name {
+    font-weight: 900 !important;
+    letter-spacing: -0.04em !important;
+}
+
+.VPHero .text {
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+}

@@ -1,0 +1,37 @@
+{
+    "ui": {
+        "confirm": "Potvrdi",
+        "cancel": "Odustani",
+        "yes": "Da",
+        "no": "Ne",
+        "back": "Natrag",
+        "next": "Naprijed",
+        "previous": "Prethodno",
+        "save": "Spremi",
+        "close": "Zatvori"
+    },
+    "status": {
+        "enabled": "Omogućeno",
+        "disabled": "Onemogućeno",
+        "on": "Uključeno",
+        "off": "Isključeno",
+        "loading": "Učitavanje...",
+        "processing": "Obrada...",
+        "success": "Uspjeh!",
+        "failed": "Neuspjeh!"
+    },
+    "errors": {
+        "generic": "Došlo je do neočekivane pogreške. Molimo pokušajte ponovno kasnije.\n{error}",
+        "timeout": "Vrijeme za ovu radnju je isteklo.",
+        "no_permissions": "Nemate potrebne dozvole za izvršavanje ove radnje.",
+        "dev_only": "Ova naredba je ograničena samo na razvojne programere.",
+        "db_error": "Došlo je do pogreške prilikom pristupa bazi podataka."
+    },
+    "labels": {
+        "author": "Autor",
+        "duration": "Trajanje",
+        "requested_by": "Zatražio",
+        "volume": "Glasnoća",
+        "page": "Stranica {current} od {total}"
+    }
+}

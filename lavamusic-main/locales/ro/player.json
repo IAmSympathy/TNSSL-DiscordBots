@@ -1,0 +1,39 @@
+{
+    "errors": {
+        "no_player": "Nu există niciun player activ pe acest server.",
+        "no_channel": "Trebuie să fii într-un canal vocal pentru a utiliza această comandă.",
+        "queue_empty": "Coada este goală.",
+        "no_previous": "Nu există melodii anterioare în coadă.",
+        "no_song": "Nu există melodii în coadă.",
+        "already_paused": "Melodia este deja în pauză.",
+        "user_not_in_voice_channel": "Nu ești conectat la un canal vocal."
+    },
+    "trackStart": {
+        "now_playing": "Acum se redă",
+        "requested_by": "Solicitat de {user}",
+        "duration": "Durată",
+        "author": "Autor",
+        "not_connected_to_voice_channel": "Nu ești conectat la <#{channel}> pentru a utiliza aceste butoane.",
+        "need_dj_role": "Trebuie să ai rolul de DJ pentru a utiliza această comandă.",
+        "previous_by": "Anterior de {user}",
+        "no_previous_song": "Nu există nicio melodie anterioară.",
+        "paused_by": "Pauză de către {user}",
+        "resumed_by": "Reluat de către {user}",
+        "skipped_by": "Sărit de către {user}",
+        "no_more_songs_in_queue": "Nu mai sunt melodii în coadă.",
+        "looping_by": "Repetare activată de {user}",
+        "looping_queue_by": "Repetare coadă activată de {user}",
+        "looping_off_by": "Repetare dezactivată de {user}"
+    },
+    "setupStart": {
+        "now_playing": "Acum se redă",
+        "description": "[{title}]({uri}) de {author} • `[{length}]` - Solicitat de <@{requester}>",
+        "error_searching": "A apărut o eroare la căutare.",
+        "no_results": "Nu s-au găsit rezultate.",
+        "nothing_playing": "Nu se redă nimic momentan",
+        "queue_too_long": "Coada este prea lungă. Dimensiunea maximă este de {maxQueueSize} melodii.",
+        "playlist_too_long": "Lista de redare este prea lungă. Dimensiunea maximă este de {maxPlaylistSize} melodii.",
+        "added_to_queue": "S-a adăugat [{title}]({uri}) în coadă.",
+        "added_playlist_to_queue": "S-au adăugat [{length}] melodii din lista de redare în coadă."
+    }
+}

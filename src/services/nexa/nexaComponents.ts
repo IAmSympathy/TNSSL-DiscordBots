@@ -8,6 +8,7 @@ import * as http from "http";
 import sharp from "sharp";
 import {ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, ContainerBuilder, MediaGalleryBuilder, MediaGalleryItemBuilder, MessageFlags, SeparatorBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextDisplayBuilder,} from "discord.js";
 import type {Player, Track} from "lavalink-client";
+import {FILTERS, getActiveFilters} from "./nexaFilters";
 // SectionBuilder et ThumbnailBuilder existent à runtime mais pas encore dans les types
 const {SectionBuilder, ThumbnailBuilder} = require("discord.js") as any;
 
@@ -195,6 +196,28 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
 
             container.addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(`${header}\n\`\`\`\n${lines.join("\n")}\n\`\`\`${footer}`)
+            );
+        }
+
+        // Select menu des filtres (multi-select)
+        {
+            const activeFilters = getActiveFilters(player!);
+            const options = FILTERS.map(f =>
+                new StringSelectMenuOptionBuilder()
+                    .setValue(`nexa_filter_${f.id}`)
+                    .setLabel(`${f.emoji} ${f.label}`)
+                    .setDescription(f.description)
+                    .setDefault(activeFilters.has(f.id))
+            );
+            container.addActionRowComponents(
+                new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+                    new StringSelectMenuBuilder()
+                        .setCustomId("nexa_filter_select")
+                        .setPlaceholder("🎛️ Filtres audio — sélectionner pour activer")
+                        .setMinValues(0)
+                        .setMaxValues(FILTERS.length)
+                        .addOptions(options)
+                )
             );
         }
 

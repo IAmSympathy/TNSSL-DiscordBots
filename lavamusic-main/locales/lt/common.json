@@ -1,0 +1,37 @@
+{
+    "ui": {
+        "confirm": "Patvirtinti",
+        "cancel": "Atšaukti",
+        "yes": "Taip",
+        "no": "Ne",
+        "back": "Atgal",
+        "next": "Kitas",
+        "previous": "Ankstesnis",
+        "save": "Išsaugoti",
+        "close": "Uždaryti"
+    },
+    "status": {
+        "enabled": "Įjungta",
+        "disabled": "Išjungta",
+        "on": "Įjungta",
+        "off": "Išjungta",
+        "loading": "Kraunama...",
+        "processing": "Apdorojama...",
+        "success": "Pavyko!",
+        "failed": "Nepavyko!"
+    },
+    "errors": {
+        "generic": "Įvyko nenumatyta klaida. Bandykite dar kartą vėliau.\n{error}",
+        "timeout": "Šio veiksmo atlikimo laikas baigėsi.",
+        "no_permissions": "Jūs neturite reikiamų leidimų šiam veiksmui atlikti.",
+        "dev_only": "Šią komandą gali naudoti tik kūrėjai.",
+        "db_error": "Įvyko klaida jungiantis prie duomenų bazės."
+    },
+    "labels": {
+        "author": "Autorius",
+        "duration": "Trukmė",
+        "requested_by": "Užsakė",
+        "volume": "Garsumas",
+        "page": "{current} puslapis iš {total}"
+    }
+}

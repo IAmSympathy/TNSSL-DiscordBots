@@ -1,0 +1,23 @@
+import type { LavalinkNode } from "lavalink-client";
+import { Event, type Lavamusic } from "../../structures/index";
+import logger from "../../structures/Logger";
+import { LavamusicEventType } from "../../types/events";
+import { LOG_LEVEL } from "../../types/log";
+import { sendLog } from "../../utils/BotLog";
+export default class ErrorEvent extends Event {
+	constructor(client: Lavamusic, file: string) {
+		super(client, file, {
+			type: LavamusicEventType.Node,
+			name: "error",
+		});
+	}
+
+	public async run(node: LavalinkNode, error: Error): Promise<void> {
+		logger.error(`Node ${node.id} error: ${error.stack || error.message}`);
+		sendLog(
+			this.client,
+			`Node ${node.id} encountered an error: ${error.stack || error.message}`,
+			LOG_LEVEL.ERROR,
+		);
+	}
+}

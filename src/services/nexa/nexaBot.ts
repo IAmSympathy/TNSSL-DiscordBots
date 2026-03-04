@@ -9,6 +9,7 @@ import * as dotenv from "dotenv";
 import type {Player, Track} from "lavalink-client";
 import {getHistory, getKazagumo, getOrCreatePlayer, initKazagumo, isLavalinkReady, previousTrack, pushHistory, searchTrack, skipTrack, stopPlayback, togglePause,} from "./musicPlayer";
 import {buildJukeboxPanel, buildTrackProposal} from "./nexaComponents";
+import {applyFilterSet} from "./nexaFilters";
 
 dotenv.config();
 
@@ -193,6 +194,12 @@ export class NexaBot {
 
         // Boutons et select menus
         this.client.on(Events.InteractionCreate, async (interaction) => {
+            if (interaction.isStringSelectMenu() && interaction.customId === "nexa_filter_select") {
+                await interaction.deferUpdate().catch(() => {
+                });
+                await this.handleFilterSelect(interaction);
+                return;
+            }
             if (interaction.isStringSelectMenu() && interaction.customId.startsWith("nexa_select_")) {
                 await interaction.deferUpdate().catch(() => {
                 });
@@ -397,6 +404,35 @@ export class NexaBot {
                 break;
             }
         }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // SELECT MENU FILTRES
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private async handleFilterSelect(interaction: any): Promise<void> {
+        const guildId = interaction.guildId;
+        if (!guildId) return;
+
+        // Vérification salon vocal
+        if (!await this.isInSameVoiceChannel(interaction)) {
+            await interaction.followUp({content: "❌ Tu dois être dans le même salon vocal que moi !", flags: MessageFlags.Ephemeral}).catch(() => {
+            });
+            return;
+        }
+
+        let player: Player | undefined;
+        try {
+            player = getKazagumo().getPlayer(guildId);
+        } catch {
+            return;
+        }
+        if (!player) return;
+
+        // interaction.values contient tous les ids sélectionnés
+        const selectedIds = (interaction.values as string[]).map((v: string) => v.replace("nexa_filter_", ""));
+        await applyFilterSet(player, selectedIds);
+        await this.refreshPanel(guildId);
     }
 
     // ─────────────────────────────────────────────────────────────────────────

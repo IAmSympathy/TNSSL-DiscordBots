@@ -1,0 +1,39 @@
+{
+    "errors": {
+        "no_player": "U ovom cehu nema aktivnog svirača.",
+        "no_channel": "Morate biti u glasovnom kanalu da biste koristili ovu naredbu.",
+        "queue_empty": "Red čekanja je prazan.",
+        "no_previous": "Nema prethodnih pjesama u redu čekanja.",
+        "no_song": "Nema pjesama u redu čekanja.",
+        "already_paused": "Pjesma je već pauzirana.",
+        "user_not_in_voice_channel": "Niste povezani s glasovnim kanalom."
+    },
+    "trackStart": {
+        "now_playing": "Sada se pušta",
+        "requested_by": "Zatražio {user}",
+        "duration": "Trajanje",
+        "author": "Autor",
+        "not_connected_to_voice_channel": "Niste povezani s <#{channel}> da biste koristili ove gumbe.",
+        "need_dj_role": "Morate imati ulogu DJ-a da biste koristili ovu naredbu.",
+        "previous_by": "Prethodno od {user}",
+        "no_previous_song": "Nema prethodne pjesme.",
+        "paused_by": "Pauzirao {user}",
+        "resumed_by": "Nastavio {user}",
+        "skipped_by": "Preskočio {user}",
+        "no_more_songs_in_queue": "Nema više pjesama u redu čekanja.",
+        "looping_by": "Ponavljanje od {user}",
+        "looping_queue_by": "Red čekanja ponavlja {user}",
+        "looping_off_by": "Ponavljanje isključio {user}"
+    },
+    "setupStart": {
+        "now_playing": "Sada se pušta",
+        "description": "[{title}]({uri}) od {author} • `[{length}]` - Zatražio <@{requester}>",
+        "error_searching": "Došlo je do pogreške prilikom pretraživanja.",
+        "no_results": "Nisu pronađeni rezultati.",
+        "nothing_playing": "Trenutno se ništa ne pušta",
+        "queue_too_long": "Red čekanja je predug. Maksimalna duljina je {maxQueueSize} pjesama.",
+        "playlist_too_long": "Popis pjesama je predug. Maksimalna duljina je {maxPlaylistSize} pjesama.",
+        "added_to_queue": "Dodano [{title}]({uri}) u red čekanja.",
+        "added_playlist_to_queue": "Dodano [{length}] pjesama s popisa pjesama u red čekanja."
+    }
+}

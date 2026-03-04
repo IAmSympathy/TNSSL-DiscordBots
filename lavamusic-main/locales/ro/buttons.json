@@ -1,0 +1,13 @@
+{
+    "invite": "Invită",
+    "support": "Server de Suport",
+    "previous": "Anterior",
+    "resume": "Reluare",
+    "stop": "Stop",
+    "skip": "Sari",
+    "loop": "Repetă",
+    "next": "Următorul",
+    "errors": {
+        "not_author": "Nu poți folosi acest buton."
+    }
+}

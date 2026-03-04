@@ -1,0 +1,69 @@
+{
+    "eval": {
+        "description": "Evaluer kode",
+        "success": "Kode evalueret succesfuldt",
+        "error": "Kunne ikke evaluere kode"
+    },
+    "guilds": {
+        "description": "Administrer og list bot-guilds",
+        "list": "Liste over Guilds",
+        "leave": {
+            "success": "Forlod guild succesfuldt: {name}",
+            "fail": "Kunne ikke forlade guild {name}",
+            "log": "Bot har forladt guild: {name} (ID: {id})"
+        },
+        "not_found": "Guild ikke fundet."
+    },
+    "restart": {
+        "description": "Genstart bot-processen",
+        "prompt": "Er du sikker på, at du vil genstarte **{client}**?",
+        "status": {
+            "restarting": "Genstarter...",
+            "canceled": "Genstart annulleret.",
+            "error": "Der opstod en fejl under genstart af botten."
+        },
+        "restart_by": "Genstart initieret af {user}"
+    },
+    "shutdown": {
+        "description": "Luk bot-processen ned",
+        "prompt": "Er du sikker på, at du vil lukke ned?",
+        "status": "Lukker ned...",
+        "canceled": "Nedlukning annulleret."
+    },
+    "deploy": {
+        "description": "Synkroniser slash-kommandoer med Discord API",
+        "prompt": "Hvor ønsker du at udrulle/fjerne kommandoerne?",
+        "status": {
+            "deployed_global": "Kommandoer udrullet globalt.",
+            "deployed_guild": "Kommandoer udrullet i denne guild.",
+            "removed_global": "Kommandoer fjernet globalt.",
+            "removed_guild": "Kommandoer fjernet fra denne guild.",
+            "failed": "Udrulning mislykkedes via kommando: {command}"
+        },
+        "buttons": {
+            "deploy_global": "Udrul Globalt",
+            "deploy_guild": "Udrul Guild",
+            "remove_global": "Fjern Globalt",
+            "remove_guild": "Fjern Guild"
+        }
+    },
+    "invite": {
+        "create": {
+            "description": "Opret et invitationslink til en specifik guild.",
+            "errors": {
+                "guild_not_found": "Guild ikke fundet. Sørg for at ID'et er korrekt.",
+                "no_suitable_channel": "Ingen passende kanal fundet med nok tilladelser til at oprette en invitation i den guild."
+            },
+            "success": "Invitationslink til **{guildName}**: [Klik her]({url})"
+        },
+        "destroy": {
+            "description": "Slet alle invitationslinks oprettet af botten i en guild",
+            "errors": {
+                "guild_not_found": "Guild ikke fundet. Indtast venligst et gyldigt ID.",
+                "generic": "Kunne ikke slette invitationer. Tjek om jeg har 'Manage Server' tilladelser i den guild."
+            },
+            "success": "Slettede succesfuldt **{count}** invitation(er) oprettet af mig i **{guildName}**.",
+            "not_found": "Ingen invitationer oprettet af mig blev fundet i denne guild."
+        }
+    }
+}
