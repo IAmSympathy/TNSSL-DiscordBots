@@ -7,7 +7,7 @@
 import {Client, Events, GatewayIntentBits, type Message, MessageFlags, TextChannel,} from "discord.js";
 import * as dotenv from "dotenv";
 import type {Player, Track} from "lavalink-client";
-import {getHistory, getKazagumo, getOrCreatePlayer, initKazagumo, isLavalinkReady, previousTrack, pushHistory, searchTrack, seekRelative, skipTrack, stopPlayback, togglePause,} from "./musicPlayer";
+import {clearHistory, getHistory, getKazagumo, getOrCreatePlayer, initKazagumo, isLavalinkReady, previousTrack, pushHistory, searchTrack, seekRelative, skipTrack, stopPlayback, togglePause,} from "./musicPlayer";
 import {buildJukeboxPanel, buildTrackProposal} from "./nexaComponents";
 import {applyFilterSet, getActiveFilters} from "./nexaFilters";
 
@@ -491,9 +491,12 @@ export class NexaBot {
                 savedFilterOnClose.delete(guildId);
                 const hist = getHistory(guildId);
                 if (hist.length > 0) {
+                    // Remettre toutes les tracks de l'historique dans la queue
                     for (const t of hist) {
                         player.queue.add(t);
                     }
+                    // Vider l'historique — il sera reconstruit au fur et à mesure
+                    clearHistory(guildId);
                     await player.play();
                     if (savedFilter) await applyFilterSet(player, [savedFilter]);
                 }

@@ -136,6 +136,10 @@ export function getHistory(guildId: string): Track[] {
     return trackHistory.get(guildId) ?? [];
 }
 
+export function clearHistory(guildId: string): void {
+    trackHistory.delete(guildId);
+}
+
 export async function skipTrack(guildId: string): Promise<void> {
     const player = getKazagumo().getPlayer(guildId);
     if (!player) return;

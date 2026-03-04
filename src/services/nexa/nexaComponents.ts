@@ -123,7 +123,7 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
             new TextDisplayBuilder().setContent(
                 [
                     `## 💽 Nexa's Jukebox - Mode Requêtes`,
-                    `## [${info.title}](${info.url})`,
+                    `### [${info.title}](${info.url})`,
                     [
                         `${info.sourceEmoji} ${info.channel}`,
                         info.isLive ? `🔴 LIVE` : `⏱️ ${info.duration}`,
@@ -182,10 +182,16 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
                 return `${prefix} ${title} (${inf.duration})`;
             };
             const currentTitle = info.title.length > 44 ? info.title.slice(0, 43) + "…" : info.title;
+
+            // Si pas de track suivante, afficher "Fermeture du Jukebox" à la place
+            const nextLine = nextTrack
+                ? fmtLine(nextTrack, " ")
+                : ` (Fermeture du Jukebox)`;
+
             const lines = [
                 prevTrack ? fmtLine(prevTrack, " ") : " ",
                 `‎ ‎ ‎ ▶ ${currentTitle} (${info.duration})`,
-                nextTrack ? fmtLine(nextTrack, " ") : " ",
+                nextLine,
             ];
             const posMs = (player as any)?.position ?? 0;
             const remainingMs = (current?.info.isStream ? 0 : Math.max(0, (current?.info.duration ?? 0) - posMs))
