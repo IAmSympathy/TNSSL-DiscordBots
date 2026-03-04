@@ -56,13 +56,13 @@ export function trackToDisplay(t: Track) {
         thumbnail: t.info.artworkUrl ?? "",
         channel: t.info.author ?? "",
         isLive: t.info.isStream ?? false,
-        requestedBy: (t as any).requester?.username ?? (t as any).requester?.name ?? "",
+        requestedBy: (t as any).requester?.displayName ?? (t as any).requester?.name ?? "",
         requestedById: (t as any).requester?.id ?? "",
     };
 }
 
 /** Construit le message Components V2 du panneau jukebox */
-export async function buildJukeboxPanel(player: Player | null): Promise<{ components: any[]; flags: number; files?: AttachmentBuilder[] }> {
+export async function buildJukeboxPanel(player: Player | null, hasHistory = false): Promise<{ components: any[]; flags: number; files?: AttachmentBuilder[] }> {
     const container = new ContainerBuilder();
 
     const current = player?.queue?.current as Track | null | undefined;
@@ -87,7 +87,7 @@ export async function buildJukeboxPanel(player: Player | null): Promise<{ compon
 
         container.addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
-                `## 💽 Nexa's Jukebox — Joue\n**[${info.title}](${info.url})**\n-# 📺 ${info.channel}${info.isLive ? " · 🔴 LIVE" : ` · ⏱️ ${info.duration}`}${info.requestedBy ? ` · demandé par **${info.requestedBy}**` : ""}`
+                `## 💽 Nexa's Jukebox — Mode Requête\n**[${info.title}](${info.url})**\n-# 📺 ${info.channel}${info.isLive ? " · 🔴 LIVE" : ` · ⏱️ ${info.duration}`}${info.requestedBy ? ` · demandé par **${info.requestedBy}**` : ""}`
             )
         );
         container.addMediaGalleryComponents(
@@ -96,6 +96,11 @@ export async function buildJukeboxPanel(player: Player | null): Promise<{ compon
         container.addSeparatorComponents(new SeparatorBuilder());
         container.addActionRowComponents(
             new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder()
+                    .setCustomId("nexa_prev")
+                    .setLabel("⏮ Préc.")
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(!hasHistory),
                 new ButtonBuilder()
                     .setCustomId("nexa_playpause")
                     .setLabel(isPaused ? "▶️ Reprendre" : "⏸ Pause")
@@ -113,8 +118,12 @@ export async function buildJukeboxPanel(player: Player | null): Promise<{ compon
                     .setDisabled(!isPlaying),
                 new ButtonBuilder()
                     .setCustomId("nexa_loop")
-                    .setLabel(repeatMode === "off" ? "🔁 Loop : Off" : repeatMode === "track" ? "🔂 Loop : Titre" : "🔁 Loop : File")
+                    .setLabel(repeatMode === "off" ? "🔁 Off" : repeatMode === "track" ? "🔂 Titre" : "🔁 File")
                     .setStyle(repeatMode === "off" ? ButtonStyle.Secondary : ButtonStyle.Success),
+            )
+        );
+        container.addActionRowComponents(
+            new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
                     .setCustomId("nexa_shuffle")
                     .setLabel("🔀 Shuffle")
@@ -124,13 +133,19 @@ export async function buildJukeboxPanel(player: Player | null): Promise<{ compon
         );
         container.addSeparatorComponents(new SeparatorBuilder());
         if (queue.length > 0) {
-            const lines = queue.slice(0, 5).map((t, i) => {
+            const MAX_SHOW = 5;
+            const shown = queue.slice(0, MAX_SHOW);
+            const lines = shown.map((t, i) => {
                 const inf = trackToDisplay(t);
-                return `**${i + 1}.** ${inf.title} · *${inf.duration}*`;
+                const title = inf.title.length > 50 ? inf.title.slice(0, 49) + "…" : inf.title;
+                return `**${i + 1}.** ${title} · *${inf.duration}*`;
             });
-            const extra = queue.length > 5 ? `\n-# *… et ${queue.length - 5} autre(s)*` : "";
+            const remaining = queue.length - MAX_SHOW;
+            const footer = remaining > 0
+                ? `\n-# *+ ${remaining} autre${remaining > 1 ? "s" : ""} (${queue.length} au total)*`
+                : `\n-# *${queue.length} titre${queue.length > 1 ? "s" : ""} dans la file*`;
             container.addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(`**📋 File d'attente :**\n${lines.join("\n")}${extra}`)
+                new TextDisplayBuilder().setContent(`**📋 File d'attente :**\n${lines.join("\n")}${footer}`)
             );
         } else {
             container.addTextDisplayComponents(
@@ -151,11 +166,11 @@ export async function buildJukeboxPanel(player: Player | null): Promise<{ compon
         container.addSeparatorComponents(new SeparatorBuilder());
         container.addActionRowComponents(
             new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder().setCustomId("nexa_prev").setLabel("⏮ Préc.").setStyle(ButtonStyle.Secondary).setDisabled(true),
                 new ButtonBuilder().setCustomId("nexa_playpause").setLabel("⏸ Pause").setStyle(ButtonStyle.Primary).setDisabled(true),
                 new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Skip").setStyle(ButtonStyle.Secondary).setDisabled(true),
                 new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Stop").setStyle(ButtonStyle.Danger).setDisabled(true),
-                new ButtonBuilder().setCustomId("nexa_loop").setLabel("🔁 Loop : Off").setStyle(ButtonStyle.Secondary).setDisabled(true),
-                new ButtonBuilder().setCustomId("nexa_shuffle").setLabel("🔀 Shuffle").setStyle(ButtonStyle.Secondary).setDisabled(true),
+                new ButtonBuilder().setCustomId("nexa_loop").setLabel("🔁 Off").setStyle(ButtonStyle.Secondary).setDisabled(true),
             )
         );
         return {components: [container], flags: MessageFlags.IsComponentsV2, files: [makePlaceholderAttachment()]};

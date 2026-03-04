@@ -116,9 +116,35 @@ export async function togglePause(guildId: string): Promise<"paused" | "resumed"
     }
 }
 
+// Historique des tracks jouées par guildId (max 50)
+const trackHistory = new Map<string, Track[]>();
+
+export function pushHistory(guildId: string, track: Track): void {
+    const hist = trackHistory.get(guildId) ?? [];
+    hist.push(track);
+    if (hist.length > 50) hist.shift();
+    trackHistory.set(guildId, hist);
+}
+
+export function getHistory(guildId: string): Track[] {
+    return trackHistory.get(guildId) ?? [];
+}
+
 export async function skipTrack(guildId: string): Promise<void> {
     const player = getKazagumo().getPlayer(guildId);
     if (player) await player.skip();
+}
+
+export async function previousTrack(guildId: string): Promise<void> {
+    const player = getKazagumo().getPlayer(guildId);
+    if (!player) return;
+    const hist = trackHistory.get(guildId) ?? [];
+    if (!hist.length) return;
+    const prev = hist.pop()!;
+    trackHistory.set(guildId, hist);
+    // Remettre la track courante en tête de file
+    if (player.queue.current) player.queue.add(player.queue.current, 0);
+    await player.play({track: prev});
 }
 
 export async function stopPlayback(guildId: string): Promise<void> {

@@ -7,7 +7,7 @@
 import {Client, Events, GatewayIntentBits, type Message, MessageFlags, TextChannel,} from "discord.js";
 import * as dotenv from "dotenv";
 import type {Player, Track} from "lavalink-client";
-import {getKazagumo, getOrCreatePlayer, initKazagumo, isLavalinkReady, searchTrack, skipTrack, stopPlayback, togglePause,} from "./musicPlayer";
+import {getKazagumo, getOrCreatePlayer, initKazagumo, isLavalinkReady, previousTrack, searchTrack, skipTrack, stopPlayback, togglePause,} from "./musicPlayer";
 import {buildJukeboxPanel, buildTrackProposal} from "./nexaComponents";
 
 dotenv.config();
@@ -44,6 +44,8 @@ export class NexaBot {
 
         m.on("trackStart", async (player) => {
             console.log(`[Nexa] ▶️ ${player.queue.current?.info.title}`);
+            // Mémoriser la track qui VIENT de démarrer dans l'historique
+            if (player.queue.current) pushHistory(player.guildId, player.queue.current);
             await this.refreshPanel(player.guildId);
         });
         m.on("trackEnd", async (player) => {
@@ -94,7 +96,8 @@ export class NexaBot {
         } catch { /* manager pas encore prêt */
         }
 
-        const options = await buildJukeboxPanel(player ?? null);
+        const hasHistory = getHistory(guildId).length > 0;
+        const options = await buildJukeboxPanel(player ?? null, hasHistory);
 
         // Essaie d'éditer le message existant
         const existingId = this.controlMessages.get(guildId);
@@ -293,6 +296,11 @@ export class NexaBot {
         if (!player && !["nexa_playpause", "nexa_stop"].includes(id)) return;
 
         switch (id) {
+            case "nexa_prev":
+                if (!player) return;
+                await previousTrack(guildId);
+                break;
+
             case "nexa_playpause":
                 if (!player) return;
                 await togglePause(guildId);
