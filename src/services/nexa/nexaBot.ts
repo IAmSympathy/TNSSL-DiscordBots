@@ -181,6 +181,8 @@ export class NexaBot {
             const closeTimer = setTimeout(async () => {
                 clearInterval(countdownInterval);
                 closingTimers.delete(player.guildId);
+                clearHistory(player.guildId);
+                savedFilterOnClose.delete(player.guildId);
                 try {
                     const p = getKazagumo().getPlayer(player.guildId);
                     if (p) await p.destroy();
@@ -340,6 +342,8 @@ export class NexaBot {
                 if (oldState.channelId && !newState.channelId) {
                     console.log(`[Nexa] 🔌 Déconnecté de force du vocal — ${guildId}`);
                     cancelClosingTimer(guildId);
+                    clearHistory(guildId);
+                    savedFilterOnClose.delete(guildId);
                     try {
                         const p = getKazagumo().getPlayer(guildId);
                         if (p) await p.destroy();
@@ -527,6 +531,8 @@ export class NexaBot {
 
             case "nexa_stop":
                 cancelClosingTimer(guildId);
+                clearHistory(guildId);
+                savedFilterOnClose.delete(guildId);
                 await stopPlayback(guildId);
                 await this.refreshPanel(guildId);
                 break;
