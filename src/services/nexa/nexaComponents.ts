@@ -137,7 +137,7 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
             new TextDisplayBuilder().setContent(
                 [
                     `## 💽 Nexa's Jukebox - Mode Requêtes`,
-                    `### [${info.title}](${info.url})`,
+                    `*[${info.title}](${info.url})*`,
                     [
                         `${info.sourceEmoji} ${info.channel}`,
                         info.isLive ? `🔴 LIVE` : `⏱️ ${info.duration}`,
@@ -316,9 +316,24 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
             container.addActionRowComponents(
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder().setCustomId("nexa_prev").setLabel("⏮ Préc.").setStyle(ButtonStyle.Secondary).setDisabled(true),
-                    new ButtonBuilder().setCustomId("nexa_playpause").setLabel("⏸ Pause").setStyle(ButtonStyle.Primary).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_playpause").setLabel("▶️ Reprendre").setStyle(ButtonStyle.Success).setDisabled(true),
                     new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Skip").setStyle(ButtonStyle.Secondary).setDisabled(true),
-                    new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Stop").setStyle(ButtonStyle.Danger).setDisabled(true),)
+                    new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Stop").setStyle(ButtonStyle.Danger).setDisabled(true),
+                )
+            );
+            container.addActionRowComponents(
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    new ButtonBuilder().setCustomId("nexa_seek_back").setLabel("⏪ -10s").setStyle(ButtonStyle.Secondary).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_seek_forward").setLabel("+10s ⏩").setStyle(ButtonStyle.Secondary).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_loop").setLabel("🔁 Boucle: Off").setStyle(ButtonStyle.Secondary).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_shuffle").setLabel("🔀 Mélanger").setStyle(ButtonStyle.Secondary).setDisabled(true),
+                )
+            );
+            container.addActionRowComponents(
+                new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+                    new StringSelectMenuBuilder().setCustomId("nexa_filter_select").setPlaceholder("🎛️ Filtre audio…").setDisabled(true)
+                        .addOptions([new StringSelectMenuOptionBuilder().setValue("nexa_filter_none").setLabel("Aucun filtre").setDescription("Désactiver tous les filtres").setEmoji("✖️").setDefault(true)])
+                )
             );
             return {components: [container], flags: MessageFlags.IsComponentsV2, files: [makePlaceholderAttachment()]};
         }
