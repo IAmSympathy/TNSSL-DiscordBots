@@ -54,6 +54,22 @@ function fmt(ms: number): string {
     return h > 0 ? `${h}:${String(m).padStart(2, "0")}:${sec}` : `${m}:${sec}`;
 }
 
+const BAR_WIDTH = 28;
+
+function buildProgressBar(posMs: number, durationMs: number): string {
+    if (!durationMs) return "";
+    const ratio = Math.min(1, Math.max(0, posMs / durationMs));
+    const filled = Math.round(ratio * BAR_WIDTH);
+    const bar = "█".repeat(filled) + "░".repeat(BAR_WIDTH - filled);
+    const elapsed = fmt(posMs);
+    const remaining = "-" + fmt(Math.max(0, durationMs - posMs));
+    // Aligne elapsed à gauche et remaining à droite sur une ligne de BAR_WIDTH + 2 chars
+    const LINE_WIDTH = BAR_WIDTH + 2;
+    const gap = LINE_WIDTH - elapsed.length - remaining.length;
+    const timeLine = elapsed + " ".repeat(Math.max(1, gap)) + remaining;
+    return `${bar}\n${timeLine}`;
+}
+
 export function trackToDisplay(t: Track) {
     return {
         title: t.info.title,
@@ -139,45 +155,44 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
             )
         );
         container.addSeparatorComponents(new SeparatorBuilder());
-        // File : précédents + courant + suivants dans un codeblock
+        // Toujours 3 lignes fixes : 1 précédent | courant au milieu | 1 suivant
         {
-            const MAX_PREV = 2;
-            const MAX_NEXT = 4;
+            const prevTrack = history.length > 0 ? history[history.length - 1] : null;
+            const nextTrack = queue.length > 0 ? queue[0] : null;
 
-            const shownPrev = history.slice(-MAX_PREV);
-            const shownNext = queue.slice(0, MAX_NEXT);
-
-            const lines: string[] = [];
-
-            for (const t of shownPrev) {
+            const fmtLine = (t: Track, prefix: string) => {
                 const inf = trackToDisplay(t);
                 const title = inf.title.length > 46 ? inf.title.slice(0, 45) + "…" : inf.title;
-                lines.push(`  ${title} (${inf.duration})`);
-            }
+                return `${prefix} ${title} (${inf.duration})`;
+            };
 
             const currentTitle = info.title.length > 44 ? info.title.slice(0, 43) + "…" : info.title;
-            lines.push(`‎ ‎ ‎ ▶ ${currentTitle} (${info.duration})`);
+            const lines = [
+                prevTrack ? fmtLine(prevTrack, " ") : " ",
+                `▶ ${currentTitle} (${info.duration})`,
+                nextTrack ? fmtLine(nextTrack, " ") : " ",
+            ];
 
-            for (const t of shownNext) {
-                const inf = trackToDisplay(t);
-                const title = inf.title.length > 46 ? inf.title.slice(0, 45) + "…" : inf.title;
-                lines.push(`  ${title} (${inf.duration})`);
-            }
-
-            const totalHidden = (history.length - shownPrev.length) + (queue.length - shownNext.length);
-            const total = history.length + 1 + queue.length;
-
-            // Durée totale restante (track courante + suivantes)
-            const remainingMs = (current?.info.isStream ? 0 : (current?.info.duration ?? 0))
+            // Durée totale restante (position actuelle + suivantes)
+            const posMs = (player as any)?.position ?? 0;
+            const remainingMs = (current?.info.isStream ? 0 : Math.max(0, (current?.info.duration ?? 0) - posMs))
                 + queue.reduce((acc, t) => acc + (t.info.isStream ? 0 : (t.info.duration ?? 0)), 0);
             const remainingFmt = info.isLive ? "∞" : fmt(remainingMs);
 
-            const footer = totalHidden > 0
-                ? `\n-# *+ ${totalHidden} autre${totalHidden > 1 ? "s" : ""} cachés — ${total} titres au total*`
-                : `\n-# *${total} titre${total > 1 ? "s" : ""} au total*`;
+            const total = history.length + 1 + queue.length;
+            const footer = `\n-# *${total} titre${total > 1 ? "s" : ""} au total*`;
 
             container.addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(`**📋 Liste de lecture:** ‎‎‎‎‎ **${remainingFmt}** restant \n\`\`\`\n${lines.join("\n")}\n\`\`\`${footer}`)
+                new TextDisplayBuilder().setContent(`**📋 Liste de lecture — ${remainingFmt} restant :**\n\`\`\`\n${lines.join("\n")}\n\`\`\`${footer}`)
+            );
+        }
+        // Barre de progression
+        if (!info.isLive) {
+            const posMs = (player as any)?.position ?? 0;
+            const durationMs = current.info.duration ?? 0;
+            const progress = buildProgressBar(posMs, durationMs);
+            container.addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(`\`\`\`\n${progress}\n\`\`\``)
             );
         }
 

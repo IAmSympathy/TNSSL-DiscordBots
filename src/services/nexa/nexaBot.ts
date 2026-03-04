@@ -42,19 +42,46 @@ export class NexaBot {
 
         const m = initKazagumo(this.client);
 
+        // Timer de progression par guildId (mis à jour toutes les 5s)
+        const progressTimers = new Map<string, ReturnType<typeof setInterval>>();
+
+        const startProgressTimer = (guildId: string) => {
+            if (progressTimers.has(guildId)) return;
+            const timer = setInterval(async () => {
+                let player: any;
+                try {
+                    player = getKazagumo().getPlayer(guildId);
+                } catch {
+                    return;
+                }
+                if (!player?.playing || player?.paused) return;
+                await this.refreshPanel(guildId);
+            }, 5000);
+            progressTimers.set(guildId, timer);
+        };
+
+        const stopProgressTimer = (guildId: string) => {
+            const t = progressTimers.get(guildId);
+            if (t) {
+                clearInterval(t);
+                progressTimers.delete(guildId);
+            }
+        };
+
         m.on("trackStart", async (player) => {
             console.log(`[Nexa] ▶️ ${player.queue.current?.info.title}`);
+            startProgressTimer(player.guildId);
             await this.refreshPanel(player.guildId);
         });
         m.on("trackEnd", async (player, track) => {
-            // Push la track qui vient de se terminer dans l'historique
+            stopProgressTimer(player.guildId);
             if (track) pushHistory(player.guildId, track as Track);
             await this.refreshPanel(player.guildId);
         });
         m.on("queueEnd", async (player) => {
+            stopProgressTimer(player.guildId);
             console.log(`[Nexa] 🏁 File vide — ${player.guildId}`);
             await this.refreshPanel(player.guildId);
-            // Détruire le player après 5 min d'inactivité
             setTimeout(async () => {
                 const p = getKazagumo().getPlayer(player.guildId);
                 if (p && !p.playing && !p.queue.tracks.length) {
@@ -64,6 +91,7 @@ export class NexaBot {
             }, 5 * 60 * 1000);
         });
         m.on("trackError", async (player) => {
+            stopProgressTimer(player.guildId);
             console.error(`[Nexa] ❌ Erreur track — ${player.guildId}`);
             await this.refreshPanel(player.guildId);
         });
@@ -96,7 +124,6 @@ export class NexaBot {
         } catch { /* manager pas encore prêt */
         }
 
-        const hasHistory = getHistory(guildId).length > 0;
         const options = await buildJukeboxPanel(player ?? null, getHistory(guildId));
 
         // Essaie d'éditer le message existant
@@ -408,11 +435,6 @@ export class NexaBot {
                 await player.play({track});
             } else {
                 player.queue.add(track);
-                const pos = player.queue.tracks.length;
-                const chan = this.client.channels.cache.get(textChannelId) as TextChannel | undefined;
-                const m = await chan?.send({content: `✅ **${track.info.title}** ajouté en position **#${pos}**`}).catch(() => null);
-                if (m) setTimeout(() => m?.delete().catch(() => {
-                }), 5000);
                 await this.refreshPanel(guildId);
             }
         } catch (err) {
