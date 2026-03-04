@@ -97,7 +97,7 @@ export class NexaBot {
         }
 
         const hasHistory = getHistory(guildId).length > 0;
-        const options = await buildJukeboxPanel(player ?? null, hasHistory);
+        const options = await buildJukeboxPanel(player ?? null, getHistory(guildId));
 
         // Essaie d'éditer le message existant
         const existingId = this.controlMessages.get(guildId);

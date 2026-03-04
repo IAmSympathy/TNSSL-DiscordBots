@@ -8,31 +8,20 @@ import * as http from "http";
 import sharp from "sharp";
 import {ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, ContainerBuilder, MediaGalleryBuilder, MediaGalleryItemBuilder, MessageFlags, SeparatorBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextDisplayBuilder,} from "discord.js";
 import type {Player, Track} from "lavalink-client";
+// SectionBuilder et ThumbnailBuilder existent à runtime mais pas encore dans les types
+const {SectionBuilder, ThumbnailBuilder} = require("discord.js") as any;
 
 const PLACEHOLDER_FILENAME = "nexa_placeholder.png";
 const PLACEHOLDER_PATH = path.join(process.cwd(), "assets", PLACEHOLDER_FILENAME);
 const PLACEHOLDER_URL = `attachment://${PLACEHOLDER_FILENAME}`;
 
-const PLACEHOLDER_SMALL_FILENAME = "nexa_placeholder_small.png";
-const PLACEHOLDER_SMALL_PATH = path.join(process.cwd(), "assets", PLACEHOLDER_SMALL_FILENAME);
-const PLACEHOLDER_SMALL_URL = `attachment://${PLACEHOLDER_SMALL_FILENAME}`;
-
 function makePlaceholderAttachment(): AttachmentBuilder {
     return new AttachmentBuilder(PLACEHOLDER_PATH, {name: PLACEHOLDER_FILENAME});
-}
-
-function makeSmallPlaceholderAttachment(): AttachmentBuilder {
-    return new AttachmentBuilder(PLACEHOLDER_SMALL_PATH, {name: PLACEHOLDER_SMALL_FILENAME});
 }
 
 /** Télécharge une thumbnail distante, la redimensionne en 1920×1080 (cover) et la retourne comme AttachmentBuilder */
 async function fetchThumbnailAttachment(url: string): Promise<AttachmentBuilder | null> {
     return fetchThumbnailAttachmentSized(url, 1920, 1080);
-}
-
-/** Télécharge une thumbnail distante, la redimensionne en 640×360 (cover) et la retourne comme AttachmentBuilder */
-async function fetchSmallThumbnailAttachment(url: string): Promise<AttachmentBuilder | null> {
-    return fetchThumbnailAttachmentSized(url, 640, 360);
 }
 
 async function fetchThumbnailAttachmentSized(url: string, width: number, height: number): Promise<AttachmentBuilder | null> {
@@ -79,7 +68,7 @@ export function trackToDisplay(t: Track) {
 }
 
 /** Construit le message Components V2 du panneau jukebox */
-export async function buildJukeboxPanel(player: Player | null, hasHistory = false): Promise<{ components: any[]; flags: number; files?: AttachmentBuilder[] }> {
+export async function buildJukeboxPanel(player: Player | null, history: Track[] = []): Promise<{ components: any[]; flags: number; files?: AttachmentBuilder[] }> {
     const container = new ContainerBuilder();
 
     const current = player?.queue?.current as Track | null | undefined;
@@ -87,6 +76,7 @@ export async function buildJukeboxPanel(player: Player | null, hasHistory = fals
     const isPlaying = !!current;
     const repeatMode = player?.repeatMode ?? "off";
     const queue = (player?.queue?.tracks ?? []) as Track[];
+    const hasHistory = history.length > 0;
 
     if (current) {
         const info = trackToDisplay(current);
@@ -149,28 +139,45 @@ export async function buildJukeboxPanel(player: Player | null, hasHistory = fals
             )
         );
         container.addSeparatorComponents(new SeparatorBuilder());
-        // Track courante + file d'attente
+        // File : précédents + courant + suivants dans un codeblock
         {
-            const MAX_SHOW = 4; // 4 suivantes + la courante = 5 lignes max
-            const currentTitle = info.title.length > 50 ? info.title.slice(0, 49) + "…" : info.title;
-            const lines: string[] = [`▶️ **${currentTitle}** · *${info.duration}*`];
+            const MAX_PREV = 2;
+            const MAX_NEXT = 4;
 
-            const shown = queue.slice(0, MAX_SHOW);
-            for (const t of shown) {
+            const shownPrev = history.slice(-MAX_PREV);
+            const shownNext = queue.slice(0, MAX_NEXT);
+
+            const lines: string[] = [];
+
+            for (const t of shownPrev) {
                 const inf = trackToDisplay(t);
-                const title = inf.title.length > 48 ? inf.title.slice(0, 47) + "…" : inf.title;
-                lines.push(`╰ ${title} · *${inf.duration}*`);
+                const title = inf.title.length > 46 ? inf.title.slice(0, 45) + "…" : inf.title;
+                lines.push(`  ${title} (${inf.duration})`);
             }
 
-            const remaining = queue.length - MAX_SHOW;
-            const footer = queue.length === 0
-                ? "\n-# *File vide après ce titre.*"
-                : remaining > 0
-                    ? `\n-# *+ ${remaining} autre${remaining > 1 ? "s" : ""} (${queue.length + 1} au total)*`
-                    : `\n-# *${queue.length + 1} titre${queue.length + 1 > 1 ? "s" : ""} dans la file*`;
+            const currentTitle = info.title.length > 44 ? info.title.slice(0, 43) + "…" : info.title;
+            lines.push(`‎ ‎ ‎ ▶ ${currentTitle} (${info.duration})`);
+
+            for (const t of shownNext) {
+                const inf = trackToDisplay(t);
+                const title = inf.title.length > 46 ? inf.title.slice(0, 45) + "…" : inf.title;
+                lines.push(`  ${title} (${inf.duration})`);
+            }
+
+            const totalHidden = (history.length - shownPrev.length) + (queue.length - shownNext.length);
+            const total = history.length + 1 + queue.length;
+
+            // Durée totale restante (track courante + suivantes)
+            const remainingMs = (current?.info.isStream ? 0 : (current?.info.duration ?? 0))
+                + queue.reduce((acc, t) => acc + (t.info.isStream ? 0 : (t.info.duration ?? 0)), 0);
+            const remainingFmt = info.isLive ? "∞" : fmt(remainingMs);
+
+            const footer = totalHidden > 0
+                ? `\n-# *+ ${totalHidden} autre${totalHidden > 1 ? "s" : ""} cachés — ${total} titres au total*`
+                : `\n-# *${total} titre${total > 1 ? "s" : ""} au total*`;
 
             container.addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(`**📋 File d'attente :**\n${lines.join("\n")}${footer}`)
+                new TextDisplayBuilder().setContent(`**📋 Liste de lecture:** ‎‎‎‎‎ **${remainingFmt}** restant \n\`\`\`\n${lines.join("\n")}\n\`\`\`${footer}`)
             );
         }
 
@@ -199,30 +206,23 @@ export async function buildJukeboxPanel(player: Player | null, hasHistory = fals
 }
 
 /** Message de confirmation d'ajout de track (avec sélection parmi plusieurs résultats) */
-export async function buildTrackProposal(tracks: Track[], userId: string): Promise<{ components: any[]; flags: number; files?: AttachmentBuilder[] }> {
+export async function buildTrackProposal(tracks: Track[], userId: string): Promise<{ components: any[]; flags: number }> {
     const track = tracks[0];
     const info = trackToDisplay(track);
     const container = new ContainerBuilder();
 
-    // Thumbnail petite (640×360) — taille uniforme pour toutes les propositions
-    let thumbUrl = PLACEHOLDER_SMALL_URL;
-    let files: AttachmentBuilder[] | undefined = [makeSmallPlaceholderAttachment()];
+    // Section avec thumbnail native (petite, à droite) — pas besoin d'uploader un fichier
+    const section = new SectionBuilder()
+        .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+                `### 🎵 Résultat trouvé\n**[${info.title}](${info.url})**\n-# 📺 ${info.channel}${info.isLive ? " · 🔴 LIVE" : ` · ⏱️ ${info.duration}`}`
+            )
+        );
     if (info.thumbnail) {
-        const thumbAttachment = await fetchSmallThumbnailAttachment(info.thumbnail);
-        if (thumbAttachment) {
-            thumbUrl = "attachment://thumb.jpg";
-            files = [thumbAttachment];
-        }
+        section.setThumbnailAccessory(new ThumbnailBuilder().setURL(info.thumbnail));
     }
+    container.addSectionComponents(section);
 
-    container.addTextDisplayComponents(
-        new TextDisplayBuilder().setContent(
-            `### 🎵 Résultat trouvé\n**[${info.title}](${info.url})**\n-# 📺 ${info.channel}${info.isLive ? " · 🔴 LIVE" : ` · ⏱️ ${info.duration}`}`
-        )
-    );
-    container.addMediaGalleryComponents(
-        new MediaGalleryBuilder().addItems(new MediaGalleryItemBuilder().setURL(thumbUrl))
-    );
     container.addSeparatorComponents(new SeparatorBuilder());
     container.addActionRowComponents(
         new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -253,5 +253,5 @@ export async function buildTrackProposal(tracks: Track[], userId: string): Promi
         );
     }
 
-    return {components: [container], flags: MessageFlags.IsComponentsV2, files};
+    return {components: [container], flags: MessageFlags.IsComponentsV2};
 }
