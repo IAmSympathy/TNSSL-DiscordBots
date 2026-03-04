@@ -60,10 +60,10 @@ export function getActiveFilters(player: Player): Set<string> {
         const activeSig = sig(activeBands);
         let matched = false;
         for (const [id, presetBands] of Object.entries(EQ_PRESETS)) {
-            if (sig(presetBands) === activeSig) { active.add(id); matched = true; break; }
-        }
-        if (!matched) active.add("_eq");
-    }
+            if (sig(presetBands) === activeSig) {
+                active.add(id);
+                matched = true;
+                break;
             }
         }
         if (!matched) active.add("_eq");
