@@ -242,7 +242,7 @@ export async function setStandbyStatus(client: Client): Promise<void> {
     await client.user.setPresence({
         status: "idle",
         activities: [{
-            name: "🌙 Mode veille",
+            name: "💤 Mode veille",
             type: ActivityType.Playing
         }]
     });

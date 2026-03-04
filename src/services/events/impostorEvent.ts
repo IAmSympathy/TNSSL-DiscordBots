@@ -475,7 +475,7 @@ export async function handleStandbyModeTransition(client: Client): Promise<void>
                         .setColor(0x64737d)
                         .setTitle('🕵️ TÂCHES TEMPORAIREMENT MODIFIÉES ⚠️')
                         .setDescription(
-                            `Je suis passée en **Mode Veille** ! 🌙\n\n` +
+                            `Je suis passée en **Mode Veille** ! 💤\n\n` +
                             `Certaines tâches me nécessitant ont été **temporairement remplacées** par des alternatives.\n\n` +
                             `✨ **Bonne nouvelle :** Si je sors du Mode Veille, tes tâches originales seront **restaurées** avec ta progression !\n\n` +
                             `**Tâches actuelles :**`

@@ -462,11 +462,11 @@ module.exports = {
                     "Le serveur est peut-être hors ligne, en maintenance, ou surchargé.\n\n" +
                     "📌 **Que faire ?**\n" +
                     "• Réessayer dans quelques instants\n" +
-                    "• Vérifier si Netricsa est en mode veille (🌙)\n" +
+                    "• Vérifier si Netricsa est en mode veille (💤)\n" +
                     "• Contacter un administrateur si le problème persiste";
             } else if (errorMessage.includes("STANDBY_MODE")) {
                 errorTitle = "Mode Veille";
-                errorDescription = "🌙 **Netricsa est en mode veille.**\n\n" +
+                errorDescription = "💤 **Netricsa est en mode veille.**\n\n" +
                     "L'API de génération d'images n'est pas accessible pour le moment.\n\n" +
                     "Le bot vérifie régulièrement la disponibilité des services et reviendra en mode normal automatiquement.";
             }

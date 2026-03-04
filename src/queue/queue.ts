@@ -738,7 +738,7 @@ export async function processLLMRequest(request: DirectLLMRequest): Promise<stri
 
             // Message d'erreur adapté selon le type d'erreur
             const errorMessage = isConnectionError
-                ? "🌙 Je ne peux pas me connecter à l'ordinateur de mon créateur. Je passe en **mode veille** et vérifierai régulièrement quand il sera de nouveau disponibles."
+                ? "💤 Je ne peux pas me connecter à l'ordinateur de mon créateur. Je passe en **mode veille** et vérifierai régulièrement quand il sera de nouveau disponibles."
                 : "An error occurred while processing your message.";
 
             if (replyToMessage) {

@@ -159,10 +159,10 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
         container.addSeparatorComponents(new SeparatorBuilder());
         container.addActionRowComponents(
             new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder().setCustomId("nexa_prev").setLabel("⏮ Préc.").setStyle(ButtonStyle.Secondary).setDisabled(!hasHistory),
+                new ButtonBuilder().setCustomId("nexa_prev").setLabel("⏮ Précédent").setStyle(ButtonStyle.Secondary).setDisabled(!hasHistory),
                 new ButtonBuilder().setCustomId("nexa_playpause").setLabel(isPaused ? "▶️ Reprendre" : "⏸ Pause").setStyle(isPaused ? ButtonStyle.Success : ButtonStyle.Primary).setDisabled(!isPlaying),
-                new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Skip").setStyle(ButtonStyle.Secondary).setDisabled(!isPlaying),
-                new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Stop").setStyle(ButtonStyle.Danger).setDisabled(!isPlaying),
+                new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Suivant").setStyle(ButtonStyle.Secondary).setDisabled(!isPlaying),
+                new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Arrêter").setStyle(ButtonStyle.Danger).setDisabled(!isPlaying),
             )
         );
         container.addActionRowComponents(
@@ -252,10 +252,10 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
             // Row 1 : Reprendre (relance liste) + Stop actifs si historique, skip désactivé, loop désactivé
             container.addActionRowComponents(
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
-                    new ButtonBuilder().setCustomId("nexa_prev").setLabel("⏮ Préc.").setStyle(ButtonStyle.Secondary).setDisabled(!hasHistory),
+                    new ButtonBuilder().setCustomId("nexa_prev").setLabel("⏮ Précédent").setStyle(ButtonStyle.Secondary).setDisabled(!hasHistory),
                     new ButtonBuilder().setCustomId("nexa_restart_queue").setLabel("▶️ Reprendre").setStyle(ButtonStyle.Success).setDisabled(!hasHistory),
-                    new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Skip").setStyle(ButtonStyle.Secondary).setDisabled(true),
-                    new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Stop").setStyle(ButtonStyle.Danger).setDisabled(!hasHistory),
+                    new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Suivant").setStyle(ButtonStyle.Secondary).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Arrêter").setStyle(ButtonStyle.Danger).setDisabled(!hasHistory),
                 )
             );
             // Row 2 : seek désactivés + shuffle désactivé
@@ -315,10 +315,10 @@ export async function buildJukeboxPanel(player: Player | null, history: Track[] 
             container.addSeparatorComponents(new SeparatorBuilder());
             container.addActionRowComponents(
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
-                    new ButtonBuilder().setCustomId("nexa_prev").setLabel("⏮ Préc.").setStyle(ButtonStyle.Secondary).setDisabled(true),
-                    new ButtonBuilder().setCustomId("nexa_playpause").setLabel("▶️ Reprendre").setStyle(ButtonStyle.Success).setDisabled(true),
-                    new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Skip").setStyle(ButtonStyle.Secondary).setDisabled(true),
-                    new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Stop").setStyle(ButtonStyle.Danger).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_prev").setLabel("⏮ Précédent").setStyle(ButtonStyle.Secondary).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_playpause").setLabel("⏸️ Pause").setStyle(ButtonStyle.Secondary).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_skip").setLabel("⏭ Suivant").setStyle(ButtonStyle.Secondary).setDisabled(true),
+                    new ButtonBuilder().setCustomId("nexa_stop").setLabel("⏹ Arrêter").setStyle(ButtonStyle.Danger).setDisabled(true),
                 )
             );
             container.addActionRowComponents(

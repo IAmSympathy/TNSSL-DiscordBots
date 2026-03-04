@@ -7,7 +7,7 @@ import {getChannelNameFromInteraction} from "../../utils/channelHelper";
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("standby-status")
-        .setDescription("🌙 Affiche le statut du mode veille et force une vérification de connectivité"),
+        .setDescription("💤 Affiche le statut du mode veille et force une vérification de connectivité"),
 
     async execute(interaction: ChatInputCommandInteraction) {
         try {
@@ -21,7 +21,7 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor(isStandby ? 0xffa500 : 0x00ff00)
-                .setTitle(isStandby ? "🌙 Mode Veille ACTIF" : "✅ Mode Normal")
+                .setTitle(isStandby ? "💤 Mode Veille ACTIF" : "✅ Mode Normal")
                 .setDescription(
                     isStandby
                         ? "Le bot est en mode veille car les services locaux sont inaccessibles."
@@ -61,7 +61,7 @@ module.exports = {
 
             // Logger la commande
             const channelName = getChannelNameFromInteraction(interaction);
-            await logCommand("🌙 Vérification du mode veille", undefined, [
+            await logCommand("💤 Vérification du mode veille", undefined, [
                 {name: "👤 Par", value: interaction.user.username, inline: true},
                 {name: "📊 État", value: isStandby ? "Veille" : "Normal", inline: true},
                 {name: "🔍 Ollama", value: status.ollama ? "✅" : "❌", inline: true},

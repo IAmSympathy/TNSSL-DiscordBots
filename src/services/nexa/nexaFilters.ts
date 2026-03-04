@@ -75,9 +75,17 @@ export function getActiveFilters(player: Player): Set<string> {
 export async function applyFilterSet(player: Player, selectedIds: string[]): Promise<void> {
     const fm = player.filterManager;
 
+    // Vérifier si la normalisation est active avant le reset
+    const wasNormalized = (fm as any).filters?.normalizer ?? false;
+
     // Désactiver tous les filtres + vider les bandes EQ
     await fm.resetFilters();
-    await fm.clearEQ(); // resetFilters ne reset pas equalizerBands
+    await fm.clearEQ();
+
+    // Réactiver la normalisation si elle était active
+    if (wasNormalized) {
+        await (fm as any).toggleNormalization(0.75, true);
+    }
 
     // Activer le filtre sélectionné (s'il y en a un)
     const filterId = selectedIds[0] ?? null;

@@ -116,6 +116,14 @@ export class NexaBot {
             cancelClosingTimer(player.guildId);
             const track = player.queue.current;
             if (track) lastPlayedTrack.set(player.guildId, track as Track);
+            // Activer la normalisation du volume automatiquement
+            try {
+                const norm = (player.filterManager as any).filters?.normalizer ?? false;
+                if (!norm) {
+                    await (player.filterManager as any).toggleNormalization(0.75, true);
+                }
+            } catch {
+            }
             startProgressTimer(player.guildId);
             await this.refreshPanel(player.guildId);
             if (track) {
