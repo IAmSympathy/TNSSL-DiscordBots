@@ -89,11 +89,20 @@ export class KlodovikVoiceService {
                 adapterCreator: channel.guild.voiceAdapterCreator as any,
             });
 
+            // Logger tous les changements d'état pour diagnostiquer
+            connection.on("stateChange", (oldState, newState) => {
+                console.log(`[Klodovik Voice] 🔄 État connexion: ${oldState.status} → ${newState.status}`);
+            });
+            connection.on("error", (err) => {
+                console.error(`[Klodovik Voice] ❌ Erreur connexion:`, err);
+            });
+
             // Attendre que la connexion soit prête avant de jouer
             try {
-                await entersState(connection, VoiceConnectionStatus.Ready, 10_000);
-            } catch {
-                console.error("[Klodovik Voice] La connexion n'a pas pu atteindre l'état Ready dans le temps imparti");
+                await entersState(connection, VoiceConnectionStatus.Ready, 15_000);
+                console.log(`[Klodovik Voice] ✅ Connexion prête !`);
+            } catch (e) {
+                console.error(`[Klodovik Voice] ❌ Timeout Ready. État actuel: ${connection.state.status}`);
                 connection.destroy();
                 this.isPlaying = false;
                 return false;

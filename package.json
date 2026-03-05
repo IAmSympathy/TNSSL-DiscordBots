@@ -24,7 +24,8 @@
     "figlet": "^1.10.0",
     "lavalink-client": "^2.9.6",
     "play-dl": "^1.9.7",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@types/needle": "^3.3.0",
