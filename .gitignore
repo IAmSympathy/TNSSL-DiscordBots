@@ -2,11 +2,7 @@
 node_modules
 dist
 /generated_images
-data/birthday_state.json
-data/meme_schedule.json
 /temp_images
-./data
-/data
+/data/
+/lavalink/
 cookies.txt
-./lavalink
-/lavalink
