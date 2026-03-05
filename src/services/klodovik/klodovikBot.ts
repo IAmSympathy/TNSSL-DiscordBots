@@ -95,6 +95,9 @@ export class KlodovikBot {
             console.log(`[Klodovik] ✓ Bot connecté: ${c.user.tag}`);
             this.ready = true;
 
+            // Enregistrer le client dans le voiceService
+            KlodovikVoiceService.getInstance().setClient(this.client);
+
             // Initialiser le logger Discord pour Klodovik
             initializeKlodovikLogger(this.client);
 
