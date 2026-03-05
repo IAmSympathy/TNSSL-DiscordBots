@@ -2,7 +2,12 @@
 node_modules
 dist
 /generated_images
+./data
+/data
+data/meme_schedule.json
 /temp_images
 /data/
 /lavalink/
 cookies.txt
+./lavalink
+/lavalink
