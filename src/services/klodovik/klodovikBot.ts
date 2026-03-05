@@ -341,6 +341,8 @@ export class KlodovikBot {
             {
                 name: "ahuaah",
                 description: "[TAH-UM] 🦎 Invoquer Klodovik dans le salon vocal actuel",
+                contexts: [0], // Guild uniquement (nécessite un salon vocal)
+                integration_types: [0], // Guild install uniquement
             },
         ];
 
