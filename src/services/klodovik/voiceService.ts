@@ -1,5 +1,5 @@
 import {AudioPlayerStatus, createAudioPlayer, createAudioResource, entersState, getVoiceConnection, joinVoiceChannel, VoiceConnectionStatus} from "@discordjs/voice";
-import {VoiceBasedChannel} from "discord.js";
+import {Client, VoiceBasedChannel} from "discord.js";
 import * as path from "path";
 import * as fs from "fs";
 import {logKlodovikVoice} from "../../utils/discordLogger";
@@ -11,6 +11,7 @@ export class KlodovikVoiceService {
     private static instance: KlodovikVoiceService;
     private readonly soundsPath: string;
     private isPlaying: boolean = false;
+    private klodovikClient: Client | null = null;
 
     private constructor() {
         this.soundsPath = path.join(process.cwd(), "assets", "klodovik_sounds");
@@ -22,6 +23,10 @@ export class KlodovikVoiceService {
             KlodovikVoiceService.instance = new KlodovikVoiceService();
         }
         return KlodovikVoiceService.instance;
+    }
+
+    public setClient(client: Client): void {
+        this.klodovikClient = client;
     }
 
     /**
@@ -82,11 +87,16 @@ export class KlodovikVoiceService {
         console.log(`[Klodovik Voice] 🎵 Rejoint ${channel.name} pour jouer: ${soundFile}`);
 
         try {
+            // Utiliser le guild du client Klodovik pour le bon voiceAdapterCreator
+            const guild = this.klodovikClient
+                ? (this.klodovikClient.guilds.cache.get(channel.guild.id) ?? channel.guild)
+                : channel.guild;
+
             // Rejoindre le salon vocal
             const connection = joinVoiceChannel({
                 channelId: channel.id,
-                guildId: channel.guild.id,
-                adapterCreator: channel.guild.voiceAdapterCreator as any,
+                guildId: guild.id,
+                adapterCreator: guild.voiceAdapterCreator as any,
             });
 
             // Logger tous les changements d'état pour diagnostiquer

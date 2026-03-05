@@ -755,7 +755,7 @@ export class KlodovikBot {
 
         if (played) {
             await interaction.editReply({
-                content: `🦎 **AHUAAH !** Klodovik débarque dans **${voiceChannel.name}** !`,
+                content: `🦜 **AHUAAH !** Klodovik débarque dans **${voiceChannel.name}** !`,
             });
             console.log(`[Klodovik Voice] 🎯 Invocation forcée dans ${voiceChannel.name} par ${interaction.user?.username}`);
         } else {
