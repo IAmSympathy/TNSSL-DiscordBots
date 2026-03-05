@@ -340,9 +340,18 @@ export class KlodovikBot {
             },
             {
                 name: "ahuaah",
-                description: "[TAH-UM] 🦎 Invoquer Klodovik dans le salon vocal actuel",
+                description: "[TAH-UM] 🦎 Invoquer Klodovik dans le salon vocal actuel (ou un salon spécifié)",
                 contexts: [0], // Guild uniquement (nécessite un salon vocal)
                 integration_types: [0], // Guild install uniquement
+                options: [
+                    {
+                        name: "salon",
+                        description: "Salon vocal cible (par défaut : votre salon vocal actuel)",
+                        type: 7, // CHANNEL
+                        required: false,
+                        channel_types: [2, 13], // GUILD_VOICE, GUILD_STAGE_VOICE
+                    },
+                ],
             },
         ];
 
@@ -728,13 +737,15 @@ export class KlodovikBot {
             return;
         }
 
-        // Vérifier que l'utilisateur est dans un salon vocal
-        const voiceChannel = member?.voice?.channel;
+        // Vérifier si un salon a été fourni en option, sinon utiliser le salon vocal de l'utilisateur
+        const targetChannel = interaction.options.getChannel("salon");
+        const voiceChannel = targetChannel ?? member?.voice?.channel;
+
         if (!voiceChannel || !voiceChannel.isVoiceBased()) {
             await replyWithError(
                 interaction,
                 "Aucun salon vocal",
-                "Vous devez être dans un salon vocal pour invoquer Klodovik !",
+                "Vous devez être dans un salon vocal ou fournir un salon vocal valide pour invoquer Klodovik !",
                 true
             );
             return;
