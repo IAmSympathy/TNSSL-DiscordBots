@@ -171,7 +171,7 @@ async function updateFreeGamesChannelName(client: Client): Promise<void> {
         const nowSec = Math.floor(Date.now() / 1000);
         const activeCount = (state.currentGames || []).filter(p => p.until === 0 || p.until > nowSec).length;
 
-        const newName = `┃🎁┃promos『${activeCount}』`;
+        const newName = `┃🎁┃promotions『${activeCount}』`;
         if (channel.name === newName) return;
 
         await channel.setName(newName);

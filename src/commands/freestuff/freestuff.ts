@@ -32,8 +32,8 @@ module.exports = {
                         : "offre gratuite";
 
                 const embed = new EmbedBuilder()
-                    .setColor(0xa4ce88)
-                    .setTitle("💸 Promotions")
+                    .setColor(0xfbd687)
+                    .setTitle("🎁 Promotions")
                     .setDescription(`Aucun ${categoryLabel} disponible en ce moment.\n\nReviens plus tard, de nouvelles offres arrivent régulièrement !`)
                     .setTimestamp();
 

@@ -1798,7 +1798,7 @@ async function sendAchievementNotification(
             .setDescription(
                 `## ${achievement.emoji} ${achievement.name}\n\n` +
                 `*${achievement.description}*\n\n` +
-                `🎁 **+${achievement.xpReward} XP** gagné !\n\n` +
+                `💫 **+${achievement.xpReward} XP** gagné !\n\n` +
                 `Consulte tous tes succès avec \`/profile\` ou en faisant clic droit sur ton nom : Applications → **Voir le profil** !`
             )
             .setFooter({text: "Continue comme ça pour débloquer plus de succès !"})
@@ -1904,7 +1904,7 @@ async function sendAchievementNotification(
             await logCommand("🏆 Achievement Débloqué", undefined, [
                 {name: "👤 Utilisateur", value: user.username, inline: true},
                 {name: "🎯 Achievement", value: `${achievement.emoji} ${achievement.name}`, inline: true},
-                {name: "🎁 XP", value: `+${achievement.xpReward} XP`, inline: true},
+                {name: "💫 XP", value: `+${achievement.xpReward} XP`, inline: true},
                 {name: "📋 Type", value: achievementType, inline: true},
                 {name: "📨 Notification", value: notificationType, inline: true}
             ], undefined, channelName, user.displayAvatarURL());
