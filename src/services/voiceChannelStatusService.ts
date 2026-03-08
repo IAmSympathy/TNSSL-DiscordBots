@@ -83,19 +83,57 @@ function buildVoiceStatus(channel: VoiceChannel): string {
         return `🔇 ${nonSilent[0].displayName} parle dans le vide`;
     }
 
-    // --- Collecter toutes les activités par type ---
+    // --- Collecter les activités par type, une seule fois par membre ---
+    // Priorité : Playing > Streaming > Watching > Listening
+    // Cela évite qu'un membre avec plusieurs activités soit compté plusieurs fois
+    const ACTIVITY_PRIORITY = [
+        ActivityType.Playing,
+        ActivityType.Streaming,
+        ActivityType.Watching,
+        ActivityType.Listening,
+    ];
+
     const gameCounts = new Map<string, number>();
-    for (const activity of members.flatMap(m => m.presence?.activities ?? [])) {
-        if (activity.type === ActivityType.Playing) {
-            gameCounts.set(activity.name, (gameCounts.get(activity.name) ?? 0) + 1);
+    const streamers: typeof members = [];
+    const listeners: typeof members = [];
+    const watchers: typeof members = [];
+
+    for (const member of members) {
+        const activities = member.presence?.activities ?? [];
+
+        // Trouver l'activité la plus prioritaire du membre
+        let dominantType: ActivityType | null = null;
+        let dominantName: string | null = null;
+        for (const type of ACTIVITY_PRIORITY) {
+            const found = activities.find(a => a.type === type);
+            if (found) {
+                dominantType = type;
+                dominantName = found.name;
+                break;
+            }
+        }
+
+        if (dominantType === null) continue;
+
+        switch (dominantType) {
+            case ActivityType.Playing:
+                gameCounts.set(dominantName!, (gameCounts.get(dominantName!) ?? 0) + 1);
+                break;
+            case ActivityType.Streaming:
+                streamers.push(member);
+                break;
+            case ActivityType.Watching:
+                watchers.push(member);
+                break;
+            case ActivityType.Listening:
+                listeners.push(member);
+                break;
         }
     }
+
     const sortedGames = [...gameCounts.entries()].sort((a, b) => b[1] - a[1]);
     const topGameCount = sortedGames[0]?.[1] ?? 0;
 
-    const streamers = members.filter(m => m.presence?.activities.some(a => a.type === ActivityType.Streaming));
-    const listeners = members.filter(m => m.presence?.activities.some(a => a.type === ActivityType.Listening));
-    const watchers = members.filter(m => m.presence?.activities.some(a => a.type === ActivityType.Watching));
 
     // --- Trouver l'activité la plus représentative (max membres impliqués, min 2) ---
     const scores: { count: number; type: string }[] = [
