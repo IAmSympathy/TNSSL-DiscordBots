@@ -102,9 +102,10 @@ export function setupFreeStuffWebhook(client: Client, port: number = 3000): void
     /**
      * Démarrer le serveur
      */
-    app.listen(port, () => {
+    app.listen(port, "0.0.0.0", () => {
+        const publicUrl = EnvConfig.WEBHOOK_PUBLIC_URL;
         logger.info(`✅ FreeStuff webhook server listening on port ${port}`);
-        logger.info(`   Webhook URL: http://your-server:${port}/webhooks/freestuff`);
+        logger.info(`   Webhook URL: ${publicUrl}/webhooks/freestuff`);
         logger.info(`   Configure this URL at: https://dashboard.freestuffbot.xyz/`);
     });
 }

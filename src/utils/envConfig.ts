@@ -154,6 +154,11 @@ export class EnvConfig {
         return parseInt(process.env.FREESTUFF_WEBHOOK_PORT || "3000", 10);
     }
 
+    static get WEBHOOK_PUBLIC_URL(): string {
+        const port = this.FREESTUFF_WEBHOOK_PORT;
+        return process.env.WEBHOOK_PUBLIC_URL || `http://localhost:${port}`;
+    }
+
     // ── Nexa (bot de musique)
     static get NEXA_TOKEN(): string | undefined {
         return process.env.NEXA_TOKEN;
