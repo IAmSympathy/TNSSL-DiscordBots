@@ -84,7 +84,7 @@ function buildVoiceStatus(channel: VoiceChannel): string {
     const nonSilent = members.filter(m => !m.voice.selfMute || !m.voice.selfDeaf);
 
     if (silentMembers.length === totalMembers) {
-        return `🔇 Tout le monde est en sourdine`;
+        return `🔇 Tout le monde est en sourdine. Super !`;
     }
     if (nonSilent.length === 1) {
         return `🔇 ${nonSilent[0].displayName} parle dans le vide`;
