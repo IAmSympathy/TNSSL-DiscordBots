@@ -90,6 +90,15 @@ function buildVoiceStatus(channel: VoiceChannel): string {
         return `🔇 ${nonSilent[0].displayName} parle dans le vide`;
     }
 
+    // --- Cas mixte : certains en sourdine, certains AFK, 1 seul vraiment actif ---
+    // Un membre est "vraiment actif" s'il n'est ni AFK ni en sourdine totale
+    const trulyActive = members.filter(
+        m => m.presence?.status !== "idle" && !(m.voice.selfMute && m.voice.selfDeaf)
+    );
+    if (trulyActive.length === 1) {
+        return `🎙️ ${trulyActive[0].displayName} parle dans le vide`;
+    }
+
     // --- Collecter les activités par type, une seule fois par membre ---
     // Priorité : Playing > Streaming > Watching > Listening
     // Cela évite qu'un membre avec plusieurs activités soit compté plusieurs fois
