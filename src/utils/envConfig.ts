@@ -66,6 +66,18 @@ export class EnvConfig {
         return process.env.FREE_GAMES_CHANNEL_ID;
     }
 
+    static get MINECRAFT_STATUS_GUILD_ID(): string | undefined {
+        return process.env.MINECRAFT_STATUS_GUILD_ID;
+    }
+
+    static get MINECRAFT_ONLINE_CHANNEL_ID(): string | undefined {
+        return process.env.MINECRAFT_ONLINE_CHANNEL_ID;
+    }
+
+    static get MINECRAFT_ONLINE_UPDATE_INTERVAL_MS(): number {
+        return parseInt(process.env.MINECRAFT_ONLINE_UPDATE_INTERVAL_MS || "60000", 10);
+    }
+
     static get CITATIONS_THREAD_ID(): string | undefined {
         return process.env.CITATIONS_THREAD_ID;
     }
