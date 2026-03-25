@@ -529,20 +529,18 @@ async function handleChunkyPauseOnPlayersOnline(snapshot: OnlineSnapshot): Promi
         return;
     }
 
-    // Vérifier la transition 0 -> 1+ joueurs
     const wasNoPlayersOnline = lastOnlinePlayersSnapshot === 0;
     const arePlayersOnline = snapshot.onlinePlayers > 0;
-    const playerCountChanged = lastOnlinePlayersSnapshot !== snapshot.onlinePlayers;
     
     lastOnlinePlayersSnapshot = snapshot.onlinePlayers;
 
-    // Si transition 0 -> 1+, il faut faire la pause
-    if (arePlayersOnline && (!wasNoPlayersOnline || !playerCountChanged)) {
+    // Transition 0 -> 1+ : faire la pause
+    if (!wasNoPlayersOnline && arePlayersOnline) {
         // Déjà en mode "joueurs en ligne", aucune action nécessaire
         return;
     }
 
-    if (arePlayersOnline && wasNoPlayersOnline) {
+    if (wasNoPlayersOnline && arePlayersOnline) {
         // Transition 0 -> 1+ : faire la pause
         if (!EnvConfig.MINECRAFT_RCON_PASSWORD) {
             return;
@@ -576,12 +574,18 @@ async function handleChunkyPauseOnPlayersOnline(snapshot: OnlineSnapshot): Promi
         return;
     }
 
-    if (!arePlayersOnline && wasNoPlayersOnline) {
-        // Reste en 0 joueurs
+    // Transition 1+ -> 0 : reset le flag pour permettre la prochaine pause
+    if (!arePlayersOnline && !wasNoPlayersOnline) {
         if (chunkyPauseIssuedForActivePlayers) {
             chunkyPauseIssuedForActivePlayers = false;
             markChunkyStateDirty();
+            logger.info(`[Minecraft] Chunky: flag pause réinitialisé après départ des joueurs`);
         }
+        return;
+    }
+
+    // Reste en 0 joueurs
+    if (!arePlayersOnline && wasNoPlayersOnline) {
         return;
     }
 }
