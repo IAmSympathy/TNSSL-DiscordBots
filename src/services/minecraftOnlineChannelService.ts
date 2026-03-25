@@ -30,6 +30,7 @@ let chunkyStateLoaded = false;
 let chunkyStateInitPromise: Promise<void> | null = null;
 let chunkyStateSaveInFlight = false;
 let chunkyStateSaveQueued = false;
+let lastOnlinePlayersSnapshot = 0;
 
 type OnlineSnapshot = {
     onlinePlayers: number;
@@ -528,46 +529,60 @@ async function handleChunkyPauseOnPlayersOnline(snapshot: OnlineSnapshot): Promi
         return;
     }
 
-    if (snapshot.onlinePlayers <= 0) {
+    // Vérifier la transition 0 -> 1+ joueurs
+    const wasNoPlayersOnline = lastOnlinePlayersSnapshot === 0;
+    const arePlayersOnline = snapshot.onlinePlayers > 0;
+    const playerCountChanged = lastOnlinePlayersSnapshot !== snapshot.onlinePlayers;
+    
+    lastOnlinePlayersSnapshot = snapshot.onlinePlayers;
+
+    // Si transition 0 -> 1+, il faut faire la pause
+    if (arePlayersOnline && (!wasNoPlayersOnline || !playerCountChanged)) {
+        // Déjà en mode "joueurs en ligne", aucune action nécessaire
+        return;
+    }
+
+    if (arePlayersOnline && wasNoPlayersOnline) {
+        // Transition 0 -> 1+ : faire la pause
+        if (!EnvConfig.MINECRAFT_RCON_PASSWORD) {
+            return;
+        }
+
+        if (chunkyMarkedUnavailable) {
+            return;
+        }
+
+        try {
+            await withRconConnection(async (rcon) => {
+                const pauseResponse = await sendRconCommand(rcon, "chunky pause");
+                if (chunkyMarkedUnavailable) {
+                    logger.warn("[Minecraft] Chunky introuvable via RCON pendant 'chunky pause'. Automatisation désactivée jusqu'au redémarrage.");
+                    return;
+                }
+
+                const pauseState = classifyChunkyPauseResponse(pauseResponse);
+                if (pauseState === "paused" || pauseState === "already-paused" || pauseState === "no-task") {
+                    chunkyPauseIssuedForActivePlayers = true;
+                    markChunkyStateDirty();
+                    logger.info(`[Minecraft] Chunky pausé lors de l'arrivée de joueurs (${snapshot.onlinePlayers}) : ${pauseState}`);
+                    return;
+                }
+
+                logger.warn(`[Minecraft] Chunky pause: réponse inattendue: ${pauseResponse}`);
+            });
+        } catch (error) {
+            logger.warn("[Minecraft] Erreur pendant la pause automatique Chunky:", error);
+        }
+        return;
+    }
+
+    if (!arePlayersOnline && wasNoPlayersOnline) {
+        // Reste en 0 joueurs
         if (chunkyPauseIssuedForActivePlayers) {
             chunkyPauseIssuedForActivePlayers = false;
             markChunkyStateDirty();
         }
         return;
-    }
-
-    if (!EnvConfig.MINECRAFT_RCON_PASSWORD) {
-        return;
-    }
-
-    if (chunkyMarkedUnavailable) {
-        return;
-    }
-
-    if (chunkyPauseIssuedForActivePlayers) {
-        return;
-    }
-
-    try {
-        await withRconConnection(async (rcon) => {
-            const pauseResponse = await sendRconCommand(rcon, "chunky pause");
-            if (chunkyMarkedUnavailable) {
-                logger.warn("[Minecraft] Chunky introuvable via RCON pendant 'chunky pause'. Automatisation désactivée jusqu'au redémarrage.");
-                return;
-            }
-
-            const pauseState = classifyChunkyPauseResponse(pauseResponse);
-            if (pauseState === "paused" || pauseState === "already-paused" || pauseState === "no-task") {
-                chunkyPauseIssuedForActivePlayers = true;
-                markChunkyStateDirty();
-                logger.info(`[Minecraft] Chunky pause lors de présence joueurs (${snapshot.onlinePlayers}) : ${pauseState}`);
-                return;
-            }
-
-            logger.warn(`[Minecraft] Chunky pause: réponse inattendue: ${pauseResponse}`);
-        });
-    } catch (error) {
-        logger.warn("[Minecraft] Erreur pendant la pause automatique Chunky:", error);
     }
 }
 
