@@ -31,6 +31,7 @@ let chunkyStateInitPromise: Promise<void> | null = null;
 let chunkyStateSaveInFlight = false;
 let chunkyStateSaveQueued = false;
 let lastOnlinePlayersSnapshot: number | null = null;
+let minecraftUpdaterTickInFlight = false;
 
 type OnlineSnapshot = {
     onlinePlayers: number;
@@ -539,6 +540,7 @@ async function handleChunkyPauseOnPlayersOnline(snapshot: OnlineSnapshot): Promi
 
     const arePlayersOnline = snapshot.onlinePlayers > 0;
     const previousSnapshot = lastOnlinePlayersSnapshot;
+    const transitionedToOnline = (previousSnapshot === 0 || previousSnapshot === null) && arePlayersOnline;
     lastOnlinePlayersSnapshot = snapshot.onlinePlayers;
 
     // Dès que le serveur redevient vide, autoriser une future pause.
@@ -559,8 +561,9 @@ async function handleChunkyPauseOnPlayersOnline(snapshot: OnlineSnapshot): Promi
         return;
     }
 
-    // Ne pas spammer: on pause une seule fois par période "joueurs en ligne".
-    if (chunkyPauseIssuedForActivePlayers) {
+    // Ne pas spammer: on pause une seule fois par période "joueurs en ligne",
+    // sauf si on vient clairement de repasser de 0 -> 1+ joueurs.
+    if (chunkyPauseIssuedForActivePlayers && !transitionedToOnline) {
         return;
     }
 
@@ -576,7 +579,7 @@ async function handleChunkyPauseOnPlayersOnline(snapshot: OnlineSnapshot): Promi
             if (pauseState === "paused" || pauseState === "already-paused" || pauseState === "no-task") {
                 chunkyPauseIssuedForActivePlayers = true;
                 markChunkyStateDirty();
-                const transition = previousSnapshot === 0 ? "0->1+" : "online-stable";
+                const transition = transitionedToOnline ? "0->1+" : "online-stable";
                 logger.info(`[Minecraft] Chunky pausé (${transition}, joueurs: ${snapshot.onlinePlayers}) : ${pauseState}`);
                 return;
             }
@@ -835,6 +838,11 @@ export function startMinecraftOnlineChannelUpdater(client: Client): void {
     }
 
     const tick = async () => {
+        if (minecraftUpdaterTickInFlight) {
+            return;
+        }
+
+        minecraftUpdaterTickInFlight = true;
         try {
             await chunkyStateInitPromise;
 
@@ -854,12 +862,25 @@ export function startMinecraftOnlineChannelUpdater(client: Client): void {
                 return;
             }
 
-            await updateMinecraftOnlineChannel(client, snapshot.onlinePlayers);
-            await updateMinecraftPlayersTopic(client, snapshot);
-            await handleChunkyPauseOnPlayersOnline(snapshot);
-            await handleChunkyAutomation(snapshot);
+            await updateMinecraftOnlineChannel(client, snapshot.onlinePlayers).catch((error) => {
+                logger.warn("[Minecraft] Erreur pendant le renommage du salon:", error);
+            });
+
+            await updateMinecraftPlayersTopic(client, snapshot).catch((error) => {
+                logger.warn("[Minecraft] Erreur pendant la mise a jour du topic joueurs:", error);
+            });
+
+            await handleChunkyPauseOnPlayersOnline(snapshot).catch((error) => {
+                logger.warn("[Minecraft] Erreur pendant la pause Chunky:", error);
+            });
+
+            await handleChunkyAutomation(snapshot).catch((error) => {
+                logger.warn("[Minecraft] Erreur pendant l'automatisation Chunky:", error);
+            });
         } catch (error) {
             logger.warn("[Minecraft] Erreur pendant la mise à jour du salon:", error);
+        } finally {
+            minecraftUpdaterTickInFlight = false;
         }
     };
 
