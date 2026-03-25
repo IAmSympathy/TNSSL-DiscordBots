@@ -30,7 +30,7 @@ let chunkyStateLoaded = false;
 let chunkyStateInitPromise: Promise<void> | null = null;
 let chunkyStateSaveInFlight = false;
 let chunkyStateSaveQueued = false;
-let lastOnlinePlayersSnapshot = 0;
+let lastOnlinePlayersSnapshot: number | null = null;
 
 type OnlineSnapshot = {
     onlinePlayers: number;
@@ -529,19 +529,19 @@ async function handleChunkyPauseOnPlayersOnline(snapshot: OnlineSnapshot): Promi
         return;
     }
 
-    const wasNoPlayersOnline = lastOnlinePlayersSnapshot === 0;
-    const arePlayersOnline = snapshot.onlinePlayers > 0;
-    
-    lastOnlinePlayersSnapshot = snapshot.onlinePlayers;
-
-    // Transition 0 -> 1+ : faire la pause
-    if (!wasNoPlayersOnline && arePlayersOnline) {
-        // Déjà en mode "joueurs en ligne", aucune action nécessaire
+    // Première exécution : initialiser et ne rien faire
+    if (lastOnlinePlayersSnapshot === null) {
+        lastOnlinePlayersSnapshot = snapshot.onlinePlayers;
         return;
     }
 
+    const wasNoPlayersOnline = lastOnlinePlayersSnapshot === 0;
+    const arePlayersOnline = snapshot.onlinePlayers > 0;
+
+    lastOnlinePlayersSnapshot = snapshot.onlinePlayers;
+
+    // Transition 0 -> 1+ : faire la pause
     if (wasNoPlayersOnline && arePlayersOnline) {
-        // Transition 0 -> 1+ : faire la pause
         if (!EnvConfig.MINECRAFT_RCON_PASSWORD) {
             return;
         }
@@ -581,11 +581,6 @@ async function handleChunkyPauseOnPlayersOnline(snapshot: OnlineSnapshot): Promi
             markChunkyStateDirty();
             logger.info(`[Minecraft] Chunky: flag pause réinitialisé après départ des joueurs`);
         }
-        return;
-    }
-
-    // Reste en 0 joueurs
-    if (!arePlayersOnline && wasNoPlayersOnline) {
         return;
     }
 }
