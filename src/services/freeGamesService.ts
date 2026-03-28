@@ -8,7 +8,9 @@ const logger = createLogger("FreeGamesService");
 
 // Rate limit Discord : max 2 renommages de salon par 10 minutes
 const CHANNEL_RENAME_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
+const CHANNEL_COUNT_REFRESH_MS = 10 * 60 * 1000; // 10 minutes
 let lastChannelRenameTime = 0;
+let channelRefreshInterval: NodeJS.Timeout | null = null;
 
 const API_BASE_URL = "https://api.freestuffbot.xyz/v2";
 const COMPATIBILITY_DATE = "2025-03-01";
@@ -152,6 +154,42 @@ function saveFilterConfig(config: FreeGamesConfig): void {
 }
 
 /**
+ * Normalise `until` en secondes Unix (l'API peut renvoyer ms ou s)
+ */
+function toUnixSeconds(until: number): number {
+    if (!until || until <= 0) return 0;
+    return until > 9999999999 ? Math.floor(until / 1000) : until;
+}
+
+/**
+ * Indique si une offre est toujours active
+ */
+function isProductActive(product: Pick<Product, "until">, nowSec = Math.floor(Date.now() / 1000)): boolean {
+    const untilSeconds = toUnixSeconds(product.until);
+    return untilSeconds === 0 || untilSeconds > nowSec;
+}
+
+/**
+ * Purge les offres expirées et déduplique par ID pour éviter un compteur gonflé
+ */
+function pruneExpiredCurrentGames(state: FreeGamesState): boolean {
+    const current = state.currentGames || [];
+    const nowSec = Math.floor(Date.now() / 1000);
+    const deduped = new Map<number, Product>();
+
+    for (const product of current) {
+        if (isProductActive(product, nowSec)) {
+            deduped.set(product.id, product);
+        }
+    }
+
+    const pruned = Array.from(deduped.values());
+    const changed = pruned.length !== current.length;
+    state.currentGames = pruned;
+    return changed;
+}
+
+/**
  * Met à jour le nom du salon freestuff pour afficher le nombre de promotions actives.
  * Lit l'état depuis le fichier — ne se déclenche que lors de nouvelles promos ou au démarrage.
  * Respecte le rate limit Discord (~2 renommages / 10 min).
@@ -168,8 +206,10 @@ async function updateFreeGamesChannelName(client: Client): Promise<void> {
         if (!channel) return;
 
         const state = loadState();
-        const nowSec = Math.floor(Date.now() / 1000);
-        const activeCount = (state.currentGames || []).filter(p => p.until === 0 || p.until > nowSec).length;
+        if (pruneExpiredCurrentGames(state)) {
+            saveState(state);
+        }
+        const activeCount = (state.currentGames || []).length;
 
         const newName = `┃🎁┃promotions『${activeCount}』`;
         if (channel.name === newName) return;
@@ -330,8 +370,11 @@ export function getCurrentFreeGames(category?: "games" | "other"): { container: 
     const state = loadState();
     if (!state.currentGames || state.currentGames.length === 0) return [];
 
-    const now = Math.floor(Date.now() / 1000);
-    let activeGames = state.currentGames.filter(p => p.until === 0 || p.until > now);
+    if (pruneExpiredCurrentGames(state)) {
+        saveState(state);
+    }
+
+    let activeGames = state.currentGames.filter(p => isProductActive(p));
 
     if (category === "games") {
         activeGames = activeGames.filter(p => p.kind === "game");
@@ -642,8 +685,7 @@ export async function processAnnouncement(client: Client, announcement: Resolved
 
         // Mettre à jour les produits actifs : purger les expirés + ajouter les nouveaux
         if (!state.currentGames) state.currentGames = [];
-        const now = Math.floor(Date.now() / 1000);
-        state.currentGames = state.currentGames.filter(p => p.until === 0 || p.until > now);
+        state.currentGames = state.currentGames.filter(p => isProductActive(p));
         for (const product of announcement.resolvedProducts) {
             const isTrash = product.flags & (1 << 0);
             const passesFilters =
@@ -653,10 +695,17 @@ export async function processAnnouncement(client: Client, announcement: Resolved
                 filterConfig.allowedStores.includes(product.store) &&
                 (filterConfig.minRating === 0 || product.rating >= filterConfig.minRating / 10);
 
-            if (passesFilters && !state.currentGames.find(p => p.id === product.id)) {
-                state.currentGames.push(product);
+            if (passesFilters) {
+                const existingIndex = state.currentGames.findIndex(p => p.id === product.id);
+                if (existingIndex >= 0) {
+                    state.currentGames[existingIndex] = product;
+                } else {
+                    state.currentGames.push(product);
+                }
             }
         }
+
+        pruneExpiredCurrentGames(state);
 
         saveState(state);
 
@@ -759,10 +808,20 @@ export async function initializeFreeGamesService(client: Client): Promise<void> 
 
     // Nettoyer l'état des vieux jeux (garder seulement les 1000 derniers)
     const state = loadState();
+    let hasStateChanged = false;
     if (state.notifiedGames.length > 1000) {
         state.notifiedGames = state.notifiedGames.slice(-1000);
-        saveState(state);
+        hasStateChanged = true;
         logger.info(`Cleaned old game notifications (kept last 1000)`);
+    }
+
+    if (pruneExpiredCurrentGames(state)) {
+        hasStateChanged = true;
+        logger.info("Cleaned expired promotions from current state");
+    }
+
+    if (hasStateChanged) {
+        saveState(state);
     }
 
     // Mettre à jour le nom du salon au démarrage (reflète l'état actuel du fichier)
@@ -771,6 +830,16 @@ export async function initializeFreeGamesService(client: Client): Promise<void> 
             logger.warn("[FreeGames] Failed to update channel name at startup:", error);
         });
     }, 5000);
+
+    // Rafraîchit périodiquement le compteur, même sans nouveau webhook.
+    if (channelRefreshInterval) {
+        clearInterval(channelRefreshInterval);
+    }
+    channelRefreshInterval = setInterval(() => {
+        updateFreeGamesChannelName(client).catch(error => {
+            logger.warn("[FreeGames] Failed to refresh channel name:", error);
+        });
+    }, CHANNEL_COUNT_REFRESH_MS);
 }
 
 
