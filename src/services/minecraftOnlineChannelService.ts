@@ -22,10 +22,6 @@ let chunkyAutomationInFlight = false;
 let lastChunkyAutomationAt = 0;
 let chunkyMarkedUnavailable = false;
 let chunkyPauseIssuedForActivePlayers = false;
-let chunkyCurrentWorldIndex = 0;
-let chunkyAllWorldsCompletedLogged = false;
-const chunkyStartedWorlds = new Set<string>();
-const chunkyCompletedWorlds = new Set<string>();
 let chunkyStateLoaded = false;
 let chunkyStateInitPromise: Promise<void> | null = null;
 let chunkyStateSaveInFlight = false;
@@ -50,9 +46,6 @@ type ChunkyPersistedState = {
     lastOnlinePlayersSnapshot: number | null;
     chunkyMarkedUnavailable: boolean;
     chunkyPauseIssuedForActivePlayers: boolean;
-    chunkyCurrentWorldIndex: number;
-    chunkyStartedWorlds: string[];
-    chunkyCompletedWorlds: string[];
 };
 
 function getChunkyPersistedStateSnapshot(): ChunkyPersistedState {
@@ -62,9 +55,6 @@ function getChunkyPersistedStateSnapshot(): ChunkyPersistedState {
         lastOnlinePlayersSnapshot,
         chunkyMarkedUnavailable,
         chunkyPauseIssuedForActivePlayers,
-        chunkyCurrentWorldIndex,
-        chunkyStartedWorlds: Array.from(chunkyStartedWorlds),
-        chunkyCompletedWorlds: Array.from(chunkyCompletedWorlds),
     };
 }
 
@@ -118,24 +108,6 @@ async function loadChunkyStateFromDisk(): Promise<void> {
 
         if (typeof parsed.chunkyPauseIssuedForActivePlayers === "boolean") {
             chunkyPauseIssuedForActivePlayers = parsed.chunkyPauseIssuedForActivePlayers;
-        }
-
-        if (typeof parsed.chunkyCurrentWorldIndex === "number" && Number.isInteger(parsed.chunkyCurrentWorldIndex) && parsed.chunkyCurrentWorldIndex >= 0) {
-            chunkyCurrentWorldIndex = parsed.chunkyCurrentWorldIndex;
-        }
-
-        chunkyStartedWorlds.clear();
-        for (const world of Array.isArray(parsed.chunkyStartedWorlds) ? parsed.chunkyStartedWorlds : []) {
-            if (typeof world === "string" && world.trim().length > 0) {
-                chunkyStartedWorlds.add(world);
-            }
-        }
-
-        chunkyCompletedWorlds.clear();
-        for (const world of Array.isArray(parsed.chunkyCompletedWorlds) ? parsed.chunkyCompletedWorlds : []) {
-            if (typeof world === "string" && world.trim().length > 0) {
-                chunkyCompletedWorlds.add(world);
-            }
         }
 
         logger.info(`[Minecraft] Etat Chunky rechargé depuis ${CHUNKY_STATE_FILE_PATH}`);
@@ -381,25 +353,7 @@ function getCurrentChunkyWorldName(): string {
         return "unknown";
     }
 
-    const safeIndex = Math.min(Math.max(chunkyCurrentWorldIndex, 0), worlds.length - 1);
-    return worlds[safeIndex];
-}
-
-function getNextPendingWorldIndex(worlds: string[], startAt: number): number {
-    if (worlds.length === 0) {
-        return -1;
-    }
-
-    for (let offset = 0; offset < worlds.length; offset += 1) {
-        const index = (startAt + offset) % worlds.length;
-        const worldName = worlds[index];
-        // Un monde est "pending" s'il n'a pas été lancé ET n'est pas terminé
-        if (!chunkyStartedWorlds.has(worldName) && !chunkyCompletedWorlds.has(worldName)) {
-            return index;
-        }
-    }
-
-    return -1;
+    return worlds[0];
 }
 
 async function ensureChunkyTaskForWorld(rcon: Rcon, worldName: string, radius: number, allowStart: boolean): Promise<ChunkyWorldTaskState> {
@@ -439,22 +393,17 @@ async function ensureChunkyTaskForWorld(rcon: Rcon, worldName: string, radius: n
 
     const continueState = classifyChunkyContinueResponse(continueResponse);
     if (continueState === "continued" || continueState === "already-running") {
-        const isFirstAnnouncement = !chunkyStartedWorlds.has(worldName);
-        chunkyStartedWorlds.add(worldName);
-        markChunkyStateDirty();
-        if (continueState === "continued" && isFirstAnnouncement) {
+        // Envoyer l'annonce seulement si c'est vraiment une "continuation" (reprise) et pas déjà en cours
+        if (continueState === "continued") {
             await sendChunkyChatAnnouncement(rcon, `[Chunky] Continuing generation for dimension ${worldName}.`);
         }
         logger.info(`[Minecraft] Chunky ${worldName} (${selectedWorldName}): ${continueState === "continued" ? "continue" : "déjà en cours"}`);
         return "running";
     }
 
-    if (continueState === "no-task" && chunkyStartedWorlds.has(worldName)) {
-        chunkyStartedWorlds.delete(worldName);
-        chunkyCompletedWorlds.add(worldName);
-        markChunkyStateDirty();
-        logger.info(`[Minecraft] Chunky ${worldName} (${selectedWorldName}): dimension terminée`);
-        return "completed";
+    if (continueState === "no-task") {
+        logger.debug(`[Minecraft] Chunky ${worldName} (${selectedWorldName}): aucune tâche active`);
+        // Laisser continuer pour démarrer une nouvelle tâche
     }
 
     if (continueState === "unknown") {
@@ -480,16 +429,12 @@ async function ensureChunkyTaskForWorld(rcon: Rcon, worldName: string, radius: n
     const startState = classifyChunkyStartResponse(startResponse);
 
     if (startState === "started") {
-        chunkyStartedWorlds.add(worldName);
-        markChunkyStateDirty();
         await sendChunkyChatAnnouncement(rcon, `[Chunky] Starting generation for dimension ${worldName} (radius ${radius}).`);
         logger.info(`[Minecraft] Chunky ${worldName} (${selectedWorldName}): nouvelle tâche démarrée (radius ${radius})`);
         return "started";
     }
 
     if (startState === "already-running") {
-        chunkyStartedWorlds.add(worldName);
-        markChunkyStateDirty();
         logger.info(`[Minecraft] Chunky ${worldName} (${selectedWorldName}): tâche déjà en cours`);
         return "running";
     }
@@ -528,37 +473,8 @@ async function handleChunkyAutomation(snapshot: OnlineSnapshot): Promise<void> {
         return;
     }
 
-    const activeWorldSet = new Set(worlds);
-    let stateChangedByWorldPruning = false;
-    for (const world of Array.from(chunkyStartedWorlds)) {
-        if (!activeWorldSet.has(world)) {
-            chunkyStartedWorlds.delete(world);
-            stateChangedByWorldPruning = true;
-        }
-    }
-    for (const world of Array.from(chunkyCompletedWorlds)) {
-        if (!activeWorldSet.has(world)) {
-            chunkyCompletedWorlds.delete(world);
-            stateChangedByWorldPruning = true;
-        }
-    }
-    if (stateChangedByWorldPruning) {
-        markChunkyStateDirty();
-    }
-
-    const nextPendingIndex = getNextPendingWorldIndex(worlds, chunkyCurrentWorldIndex);
-    if (nextPendingIndex < 0) {
-        if (!chunkyAllWorldsCompletedLogged) {
-            logger.info(`[Minecraft] Chunky: toutes les dimensions configurées sont terminées (${worlds.join(", ")})`);
-            chunkyAllWorldsCompletedLogged = true;
-        }
-        return;
-    }
-
-    chunkyAllWorldsCompletedLogged = false;
-    chunkyCurrentWorldIndex = nextPendingIndex;
-    markChunkyStateDirty();
-    const worldName = worlds[chunkyCurrentWorldIndex];
+    // Ne traiter que le PREMIER monde configuré - logique ultra simple
+    const worldName = worlds[0];
 
     chunkyAutomationInFlight = true;
 
@@ -571,18 +487,28 @@ async function handleChunkyAutomation(snapshot: OnlineSnapshot): Promise<void> {
             if (taskState === "started") {
                 lastChunkyAutomationAt = Date.now();
                 markChunkyStateDirty();
+                logger.info(`[Minecraft] Chunky ${worldName}: tâche démarrée`);
                 return;
             }
 
-            if (taskState === "completed") {
-                const nextIndex = getNextPendingWorldIndex(worlds, chunkyCurrentWorldIndex + 1);
-                chunkyCurrentWorldIndex = nextIndex >= 0 ? nextIndex : 0;
-                markChunkyStateDirty();
+            if (taskState === "running") {
+                logger.debug(`[Minecraft] Chunky ${worldName}: tâche en cours`);
                 return;
             }
 
             if (taskState === "waiting-cooldown") {
                 logger.info(`[Minecraft] Chunky ${worldName}: attente cooldown avant nouveau start (${Math.ceil((cooldownMs - (now - lastChunkyAutomationAt)) / 1000)}s)`);
+                return;
+            }
+
+            if (taskState === "failed") {
+                logger.warn(`[Minecraft] Chunky ${worldName}: échec du démarrage de la tâche`);
+                return;
+            }
+
+            if (taskState === "unavailable") {
+                logger.warn(`[Minecraft] Chunky ${worldName}: plugin Chunky indisponible`);
+                return;
             }
         });
     } catch (error) {
