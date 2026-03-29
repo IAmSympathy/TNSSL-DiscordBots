@@ -392,7 +392,9 @@ function getNextPendingWorldIndex(worlds: string[], startAt: number): number {
 
     for (let offset = 0; offset < worlds.length; offset += 1) {
         const index = (startAt + offset) % worlds.length;
-        if (!chunkyCompletedWorlds.has(worlds[index])) {
+        const worldName = worlds[index];
+        // Un monde est "pending" s'il n'a pas été lancé ET n'est pas terminé
+        if (!chunkyStartedWorlds.has(worldName) && !chunkyCompletedWorlds.has(worldName)) {
             return index;
         }
     }
