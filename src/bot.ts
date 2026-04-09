@@ -32,7 +32,6 @@ import {initializeRandomEventsService} from "./services/randomEventsService";
 import {initializeFreeGamesService} from "./services/freeGamesService";
 import {setupFreeStuffWebhook} from "./services/freeStuffWebhook";
 import {registerVoiceChannelStatusUpdater} from "./services/voiceChannelStatusService";
-import {startMinecraftOnlineChannelUpdater} from "./services/minecraftOnlineChannelService";
 
 
 const logger = createLogger("Bot");
@@ -195,8 +194,10 @@ client.once(Events.ClientReady, async () => {
     // Initialiser le service de notifications de jeux gratuits
     initializeFreeGamesService(client);
 
-    // Synchroniser le salon Minecraft avec le statut "X / Y players"
-    startMinecraftOnlineChannelUpdater(client);
+    // Initialiser Milton (services Minecraft)
+    const {getMiltonBot} = require("./services/milton/miltonBot");
+    const milton = getMiltonBot();
+    milton.start(client);
 
     // Initialiser le serveur webhook pour FreeStuff
     setupFreeStuffWebhook(client, EnvConfig.FREESTUFF_WEBHOOK_PORT);

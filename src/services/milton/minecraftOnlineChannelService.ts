@@ -48,6 +48,22 @@ type ChunkyPersistedState = {
     chunkyPauseIssuedForActivePlayers: boolean;
 };
 
+const CANONICAL_CHUNKY_WORLDS = new Set([
+    "minecraft:overworld",
+    "minecraft:the_nether",
+    "minecraft:the_end",
+    "blue_skies:everbright",
+    "blue_skies:everdawn",
+]);
+
+const DEFAULT_CHUNKY_WORLDS = [
+    "minecraft:overworld",
+    "minecraft:the_nether",
+    "minecraft:the_end",
+    "blue_skies:everbright",
+    "blue_skies:everdawn",
+];
+
 function getChunkyPersistedStateSnapshot(): ChunkyPersistedState {
     return {
         version: 1,
@@ -249,65 +265,29 @@ function classifyChunkyPauseResponse(response: string): ChunkyPauseState {
 }
 
 function getChunkyWorldsToProcess(): string[] {
-    const normalizeWorldName = (rawWorld: string): string => {
-        const normalized = rawWorld.trim().toLowerCase();
-        const aliases: Record<string, string> = {
-            "world": "overworld",
-            "minecraft:overworld": "overworld",
-            "world_the_end": "the_end",
-            "end": "the_end",
-            "minecraft:the_end": "the_end",
-            "world_nether": "the_nether",
-            "nether": "the_nether",
-            "minecraft:the_nether": "the_nether",
-            "the_everdawn": "everdawn",
-            "blueskies:everdawn": "everdawn",
-            "world_the_everdawn": "everdawn",
-            "the_everbright": "everbright",
-            "blueskies:everbright": "everbright",
-            "world_the_everbright": "everbright",
-        };
-
-        return aliases[normalized] ?? normalized;
-    };
+    const normalizeWorldName = (rawWorld: string): string => rawWorld.trim().toLowerCase();
 
     const configuredWorlds = EnvConfig.MINECRAFT_CHUNKY_WORLDS;
     if (configuredWorlds.length > 0) {
-        return Array.from(new Set(configuredWorlds.map(normalizeWorldName).filter(Boolean)));
+        const filteredConfiguredWorlds = configuredWorlds
+            .map(normalizeWorldName)
+            .filter(world => CANONICAL_CHUNKY_WORLDS.has(world));
+
+        if (filteredConfiguredWorlds.length > 0) {
+            return Array.from(new Set(filteredConfiguredWorlds));
+        }
     }
-    return ["overworld", "the_end", "everdawn", "everbright", "the_nether"];
+
+    return [...DEFAULT_CHUNKY_WORLDS];
 }
 
 function getChunkyWorldCandidates(worldName: string): string[] {
     const normalized = worldName.trim().toLowerCase();
-    const aliasesByWorld: Record<string, string[]> = {
-        "world": ["overworld", "world", "minecraft:overworld"],
-        "overworld": ["overworld", "world", "minecraft:overworld"],
-        "minecraft:overworld": ["minecraft:overworld", "overworld", "world"],
-        "world_nether": ["world_nether", "the_nether", "nether", "minecraft:the_nether"],
-        "the_nether": ["the_nether", "nether", "minecraft:the_nether", "world_nether"],
-        "nether": ["nether", "the_nether", "minecraft:the_nether", "world_nether"],
-        "minecraft:the_nether": ["minecraft:the_nether", "the_nether", "nether", "world_nether"],
-        "world_the_end": ["world_the_end", "the_end", "end", "minecraft:the_end"],
-        "the_end": ["the_end", "end", "minecraft:the_end", "world_the_end"],
-        "end": ["end", "the_end", "minecraft:the_end", "world_the_end"],
-        "minecraft:the_end": ["minecraft:the_end", "the_end", "end", "world_the_end"],
-        "the_everbright": ["the_everbright", "everbright", "blueskies:everbright", "world_the_everbright"],
-        "everbright": ["everbright", "the_everbright", "blueskies:everbright", "world_the_everbright"],
-        "blueskies:everbright": ["blueskies:everbright", "the_everbright", "everbright", "world_the_everbright"],
-        "world_the_everbright": ["world_the_everbright", "the_everbright", "everbright", "blueskies:everbright"],
-        "the_everdawn": ["the_everdawn", "everdawn", "blueskies:everdawn", "world_the_everdawn"],
-        "everdawn": ["everdawn", "the_everdawn", "blueskies:everdawn", "world_the_everdawn"],
-        "blueskies:everdawn": ["blueskies:everdawn", "the_everdawn", "everdawn", "world_the_everdawn"],
-        "world_the_everdawn": ["world_the_everdawn", "the_everdawn", "everdawn", "blueskies:everdawn"],
-        "the_nexus": ["the_nexus", "nexus", "minecraft:the_nexus", "world_the_nexus"],
-        "nexus": ["nexus", "the_nexus", "minecraft:the_nexus", "world_the_nexus"],
-        "minecraft:the_nexus": ["minecraft:the_nexus", "the_nexus", "nexus", "world_the_nexus"],
-        "world_the_nexus": ["world_the_nexus", "the_nexus", "nexus", "minecraft:the_nexus"],
-    };
+    if (!CANONICAL_CHUNKY_WORLDS.has(normalized)) {
+        return [];
+    }
 
-    const aliases = aliasesByWorld[normalized] || [worldName.trim()];
-    return Array.from(new Set(aliases));
+    return [normalized];
 }
 
 async function withRconConnection<T>(operation: (rcon: Rcon) => Promise<T>): Promise<T> {
