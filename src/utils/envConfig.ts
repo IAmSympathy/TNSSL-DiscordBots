@@ -107,6 +107,16 @@ export class EnvConfig {
         return value !== "0" && value !== "false" && value !== "no";
     }
 
+    /** URL publique de la carte temps reel Milton */
+    static get MILTON_MAP_URL(): string {
+        return process.env.MILTON_MAP_URL || "http://tnss-smp.duckdns.org:8123/#";
+    }
+
+    /** Application ID Discord de l'activite embarquee Milton (optionnel) */
+    static get MILTON_ACTIVITY_APPLICATION_ID(): string | undefined {
+        return process.env.MILTON_ACTIVITY_APPLICATION_ID;
+    }
+
     static get MINECRAFT_CHUNKY_AUTOMATION_ENABLED(): boolean {
         const value = (process.env.MINECRAFT_CHUNKY_AUTOMATION_ENABLED || "1").trim().toLowerCase();
         return value !== "0" && value !== "false" && value !== "no";

@@ -27,6 +27,7 @@ const GUILD_ONLY_COMMANDS = [
     "findmeme",
     "answer",
     "harvest",
+    "milton-map",
     "Déplacer le message", // Commande de menu contextuel
     "configure-free-games" // Commande d'administration pour configurer les jeux gratuits (ex: ajouter un nouveau store)
 ];
