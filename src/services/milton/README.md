@@ -16,4 +16,3 @@ Lancer la carte Minecraft Milton (`http://tnss-smp.duckdns.org:8123/#`) depuis D
 ## Permissions requises
 - Bot: `Create Instant Invite`, `View Channel`, `Connect`
 - Utilisateurs: permission d'utiliser les activites dans le salon vocal cible
-

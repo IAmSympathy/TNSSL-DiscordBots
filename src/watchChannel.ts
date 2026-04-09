@@ -450,6 +450,12 @@ export function registerWatchedChannelResponder(client: Client) {
             }
             // ===== FIN GESTION DES DMs =====
 
+            // Ignorer les pings globaux (@here/@everyone) pour éviter toute réponse/scan de Netricsa
+            if (message.mentions.everyone) {
+                logger.info(`Message from ${message.author.username} contains @here/@everyone - ignored`);
+                return;
+            }
+
             // Vérifier et gérer les modes Standby/Low Power pour les canaux serveur
             if (await handleBotModes(message, client, watchedChannelId)) {
                 return; // Mode actif, arrêter le traitement

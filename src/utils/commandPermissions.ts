@@ -67,7 +67,6 @@ const SPECIAL_COMMANDS = {
     ship: 'COMMAND_CHANNEL',
     cucumber: 'COMMAND_CHANNEL',
     slots: 'COMMAND_CHANNEL',
-    'milton-map': 'COMMAND_CHANNEL',
 } as const;
 
 /**
